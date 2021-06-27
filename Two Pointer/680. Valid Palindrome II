@@ -1,0 +1,27 @@
+The two pointers point to the head and the tail respectively, and when a different char is encountered, 
+it is judged whether the left pointer or the right pointer is not a palindrome after moving one space separately, because a char can be deleted
+class Solution {
+    public boolean validPalindrome(String s) {
+        int i = 0, j = s.length()-1;
+        while (i < j) {
+            if (s.charAt(i) == s.charAt(j)) {
+                i++;
+                j--;
+            } else {
+                return isValid(s, i+1, j) || isValid(s, i, j-1);
+            }
+        }
+        return true;
+    }
+    private boolean isValid(String s, int i, int j) {
+        while (i < j) {
+            if (s.charAt(i) == s.charAt(j)) {
+                i++;
+                j--;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+}
