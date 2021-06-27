@@ -1,0 +1,27 @@
+去看d里每个字符串是不是s的子序列，每次d里拿去比较要取更长的字符串去判断是不是子序列。
+判断子序列就是双指针，分别指向两个string，每次比较一个char，每次指向原string的指针都移动1格，如果char一样，被比较的string的指针才移动，
+最后看指针有没有移到被比较的string的最后，移到了说明是子序列，因为这个string每个char都在原string里. 比较字母顺序用compareTo
+class Solution {
+    public String findLongestWord(String s, List<String> dictionary) {
+        String res = "";
+        for (String word : dictionary) {
+            if (word.length() < res.length() || (word.length() == res.length() && word.compareTo(res) > 0)) {
+                continue;
+            } else {
+                if (isSubstring(s, word)) res = word;
+            }
+        }
+        return res;
+    }
+    private boolean isSubstring(String s, String subString) {
+        int i = 0;
+        int j = 0;
+        while (i < s.length() && j < subString.length()) {
+            if (s.charAt(i) == subString.charAt(j)) {
+                j++;
+            }
+            i++;
+        }
+        return j == subString.length();
+    }
+}
