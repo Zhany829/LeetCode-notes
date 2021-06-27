@@ -1,0 +1,25 @@
+Put the string in res as required, first put the vowels in the hashset + use two pointers to point to the head and the end of the res array respectively. 
+If the head or tail pointer has no vowels, move the pointer, and if there is a vowel, switch the pointer positions. And each time, words need to be put in res
+
+class Solution {
+    public String reverseVowels(String s) {
+        HashSet<Character> hashSet = new HashSet<>(Arrays.asList('a','e','i','o','u','A','E','I','O','U'));
+        int i = 0, j = s.length()-1;
+        char[] res = new char[s.length()];
+        while (i <= j) {
+            char ci = s.charAt(i);
+            char cj = s.charAt(j);
+            if (!hashSet.contains(ci)) {
+                res[i++] = ci;
+            }
+            else if (!hashSet.contains(cj)) {
+                res[j--] = cj;
+            }
+            else {
+                res[i++] = cj;
+                res[j--] = ci;
+            }
+        }
+        return new String(res);
+    }
+}
