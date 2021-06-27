@@ -1,0 +1,15 @@
+Use two pointers point to 0 and the square root of c respectively. Then compare the value of those two number's square with c.
+Move one of the two pointers according to the result of the comparision.
+class Solution {
+    public boolean judgeSquareSum(int c) {
+        int i = 0;
+        int j = (int)Math.sqrt(c);
+        while (i <= j) {
+            int sum = i*i + j*j;
+            if (sum > c) j--;
+            else if(sum < c) i++;
+            else return true;
+        }
+        return false;
+    }
+}
