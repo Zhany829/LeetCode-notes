@@ -1,0 +1,32 @@
+用二分的去找partition返回的下标是不是正好是k，是的话就返回,因为说明array里k的位置上是第k大的数字
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        k = nums.length - k;
+        int l = 0, r = nums.length-1;
+        while (l < r) {
+            int split = partition(nums, l, r);
+            if (split == k) break;
+            else if (split < k) l = split+1;
+            else r = split-1;
+        }
+        return nums[k];
+    }
+    private int partition(int[] nums, int low, int high) {
+        int leftMark = low;
+        int rightMark = high+1;
+        int pivot = nums[low];
+        while (true) {
+            while (nums[++leftMark] < pivot && leftMark < high);
+            while (nums[--rightMark] > pivot && rightMark > low);
+            if (leftMark >= rightMark) break;
+            swap(nums, leftMark, rightMark);
+        }
+        swap(nums, rightMark, low);
+        return rightMark;
+    }
+    private void swap(int[] nums, int l, int r) {
+        int tmp = nums[l];
+        nums[l] = nums[r];
+        nums[r] = tmp;
+    }
+}
