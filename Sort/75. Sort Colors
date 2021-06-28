@@ -1,0 +1,22 @@
+三路快排，3个指针分别指index0，0和末尾，用第2个指针trace，如果当前是0，则把第1个指针和第2个指针互换，并且两个指针都++；
+如果当前trace到是2，则把第3个指针往左移1格，并把第2个指针和第3个指针互换，并且第3个指针也++；否则当前就是1，则直接把第2个指针移动1格就行
+
+class Solution {
+    public void sortColors(int[] nums) {
+        int pt0 = 0, pt1 = 0, pt2 = nums.length-1;
+        while(pt1 <= pt2) {
+            if(nums[pt1] == 0) {
+                swap(nums, pt0++, pt1++);
+            } else if (nums[pt1] == 2) {
+                swap(nums, pt1, pt2--);
+            } else {
+                pt1++;
+            }
+        }
+    }   
+    private void swap(int[] nums, int i , int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
+    }
+}
