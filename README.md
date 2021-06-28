@@ -1,2 +1,2 @@
 # LeetCode-notes
-LeetCode classic questions and solutions
+Leetcode questions and solutions
