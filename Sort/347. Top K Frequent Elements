@@ -1,0 +1,33 @@
+先用map记录每个元素的出现次数，再把元素放到对应的桶上，放到index1说明出现了1次，最后去从最高频率的桶开始拿数据，直到放满K个
+用keySet是防止频率高的重复放了 因为list不能去重
+
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> frequencyForNum = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            frequencyForNum.put(nums[i], frequencyForNum.getOrDefault(nums[i], 0)+1); //重复key就没有了
+        }
+        List<Integer>[] buckets = new ArrayList[nums.length+1];
+        for(int key : frequencyForNum.keySet()) { 
+            int frequency = frequencyForNum.get(key);
+            if (buckets[frequency] == null) {
+                buckets[frequency] = new ArrayList<>();
+            }
+            buckets[frequency].add(key);
+        }
+        List<Integer> topK = new ArrayList<>();
+        for (int i = buckets.length-1; i >= 0 && topK.size() < k; i--) {
+            if (buckets[i] == null) continue;
+            else if (buckets[i].size() > k - topK.size()) {
+                topK.addAll(buckets[i].subList(0, k - topK.size()));
+            } else {
+                topK.addAll(buckets[i]);
+            }
+        }
+        int[] res = new int[k];
+        for (int i = 0; i < k; i++) {
+            res[i] = topK.get(i);
+        }
+        return res;
+    }
+}
