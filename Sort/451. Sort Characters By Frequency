@@ -1,0 +1,27 @@
+把每个char按照频率放到对应的桶上，再用stringBuilder把出现频率最高的先拿出来，并且要按照他的出现次数来放几个
+class Solution {
+    public String frequencySort(String s) {
+        Map<Character, Integer> frequencyForChar = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            frequencyForChar.put(c, frequencyForChar.getOrDefault(c, 0)+1);
+        }
+        List<Character>[] buckets = new ArrayList[s.length()+1];
+        for (char key : frequencyForChar.keySet()) {
+            int frequency = frequencyForChar.get(key);
+            if (buckets[frequency] == null) {
+                buckets[frequency] = new ArrayList<>();
+            }
+            buckets[frequency].add(key);
+        }
+        StringBuilder res = new StringBuilder();
+        for (int i = buckets.length - 1; i >= 0; i--) {
+            if (buckets[i] == null) continue;
+            for (char c : buckets[i]) { // 从后面的bucket里拿元素
+                for (int j = 0; j < i; j++) { // i正好是char出现的次数 -- 出现几次放几个
+                    res.append(c);
+                }   
+            }
+        }
+        return res.toString();
+    }
+}
