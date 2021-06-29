@@ -1,0 +1,29 @@
+对于数组[left, right]要生成以其中i为根结点的数，则左儿子可以是[left, i -1], 右儿子可以是[i+1, right], 每次获得左边所有节点，以及右边所有节点，再以i为root配对左右节点。
+每个左节点都和右边每个节点匹配
+class Solution {
+    public List<TreeNode> generateTrees(int n) {
+        List<TreeNode> res = new ArrayList<>();
+        if (n < 1) return res;
+        return getUniqueRes(1, n);
+    }
+    private List<TreeNode> getUniqueRes(int left, int right) {
+        List<TreeNode> res = new ArrayList<>();
+        if (left > right) {
+            res.add(null);
+            return res;
+        }
+        for (int i = left; i <= right; i++) {
+            List<TreeNode> leftNodes = getUniqueRes(left, i-1);
+            List<TreeNode> rightNodes = getUniqueRes(i+1, right);
+            for (TreeNode leftNode : leftNodes) {
+                for (TreeNode rightNode : rightNodes) {
+                    TreeNode root = new TreeNode(i);
+                    root.left = leftNode;
+                    root.right = rightNode;
+                    res.add(root);
+                }
+            }
+        }
+        return res;
+    }
+}
