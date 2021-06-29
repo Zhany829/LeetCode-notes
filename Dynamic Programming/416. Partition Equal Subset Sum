@@ -1,0 +1,60 @@
+先判断和是不是奇数，如果是奇数直接返回false，因为不可能分两块和一样的。同时只要满足有一些数达到和的一半sum/2，就说明是可以被分成两半的
+01背包问题：每个数只能用一次，物品一个个选，容量也一点一点增加去考虑在实际生活中，我们也是这样做的，一个一个地尝试把候选物品放入「背包」，通过比较得出一个物品要不要拿走
+
+具体做法：一个矩阵(有物品数量个行，背包容量+1个列，一行代表一个物品，+1因为背包容量从0开始考虑)
+
+状态定义：dp[i][j]表示从数组的[0,i]这个子区间选一些数，每个数只能用一次，使得这些数恰好等于j, 所以返回dp最右下角那个值就是是不是可以达到sum/2，可以就是true
+
+状态转移方程：当前考虑到的数字选与不选
+不选择 nums[i]，如果在 [0, i - 1] 这个子区间内已经有一部分元素使得它们的和为 j ，那么 dp[i][j] = dp[i-1][j] || dp[i-1][j-nums[i]]里选前者的情况，所以我们可以用一维数组
+选择 nums[i]，如果在 [0, i - 1] 这个子区间内就得找到一部分元素，使得它们的和为 j - nums[i]，那么也可以是true，因为可以满足和=j-nums[i]，那么加上当前这次也就可以了，
+因为dp是会记录前面状态的，所以去看之前j-nums[i]可以满足的话，当前是加了个j就也满足了，所以前面是true，这个也是true
+
+一般写出状态转移方程以后，就需要考虑初始化条件。
+j - nums[i] 作为数组的下标，一定得保证大于等于 0 ，因此 nums[i] <= j；
+注意到一种非常特殊的情况：j 恰好等于 nums[i]，即单独 nums[j] 这个数恰好等于此时「背包的容积」 j，这也是符合题意的
+当 j - nums[i] == 0 成立的时候，根据上面分析，就说明单独的 nums[i] 这个数就恰好能够在被分割为单独的一组，其余的数分割成为另外一组。因此，我们把初始化的 dp[i][0] 设置成为 true 是没有问题的。
+
+class Solution {
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        if(sum % 2 == 1) return false;
+        int W = sum/2;
+        boolean[][] dp = new boolean[nums.length][W+1];
+        dp[0][0] = true;
+        for (int i = 1; i < nums.length; i++) { // 每次取一个物品(num)
+            for (int j = 0; j <= W; j++) {
+                dp[i][j] = dp[i - 1][j]; //把上一行的抄下来
+                if (nums[i] <= j) { //保证下面index不会小于0
+                    dp[i][j] = dp[i-1][j] || dp[i-1][j-nums[i]];
+                }
+            }
+        }
+        return dp[nums.length-1][W];
+    }
+}
+
+空间优化
+class Solution {
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        int W = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        if (sum % 2 == 1) return false; //和为奇数不可能能分两块和一样的
+        W = sum / 2; //只需要找数组里是不是有元素能组成和/2就行
+        boolean[] dp = new boolean[W+1];//表示能不能选一些数正好等于j，所以如果W位置上是true 说明可以用一些数=W 也就是sum/2
+        dp[0] = true; // 当 j - nums[i] == 0 成立的时候，根据上面分析，就说明单独的 nums[i] 这个数就恰好能够在被分割为单独的一组，其余的数分割成为另外一组。因此，我们把初始化的 dp[i][0] 设置成为 true 是没有问题的。
+
+        for (int i = 1; i < nums.length; i++) {
+            for (int j = W; j >= nums[i]; j--) { //逆序 因为顺序会造成nums[i]一直影响
+                dp[j] = dp[j] || dp[j-nums[i]]; //j-nums[i]位置上是true也可以，因为这里正好加了个j也满足
+            }
+        }
+        return dp[W];
+    }
+}
