@@ -1,0 +1,18 @@
+把数组一分为二，去有序的数组里找，如果mid比right小，说明这个是(右半边)有序/升序的，就在这里边看target在不在这个范围，不在就把r调左，反之把l调右。反之就在左半边找
+class Solution {
+    public int search(int[] nums, int target) {
+        int l = 0, r = nums.length-1;
+        while (l <= r) {
+            int mid = l + (r-l)/2;
+            if (nums[mid] == target) return mid;
+            else if (nums[mid] < nums[r]) { //切片右半边是排序好的
+                if (nums[mid] < target && target <= nums[r]) l = mid + 1;
+                else r = mid - 1;
+            } else { //切片左半边是排序好的
+                if (nums[l] <= target && target < nums[mid]) r = mid - 1;
+                else l = mid + 1;
+            }
+        }
+        return -1;
+    }
+}
