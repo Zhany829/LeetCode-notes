@@ -1,0 +1,24 @@
+解法：多维费用的背包问题，dp[i][j]表示用i个0和j个1能表示的字符串的最大数量
+应该是个3维的但第一维度是对前一个判断，没什么用，所以压缩维度
+但压缩维度就要从后往左开始，这样防止前面的数被override，因为少了一个维度判断。从右往左，左边的数就一直是最后放的
+因为要保证每个0或1只放一次 而从小往大会放多次 会覆盖掉之前的值
+
+
+class Solution {
+    public int findMaxForm(String[] strs, int m, int n) {
+        int[][] dp = new int[m+1][n+1]; // dp[i][j]代表i个0和j个1能组成的字符串的最大数量
+        for (String s : strs) {
+            int numZero = 0, numOne = 0;
+            for (char c : s.toCharArray()) {
+                if (c == '0') numZero++;
+                else numOne++;
+            }
+            for (int i = m; i >= numZero; i--) {
+                for (int j = n; j >= numOne; j--) { 
+                    dp[i][j] = Math.max(dp[i][j], dp[i-numZero][j-numOne]+1);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+}
