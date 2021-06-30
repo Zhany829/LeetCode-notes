@@ -1,0 +1,23 @@
+解法：定义F(i)表示组成金额i所要的最少金币数量，在计算F(i)之前已经计算了F(0)到F(i-1)
+则状态转移方程为 
+Cj代表第j枚硬币的面值，我们枚举的最后一枚硬币面值是cj那么需要从 i-cj这个金额的状态 F(i-cj)转移过来，
+再算上枚举的这枚硬币数量 1 的贡献，由于要硬币数量最少，所以 F(i)为前面能转移过来的状态的最小值加上枚举的硬币数量 1
+
+
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount+1];
+        Arrays.fill(dp, amount+1); //把所有值赋成最大，不然min里只会选初始化的0
+        dp[0] = 0;
+        for (int val = 1; val < amount+1; val++) { //自底向上
+            for (int j = 0; j < coins.length; j++) { //遍历coins金额
+                if (val >= coins[j]) { //避免数组溢出
+                //金额为11的最小硬币数 和 金额为(11-一个面值)的最小硬币数+1 比较最小值
+                    dp[val] = Math.min(dp[val], dp[val-coins[j]]+1);
+                }
+            }
+        }
+        if (dp[amount] > amount) return -1;
+        else return dp[amount];
+    }
+}
