@@ -1,0 +1,14 @@
+完全背包问题，物品数量不限  
+
+class Solution {
+    public int change(int amount, int[] coins) {
+        int[] dp = new int[amount+1];
+        dp[0] = 1; // base case: 不用给钱也是一种方法
+        for (int i = 0; i < coins.length; i++) {
+            for (int j = coins[i]; j <= amount; j++) {
+                dp[j] += dp[j-coins[i]]; //想用面值为2的硬币凑出金额5，那么要去知道凑出金额3的方法，再加上面额为2的硬币
+            }
+        }
+        return dp[amount];
+    }
+}
