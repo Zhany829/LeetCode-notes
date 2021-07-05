@@ -1,0 +1,20 @@
+解法：因为wordDict里单词没有使用次数，所以是一个完全背包问题
+对于完全背包问题，背包迭代要放在外层，物品迭代放在最里层，这样才能让物品按一定顺序放进背包
+
+
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        int n = s.length();
+        boolean[] dp = new boolean[n+1];
+        dp[0] = true;
+        for (int i = 1; i <= n; i++) { //遍历背包容量
+            for (String word : wordDict) { //遍历物品
+                int len = word.length();
+                if (len <= i && word.equals(s.substring(i-len, i))) { //容量够而且当前word和s前len个的字符一样
+                    dp[i] = dp[i] || dp[i-len]; //=dp[i]是为了防止后面被改了
+                }
+            }
+        }
+        return dp[n];
+    }
+}
