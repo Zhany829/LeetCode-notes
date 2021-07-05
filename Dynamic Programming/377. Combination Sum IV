@@ -1,0 +1,18 @@
+解法：物品没有使用次数—完全背包 外面是背包容量 里面迭代物品
+
+class Solution {
+    public int combinationSum4(int[] nums, int target) {
+        int n = nums.length;
+        int[] dp = new int[target+1];
+        dp[0] = 1;
+        Arrays.sort(nums);
+        for (int i = 1; i < target+1; i++) { //完全背包--背包容量放外面
+            for (int num : nums) { //迭代物品
+                if (i >= num) {
+                    dp[i] = dp[i] + dp[i-num];
+                }
+            }
+        }
+        return dp[target];
+    }   
+}
