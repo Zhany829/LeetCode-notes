@@ -1,0 +1,44 @@
+方法1:动态规划
+定义状态dp[i][0] 表示第 i天交易完后手里没有股票的最大利润，dp[i][1]表示第 i天交易完后手里持有一支股票的最大利润（ii 从 00 开始）。
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        int n = prices.length;
+        int[][] dp = new int[n][2];
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+        for (int i = 1; i < prices.length; i++) {
+            dp[i][0] = Math.max(dp[i-1][0], dp[i-1][1]+prices[i]);//前一次没有｜有的话这次卖出去
+            dp[i][1] = Math.max(dp[i-1][0]-prices[i], dp[i-1][1]);//前一次有｜没有的话这次买
+        }
+        return dp[n-1][0];
+    }
+}
+注意到上面的状态转移方程中，每一天的状态只与前一天的状态有关，而与更早的状态都无关，因此我们不必存储这些无关的状态，
+只需要将dp[i-1][0]和dp[i−1][1] 存放在两个变量中，通过它们计算出dp[i][0] 和dp[i][1] 并存回对应的变量，以便于第i+1 天的状态转移即可
+class Solution {
+    public int maxProfit(int[] prices) {
+        int dp0 = 0, dp1 = -prices[0];
+        for (int i = 1; i < prices.length; i++) {
+            dp0 = Math.max(dp0, dp1+prices[i]);//这次没股票：前一次没买不买 ｜ 前一次买了卖出去
+            dp1 = Math.max(dp1, dp0-prices[i]);//这次有股票：前一次买了不卖 ｜ 前一次没买这次买
+        }
+        return dp0;
+    }
+}
+
+方法2:贪心
+class Solution {
+    public int maxProfit(int[] prices) {
+        int max = 0;
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] > prices[i-1]) { //卖出有利可图
+                max += prices[i] - prices[i-1];
+            }
+        }
+        return max;
+    }
+}
+
+
+
