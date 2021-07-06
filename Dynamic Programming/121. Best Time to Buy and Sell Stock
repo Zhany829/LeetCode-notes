@@ -1,0 +1,10 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        int max = 0, min = prices[0];
+        for (int i = 1; i < prices.length; i++) {
+            min = Math.min(min, prices[i]);     // 记录遍历时候的最低价格
+            max = Math.max(max, prices[i] - min); // 记录遍历时候当天卖会不会有最大利益
+        }
+        return max;
+    }
+}
