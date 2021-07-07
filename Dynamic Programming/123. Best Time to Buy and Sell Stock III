@@ -45,16 +45,15 @@ buy2即为在同一天买入并且卖出后再以prices[0]的价格买入股票�
 同时，如果最优的情况对应的是恰好一笔交易，那么它也会因为我们在转移时允许在同一天买入并且卖出这一宽松的条件，从sell1转移至sell2 
 因此最终的答案即为sell2
 
-
 class Solution {
     public int maxProfit(int[] prices) {
         int buy1 = -prices[0], sell1 = 0;
         int buy2 = -prices[0], sell2 = 0;
-        for (int i = 1; i <prices.length; i++) {
-            buy1 = Math.max(buy1, -prices[i]);
-            sell1 = Math.max(sell1, buy1 + prices[i]);
-            buy2 = Math.max(buy2, sell1-prices[i]);
-            sell2 = Math.max(sell2, buy2 + prices[i]);
+        for (int i = 1; i < prices.length; i++) {
+            buy1 = Math.max(buy1, -prices[i]);          //不买｜买-花prices[i]钱
+            sell1 = Math.max(sell1, buy1 + prices[i]);  //不卖｜之前买了的状态+卖出的利润(prices[i])
+            buy2 = Math.max(buy2, sell1-prices[i]);     //不买｜第一次卖后的状态-花prices[i]的钱
+            sell2 = Math.max(sell2, buy2 + prices[i]);  //不卖(还是原来的状态)｜之前买了的状态+卖出的利润(prices[i])
         }
         return sell2;
     }
