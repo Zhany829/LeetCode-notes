@@ -1,0 +1,22 @@
+解法:对于buy[i] = 上次cool-price（cool完买）或者上次buy
+	对于sell，就是buy+price（buy完卖出）或者上次sell
+	对于cool就是上次sell或者上次cool的
+
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        int n = prices.length;
+        if (n <= 1) return 0;
+        int[] buy = new int[n];
+        int[] sell = new int[n];
+        int[] cool = new int[n];
+        buy[0] = -prices[0];
+        sell[0] = 0;
+        for (int i = 1; i < n; i++) {
+            buy[i] = Math.max(buy[i-1], cool[i-1]-prices[i]);
+            sell[i] = Math.max(sell[i-1], buy[i]+prices[i]);
+            cool[i] = Math.max(cool[i-1], sell[i-1]);
+        }
+        return sell[n-1];
+    }
+}
