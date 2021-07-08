@@ -1,0 +1,29 @@
+因为对一个word删除=对另一个word插入，所以实际不同的操作只有1.word1插入 2.word2插入 3.修改word1的一个单词
+所以取dp[i-1][j-1] ，dp[i-1][j]和dp[i][j-1]的最小值+1就行，前者表示修改word1的1个字母让dp[i][j]一样，也就是dp[i-1][j-1]直接变成dp[i][j]。后两种情况是插入1个字母到其中一个word
+初始化dp：dp[0][0..j]和dp[0..i][0]表示一个word为空，则另一个word要删除/这个word要插入的次数
+
+
+
+class Solution {
+    public int minDistance(String word1, String word2) {
+        int m = word1.length();
+        int n = word2.length();
+        int[][] dp = new int[m+1][n+1];
+        for (int i = 0; i < m+1; i++) {
+            dp[i][0] = i;
+        }
+        for (int i = 0; i < n+1; i++) {
+            dp[0][i] = i;
+        }
+        for (int i = 1; i < m+1; i++) {
+            for (int j = 1; j < n+1; j++) {
+                if (word1.charAt(i-1) == word2.charAt(j-1)) { //其实表示的是当前的两个char一样
+                    dp[i][j] = dp[i-1][j-1];
+                } else {
+                    dp[i][j] = Math.min(dp[i-1][j-1], Math.min(dp[i-1][j], dp[i][j-1]))+1;//min只能两两比较
+                }
+            }
+        }
+        return dp[m][n];
+    }
+}
