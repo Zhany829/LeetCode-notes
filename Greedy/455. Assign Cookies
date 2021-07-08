@@ -1,0 +1,14 @@
+解法：每次loop都用更大的饼干去喂，不管有没有成功，每次会判断是否成功，成功就进行到下个小孩
+
+class Solution {
+    public int findContentChildren(int[] g, int[] s) {
+        Arrays.sort(g);
+        Arrays.sort(s);
+        int gi = 0, si = 0;
+        while (gi < g.length && si < s.length) {
+            if (s[si] >= g[gi]) gi++; //这块饼干够用了，move去喂下一个孩子
+            si++;   //每次用一块饼干去试，如果不够大就用后面更大的一块
+        }
+        return gi;
+    }   
+}
