@@ -17,3 +17,24 @@ class Solution {
         return m+n - 2*dp[m][n];//用总长度减2*最长公共子序列 = 要删掉的数量
     }
 }
+
+方法2 用dp[i][j]记录当前经过i个word1的char和j个word2的char所删掉的数量
+class Solution {
+    public int minDistance(String word1, String word2) {
+        int m = word1.length();
+        int n = word2.length();
+        int[][] dp = new int[m+1][n+1]; //记录经过m个word1的char和n个word2的char删掉的字母数量
+        for (int i = 0; i < m+1; i++) {
+            for (int j = 0; j < n+1; j++) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = i + j; //记录当前删掉的字母数量
+                } else if (word1.charAt(i-1) == word2.charAt(j-1)) { //一样就不用删了
+                    dp[i][j] = dp[i-1][j-1];
+                } else {    //不一样就要删1个
+                    dp[i][j] = Math.min(dp[i-1][j], dp[i][j-1]) + 1;
+                }
+            }
+        }
+        return dp[m][n];
+    }
+}
