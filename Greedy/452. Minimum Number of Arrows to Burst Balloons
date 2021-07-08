@@ -1,0 +1,17 @@
+解法：按照右区间排序，如果当前气球的左区间在前面气球的右区间则继续，不需要加cnt，因为包括在一个范围内，只要之前的箭就能引爆，同样也不用更新end，因为要去看下个气球在不在这个范围内
+
+class Solution {
+    public int findMinArrowShots(int[][] points) {
+        int res = 0;
+        Arrays.sort(points, Comparator.comparingInt(o -> o[1]));
+        int end = points[0][1];
+        for (int i = 1; i < points.length; i++) {
+            if (points[i][0] <= end) {
+                res++;
+            } else {
+                end = points[i][1];
+            }
+        }
+        return points.length - res; //要返回的是需要的刺的次数也就是不重叠的区间
+    }
+}
