@@ -1,0 +1,24 @@
+解法：先把每个字母的最后出现的index放到array记录，再从第一个字母开始，去更新lastindex，直到i loop到lastindex，说明此时i就是partition的地方	
+
+class Solution {
+    public List<Integer> partitionLabels(String s) {
+        int[] lastIndexes = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            lastIndexes[s.charAt(i) - 'a'] = i; //每个index表示一个字母，上面放的是他最后出现的index
+        }
+        List<Integer> res = new ArrayList<>();
+        int firstIndex = 0;
+        while (firstIndex < s.length()) {
+            int lastIndex = firstIndex; //只是initialize一下
+            for (int i = 0; i< s.length() && i <= lastIndex; i++) {//i>lastIndex说明后面这个区间的字母不再有了
+                int index = lastIndexes[s.charAt(i)-'a']; //得到当前字母的last index
+                if (index > lastIndex) {    //说明这个区间的字母有更右边的区间
+                    lastIndex = index;
+                }
+            }
+            res.add(lastIndex - firstIndex + 1);
+            firstIndex = lastIndex + 1;
+        }
+        return res;
+    }
+}
