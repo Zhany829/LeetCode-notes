@@ -1,0 +1,12 @@
+解法：双指针，子String的char和主string的char一样时候指向子String的指针才运动，指向主String的指针每次loop都运动
+
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        int sp = 0, tp = 0;
+        while (sp < s.length() && tp < t.length()) {
+            if (s.charAt(sp) == t.charAt(tp)) sp++; //匹配到了一个char才move到下一个char去匹配
+            tp++;
+        }
+        return sp == s.length();
+    }
+}
