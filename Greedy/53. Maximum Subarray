@@ -1,0 +1,34 @@
+解法1：一直加，只要sum还是正数，同时用max记录最大的sum
+因为只有两种选择，把当前数字加到之前序列还是从当前数开始，即使当前数是负数也可以加，因为max记录了最大和，而如果sum<=0，那不如从当前数开始了
+
+
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int sum = 0;
+        int max = Integer.MIN_VALUE;
+        for (int num : nums) {
+            if (sum <= 0) { //sum不能提供价值了就替换
+                sum = num;
+            } else {
+                sum += num;
+            }
+            max = Math.max(max, sum);
+        }
+        return max;
+    }
+}
+
+解法2: 我们用 f(i) 代表以第 i 个数结尾的「连续子数组的最大和」
+f(i) = Max(nums[i],  f(i−1)+nums[i])  
+因为f(i)只和f(i-1)有关，所以可以用一个变量来记录，同时用max记录
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int pre = 0;
+        int max = nums[0];
+        for (int i = 0; i < nums.length; i++) {
+            pre = Math.max(nums[i], nums[i]+pre);
+            max = Math.max(max, pre);
+        }
+        return max;
+    }
+}
