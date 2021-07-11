@@ -1,0 +1,26 @@
+解法：4种情况 1.在[0][0]位置直接等于grid的00。 
+2.在第一列向右移动来的，取左一格的值+grid对应的此时的位置的值
+3. 在第一列向下移动来的，取上一格的值 + grid对应的此时的位置的值 
+4.取左边或者上面的最小值。因为要考虑边界所以不能直接比较左一格和上一格的值
+
+class Solution {
+    public int minPathSum(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] dp = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == 0 && j == 0) { //初始化第一格，不能在loop外初始化，因为会忽略第一行和第一列
+                    dp[i][j] = grid[0][0];
+                } else if (i == 0) {    //在第一行移动，用左边一格的值+现在的
+                    dp[i][j] =  dp[i][j-1] + grid[i][j];
+                } else if (j == 0) {    //在第一列移动，用上边一格的值+现在的
+                    dp[i][j] = dp[i-1][j] + grid[i][j];
+                } else {                //否则就看左边和上面哪个值小用哪个
+                    dp[i][j] = Math.min(dp[i-1][j], dp[i][j-1]) + grid[i][j];
+                }
+            }
+        }
+        return dp[m-1][n-1];
+    }
+}
