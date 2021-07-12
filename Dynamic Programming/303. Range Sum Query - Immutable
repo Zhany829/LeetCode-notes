@@ -1,3 +1,5 @@
+解法：用一个数组记录当前位置之前所有的数的和，之后算区间和直接减就行	
+
 class NumArray {
     private int[] sum;
     public NumArray(int[] nums) {
