@@ -1,0 +1,40 @@
+解法1：先把数组按照第一位元素排序(Lambda表达式)，同时把数组都fill成1，因为长度最少为1。
+从index1开始用当前数组一个个比较前面的所有区间，如果遇到大的，就用dp获得当前位置的dp和之前位置的dp+1的更大的一个。最后返回dp里的最大数
+
+class Solution {
+    public int findLongestChain(int[][] pairs) {
+        int n = pairs.length;
+        int[] dp = new int[n];
+        Arrays.fill(dp, 1);
+        Arrays.sort(pairs, (a,b) -> (a[0]-b[0]));
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (pairs[j][1] < pairs[i][0]) {
+                    dp[i] = Math.max(dp[i], dp[j]+1);
+                }
+            }
+        }
+        int res = 1;
+        for (int num : dp) {
+            if (num > res) res = num;
+        }
+        return res;
+    }
+}
+
+解法2:贪心
+class Solution {
+    public int findLongestChain(int[][] pairs) {
+        Arrays.sort(pairs, (a,b)->(a[1]-b[1]));
+        int end = pairs[0][1];
+        int res = 1;
+        for (int i = 1; i < pairs.length; i++) {
+            if (pairs[i][0] <= end) continue;
+            else {
+                res++;
+                end = pairs[i][1];
+            }
+        }
+        return res;
+    }
+}
