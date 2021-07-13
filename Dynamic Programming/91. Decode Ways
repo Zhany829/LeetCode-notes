@@ -1,0 +1,18 @@
+解法：多了条件处理的爬楼梯问题。1.对于当前位置i，如果不是0，那就可以编码A-I 2.和i-1的数字一起编码，但要i-1的数不为0而且与当前数的和小于等于26。符合1就+=i-1的值 符合2就是+=i-2的值
+
+class Solution {
+    public int numDecodings(String s) {
+        int n = s.length();
+        int[] dp = new int[n+1];
+        dp[0] = 1;          //只能用一个字母表示一个数字的情况
+        for (int i = 1; i < n+1; i++) {
+            if (s.charAt(i-1) != '0') { //看前一个
+                dp[i] += dp[i-1];
+            }
+            if (i >= 2 && s.charAt(i-2) != '0' && (10*(s.charAt(i-2)-'0')+s.charAt(i-1)-'0') <= 26) {
+                dp[i] += dp[i-2];
+            }
+        }
+        return dp[n];
+    }
+}
