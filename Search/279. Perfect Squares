@@ -1,0 +1,52 @@
+解法1:dp，注意初始化是i，因为最多的情况就是用1一个个拼凑 时间复杂度n*根号n
+class Solution {
+    public int numSquares(int n) {
+        int[] dp = new int[n+1];
+        for (int i = 1; i < n+1; i++) {
+            dp[i] = i;  //用1拼凑就需要i个数，所以初始化最大化为i
+            for (int j = 1; j * j <= i; j++) {
+                dp[i] = Math.min(dp[i], dp[i-j*j]+1);
+            }
+        }
+        return dp[n];
+    }
+}
+
+解法2:BFS 
+class Solution {
+    public int numSquares(int n) {
+        List<Integer> generatedSquares = generateSquares(n);  //从n到0之间的squres
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[n+1]; //标记访问过的点
+        queue.add(n);
+        visited[n] = true;
+        int res = 1;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            while (size-- > 0) {
+                int cur = queue.poll();
+                for (int s : generatedSquares) {
+                    int next = cur - s; //当前减去一个squre的数(节点)，如果合法就加入到queue
+                    if (next < 0) break;    //说明不用再加了，这个和后面squre都不合法
+                    if (next == 0) return res;  // 刚好到终点，也就是0
+                    if (visited[next]) continue;  // 访问过了
+                    queue.add(next);
+                    visited[next] = true;   // 标记成访问过
+                }
+            }
+            res++;  //BFS一轮完加步数
+        }
+        return n;
+    }
+    private List<Integer> generateSquares(int n) {
+        List<Integer> squares = new ArrayList<>();
+        int square = 1;
+        int diff = 3;
+        while (square <= n) {
+            squares.add(square);
+            square += diff;
+            diff += 2;
+        }
+        return squares;
+    }
+}
