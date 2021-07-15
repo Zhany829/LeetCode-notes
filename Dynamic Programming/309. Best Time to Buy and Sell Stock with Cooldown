@@ -20,3 +20,17 @@ class Solution {
         return sell[n-1];
     }
 }
+class Solution {
+    public int maxProfit(int[] prices) {
+        int buy = -prices[0];
+        int sell = 0;
+        int cool = 0;
+        for (int i = 1; i < prices.length; i++) {
+            buy = Math.max(buy, cool-prices[i]);
+            int cursell = sell; //记录之前的sell
+            sell = Math.max(sell, buy+prices[i]);
+            cool = Math.max(cool, cursell); //要用没更新的sell去更新
+        }
+        return sell;
+    }
+}
