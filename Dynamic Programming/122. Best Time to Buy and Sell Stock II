@@ -26,7 +26,17 @@ class Solution {
         return dp0;
     }
 }
-
+class Solution {
+    public int maxProfit(int[] prices) {
+        int buy = -prices[0];
+        int sell = 0;
+        for (int i = 1; i < prices.length; i++) {
+            buy = Math.max(buy, sell - prices[i]);//现在买还是不买 买就要花prices[i]
+            sell = Math.max(sell, buy + prices[i]);//现在卖还是不卖 卖就获得prices[i]的利益
+        }
+        return sell;
+    }
+}
 方法2:贪心
 class Solution {
     public int maxProfit(int[] prices) {
