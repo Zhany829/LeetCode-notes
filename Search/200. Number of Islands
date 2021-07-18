@@ -1,0 +1,28 @@
+解法：用dfs方法，把当前的点的四周去探索到的区域都置为0，再++岛屿数量，所以每次都能把一块岛屿全变成0
+class Solution {
+    int[][] directions = {{1,0},{-1,0},{0,1},{0,-1}};
+    int m, n;
+    public int numIslands(char[][] grid) {
+        m = grid.length;
+        n = grid[0].length;
+        int num = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] != '0') { //有岛屿的情况去把这个岛屿的地方都变成0
+                    dfs(grid, i, j);    //去探索这个点所在的岛屿，并且置0
+                    num++;  // count这个岛屿进来
+                }
+            }
+        }
+        return num;
+    }
+    private void dfs(char[][] grid, int i, int j) {
+        if (i < 0 || i > m-1 || j < 0 || j > n-1 || grid[i][j] == '0') {
+            return;
+        }
+        grid[i][j] = '0';
+        for (int[] d : directions) {
+            dfs(grid, i+d[0], j+d[1]); //去四周探索
+        }
+    }
+}
