@@ -1,0 +1,29 @@
+解法：dfs一般都是stack+递归，探索m*n每一块，每次开始探索到一块，加上他四周面积，如果上面是1，那就往上去探索，
+每次探索要1.判断是否超出边界 2.把探索过的地方标记成0.最后返回从这块探索的最大area，取探索每一块返回的area里的最大值
+
+class Solution {
+    int[][] directions = {{1,0},{-1,0},{0,1},{0,-1}};
+    public int maxAreaOfIsland(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int max = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                max = Math.max(max, dfs(i, j, grid)); //对每一个点进行探索
+            }
+        }
+        return max;
+    }
+    private int dfs(int i, int j, int[][] grid) {
+        //搜索到超出边界的点不加面积
+        if (i < 0 || i > grid.length-1 || j < 0 || j > grid[0].length-1 || grid[i][j] == 0) { 
+            return 0;
+        }
+        grid[i][j] = 0; //给搜索到的点标记为0，表示访问过
+        int area = 1;
+        for (int[] d : directions) {  // 去这个点四周看，增加area的值
+            area += dfs(i+d[0], j+d[1], grid);
+        }
+        return area;
+    }
+}
