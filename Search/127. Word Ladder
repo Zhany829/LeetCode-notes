@@ -1,0 +1,56 @@
+解法：先把所有单词放到hashset(移除beginword)，再对里面的单词进行BFS，
+建图：（set里是有的，queue里没有，所以建图就是把set里单词按层数放到queue里）对于每个单词(每轮)，
+都把这个单词每个index上换成其他25个字母去看看是不是能成为set里有的单词，如果有，则加到queue里并且用visit标记，
+如果下个单词是endword，直接返回就行，此时step要加1.要注意要把单词这个index的char返回成原来的char
+答案只要是构建下面这个图，也就是按照bfs顺序把节点放到queue里，这个顺序就是当前节点改变一个单词能变成下一个单词(可以一个char改变25次，所以可能能变成wordset里两个单词，那么这两个单词算在同一层)，
+同时每一层的步数+1
+
+
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        // 1.把wordList放到哈希set
+        Set<String> wordSet = new HashSet<>(wordList);
+        if (wordSet.size() == 0 || !wordSet.contains(endWord)) return 0;
+        wordSet.remove(beginWord);
+        // 2.图的BFS
+        Set<String> visited = new HashSet<>();
+        visited.add(beginWord);
+        Queue<String> queue = new LinkedList<>();
+        queue.add(beginWord);
+        int step = 1;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            while (size-- > 0) {
+                String currentWord = queue.poll();
+                // 如果 currentWord 能够修改 1 个字符与 endWord 相同，则返回 step + 1
+                if (changeWordEveryOneLetter(endWord,wordSet,currentWord,queue,visited)) {
+                    return step + 1;
+                }
+            }
+            step++;
+        }
+        return 0;
+    }
+    // 尝试修改currentWord里每个字符，看能不能与endWord匹配
+    private boolean changeWordEveryOneLetter(String endWord, Set<String> wordSet, 
+                                                String currentWord, Queue<String> queue, Set<String> visited) {
+        char[] charArray = currentWord.toCharArray();
+        for (int i = 0; i < endWord.length(); i++) {
+            char originChar = charArray[i]; // 先保存一下, 之后用于恢复
+            for (char k = 'a'; k <= 'z'; k++) {
+                if (k == originChar) continue;
+                charArray[i] = k;
+                String nextWord = String.valueOf(charArray);
+                if (wordSet.contains(nextWord)) {
+                    if (nextWord.equals(endWord)) return true; //下个就是endWord了
+                    if (!visited.contains(nextWord)) {  //  找到了图里节点 - 连接 - 构建图
+                        queue.add(nextWord);    // 把wordset里的词按顺序添加到queue里去访问，实现建图
+                        visited.add(nextWord); // 标记成访问过
+                    }
+                }
+            }
+            charArray[i] = originChar; //恢复成原来的字符串
+        }
+        return false;
+    }
+}
