@@ -59,3 +59,4 @@ class Solution {
     return max;
     }
 }
+解法3:这个岛屿面积太大，就要用并查集
