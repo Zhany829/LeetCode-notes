@@ -1,0 +1,27 @@
+解法：DFS，其实就是一个一维的数组，遍历这个数组，每次从没被访问过的点开始，如果被访问过就跳过，遍历到一个节点用visited数组记录被访问过的点，之后一直递归。
+就是10个元素， 比如第1个元素和2-9个元素都是匹配(=1)，那么在看元素2-9直接continue就行，则总的岛屿数量一共加了2次
+
+
+class Solution {
+    private int n;
+    public int findCircleNum(int[][] isConnected) {
+        n = isConnected.length;
+        boolean[] visited = new boolean[n+1];
+        int num = 0;
+        for (int i = 0; i < n; i++) {
+            if(!visited[i]) {   //去访问新的圈子
+                num++;
+                dfs(isConnected, i, visited);
+            }
+        }
+        return num;
+    }
+    private void dfs(int[][]isConnected, int i, boolean[] visited) {
+        visited[i] = true;
+        for (int j = 0; j < n; j++) {
+            if (isConnected[i][j] == 1 && !visited[j]) {  //有关联(是1)才去访问，目的是把访问过的置为true
+                dfs(isConnected, j, visited);
+            }
+        }
+    }
+}
