@@ -1,0 +1,30 @@
+解法：用一个StringBuilder去加字符串，比如23，先把2里的a分别组合3里的def，再用b去组合。
+如果组合到长度和digit长度一样，也就是2，就加入到res，同时返回。
+对于每一次2里的字母去组合，首先获取stringbuilder的长度来知道要去获得digit里的哪位digit，得到对于digit的3/4个字母(之前用String[]存了)，
+再枚举每个字母去组合递归过来的stringbuilder，每次递归返回要减去匹配上去的字母。比如ad->a->ae
+
+class Solution {
+    private static final String[] Keys = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    public List<String> letterCombinations(String digits) {
+        StringBuilder prefix = new StringBuilder();
+        List<String> res = new ArrayList<>();
+        if (digits == null || digits.length() == 0) {
+            return res;
+        }
+        getCombination(prefix, digits, res);
+        return res;
+    }
+    private void getCombination(StringBuilder prefix, String digits, List<String> res) {
+        if (prefix.length() == digits.length()) {   //达到长度，加入到结果中
+            res.add(String.valueOf(prefix));
+            return;
+        }
+        int curDigits = digits.charAt(prefix.length()) - '0';//获得当前数字
+        String key = Keys[curDigits];           //获取当前数字对应的字母
+        for (char c : key.toCharArray()) {      //遍历这些字母
+            prefix.append(c);                   //加到后面
+            getCombination(prefix, digits, res);    //递归到底，比如有3组字母，前两组各取1个，到最后一组取完它所有的来匹配
+            prefix.deleteCharAt(prefix.length() - 1);   //移除这个字母
+        }
+    }
+}
