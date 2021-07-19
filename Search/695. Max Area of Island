@@ -1,4 +1,4 @@
-解法：dfs一般都是stack+递归，探索m*n每一块，每次开始探索到一块，加上他四周面积，如果上面是1，那就往上去探索，
+解法1：dfs一般都是stack+递归，探索m*n每一块，每次开始探索到一块，加上他四周面积，如果上面是1，那就往上去探索，
 每次探索要1.判断是否超出边界 2.把探索过的地方标记成0.最后返回从这块探索的最大area，取探索每一块返回的area里的最大值
 
 class Solution {
@@ -25,5 +25,37 @@ class Solution {
             area += dfs(i+d[0], j+d[1], grid);
         }
         return area;
+    }
+}
+解法2:同样遍历岛屿每个点(里面会判断当前点是不是0，所以不用担心效率)，每次把当前的节点加到queue里，然后把当前节点置0同时++cur岛屿。
+然后开始往岛屿四周探索，把四周的点不管是不是1都加到queue里，只要queue不为0就一直执行这个步骤，因为这样代表从这个点开始把所有联通的面积都能探索到。
+每次探索完(queue empty)，就比较一下cur岛屿面积是不是最大，记录最大值
+class Solution {
+    int[][] directions = {{1,0},{-1,0},{0,1},{0,-1}};
+    int m,n;
+    public int maxAreaOfIsland(int[][] grid) {
+        m = grid.length;
+        n = grid[0].length;
+        int max = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                int cur = 0;
+                 Queue<int[]> queue = new LinkedList<>();
+                 queue.add(new int[]{i, j}); //把当前节点加入queue
+                 while (!queue.isEmpty()) { //对这个点四周去探索，把探索到的加到queue，同时要置0和++面积
+                    int[] curPosi = queue.poll();
+                    int x = curPosi[0];
+                    int y = curPosi[1];
+                    if (x < 0 || x > m-1 || y < 0 || y > n-1 || grid[x][y] == 0) continue;
+                    cur++;
+                    grid[x][y] = 0;
+                    for (int[] d :directions) {
+                        queue.add(new int[]{x+d[0], y+d[1]});
+                    }
+                }
+                max = Math.max(max, cur); //每次结束探索都看看这次探索的面积是不是最大的
+        }
+    }
+    return max;
     }
 }
