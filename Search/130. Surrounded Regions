@@ -1,0 +1,40 @@
+解法：要把所有被X包围的O都变成X，因为边界上的O是不被X包围的，所以直接去判断哪些O是和边界上的O直接或间接相连的就行(也就是用四周的四个点去做四周的dfs)。
+这里方法是把和边界直接或者间接连接的O变成其他字母比如A。
+标记完这些不会被X包围的O，也就是不用变成X的O，再去遍历中个2D array board，把标记的转换成O，把没标记的O，也就是被包围的O都变成X
+
+class Solution {
+    int m,n;
+    int[][] directions = {{1,0},{-1,0},{0,1},{0,-1}};
+    public void solve(char[][] board) {
+        m = board.length;
+        n = board[0].length;
+        // 把和四周的O联通的O都标记成A
+        for (int i = 0; i < m; i++) {
+            dfs(board, i, 0);
+            dfs(board, i, n-1);
+        }
+        for (int i = 0; i < n; i++) {
+            dfs(board, 0, i);
+            dfs(board, m-1, i);
+        }
+        // 把标记过的，也就是不能被包围的O变回去，把能包围的，也就是还是是O的变成X
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == 'A') {
+                    board[i][j] = 'O';
+                } else if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+    private void dfs(char[][] board, int i, int j) {
+        if (i < 0 || i > m-1 || j < 0 || j > n-1 || board[i][j] != 'O') {
+            return;
+        }
+        board[i][j] = 'A';
+        for (int[] d : directions) {
+            dfs(board, i + d[0], j + d[1]);
+        }
+    }
+}
