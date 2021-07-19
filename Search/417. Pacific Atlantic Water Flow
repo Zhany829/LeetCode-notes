@@ -1,0 +1,48 @@
+解法：从四条边开始往里找连通的点(是否连通的条件是里面的点要比四条边的点的值大或相等)，用两个2D array去记录分别从左和上和下和右往里走，把能走到的点都标为true，
+两个array都为true的地点说明都可以到达大西洋和太平洋
+也就是从四周往里找
+
+class Solution {
+    private int m,n;
+    int[][] directions = {{0,1},{0,-1},{1,0},{-1,0}};
+    int[][] matrix;
+    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        m = heights.length;
+        n = heights[0].length;
+        matrix = heights;
+        boolean[][] canReachP = new boolean[m][n];
+        boolean[][] canReachA = new boolean[m][n];
+        for (int i = 0; i < m; i++) {
+            dfs(canReachP, i, 0);   //去找和左边的点都能连通的点--也就是找比他大或一样的点去相连
+            dfs(canReachA, i, n-1); //去找和右边的点都能连通的点
+        }
+        for (int i = 0; i < n; i++) {
+            dfs(canReachP, 0, i);   //去找和上边的点都能连通的点
+            dfs(canReachA, m-1, i); //去找和下边的点都能连通的点
+        }
+        //遍历两个visited，去找他们共同能达到的点，就是能同时流到P和A的点
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 0; i < m; i++) {       
+            for (int j = 0; j < n; j++) {
+                if (canReachP[i][j] && canReachA[i][j]) { //能从P(左边和上边)和A(右边和下边)都流到的点
+                    List<Integer> cur = new ArrayList<>();
+                    cur.add(i);
+                    cur.add(j);
+                    res.add(cur);
+                }
+            }
+        }
+        return res;
+    }
+    private void dfs(boolean[][] canReach, int i, int j) {
+        if (canReach[i][j]) return;
+        canReach[i][j] = true;
+        for (int[] d : directions) {
+            int x1 = i + d[0];
+            int y1 = j + d[1];
+            if (x1 < 0 || x1 > m-1 || y1 < 0 || y1 > n-1 || matrix[i][j] > matrix[x1][y1]) continue;//dfs的条件判断
+            dfs(canReach, x1, y1);
+        }
+    }
+}
+
