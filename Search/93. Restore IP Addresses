@@ -1,0 +1,59 @@
+解法：回溯方法里判断分割点数量是不是3 -> 判断第四段字符串是否合法，合法就放入res，否则返回
+For loop从startIndex遍历整个字符串，如果合法，说明这一段是其中一段，就在后面插入一个分割点
+(也就是用subtring重新构造一个string)，同时分割点数量++ ->开始从插入分割点后面那段开始递归，之后紧接着回溯(同样用substring删掉分割点，并且分割点数量--)，不合法就返回。
+判断是否合法的方法是判断start，end区间内的string是否合法：1.start>end 2.start是0，而且不是单单一个0(start!=end) 
+3.遍历String，看看有没有哪个char不是0-9，以及这个string的值是不是会 > 255
+
+class Solution {
+    List<String> res = new ArrayList<>();
+
+    public List<String> restoreIpAddresses(String s) {
+      if (s.length() > 12) return res; // 算是剪枝了
+        backTrack(s, 0, 0);
+        return res;
+    }
+
+    // startIndex: 搜索的起始位置， pointNum:添加逗点的数量
+    private void backTrack(String s, int startIndex, int pointNum) {
+        if (pointNum == 3) {// 逗点数量为3时，分隔结束
+            // 判断第四段⼦字符串是否合法，如果合法就放进res中
+            if (isValid(s,startIndex,s.length()-1)) {
+                res.add(s);
+            }
+            return;
+        }
+        for (int i = startIndex; i < s.length(); i++) {
+            if (isValid(s, startIndex, i)) {
+                s = s.substring(0, i + 1) + "." + s.substring(i + 1);  //在str的后⾯插⼊⼀个逗点
+                pointNum++;
+                backTrack(s, i + 2, pointNum); // 插⼊逗点之后下⼀个⼦串的起始位置为i+2
+                pointNum--; // 回溯
+                s = s.substring(0, i + 1) + s.substring(i + 2); // 回溯删掉逗点
+            } else {
+                return;
+            }
+        }
+    }
+
+    // 判断字符串s在左闭⼜闭区间[start, end]所组成的数字是否合法
+    private Boolean isValid(String s, int start, int end) {
+        if (start > end) {
+            return false;
+        }
+        if (s.charAt(start) == '0' && start != end) { // 0开头的数字不合法
+            return false;
+        }
+        int num = 0;
+        for (int i = start; i <= end; i++) {
+            if (s.charAt(i) > '9' || s.charAt(i) < '0') { // 遇到⾮数字字符不合法
+                return false;
+            }
+            num = num * 10 + (s.charAt(i) - '0');
+            if (num > 255) { // 如果⼤于255了不合法
+                return false;
+            }
+        }
+        return true;
+    }
+}
+  
