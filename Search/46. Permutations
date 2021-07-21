@@ -1,0 +1,26 @@
+回溯，当当前list长度达到num要求长度，比如3，就把当前list加到res，否则就遍历visited数组，把这次递归没visit的数字加到当前list，并标记为visited，再去做递归，
+递归完当前list移除这个元素并且visited标记为false
+class Solution {
+    List<List<Integer>> res= new ArrayList<>();
+    public List<List<Integer>> permute(int[] nums) {
+        List<Integer> cur = new ArrayList<>();
+        boolean[] visited = new boolean[nums.length];
+        backTrack(cur, nums, visited);
+        return res;
+    }
+    private void backTrack(List<Integer> cur, int[] nums, boolean[] visited) {
+        if (cur.size() == nums.length) {
+            res.add(new ArrayList<>(cur)); //重新构造一个list
+            return;
+        }
+        for (int i = 0; i < visited.length; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                cur.add(nums[i]);
+                backTrack(cur, nums, visited);
+                cur.remove(cur.size()-1);
+                visited[i] = false;
+            }
+        }
+    }
+}
