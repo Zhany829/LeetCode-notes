@@ -1,0 +1,44 @@
+解法1：用树的递归做，如果root是null则返回，先把当前节点的val加到记录当前路径的变量里，如果左右儿子都是null则把变量值加到res，否则在变量后加->然后分别递归地去左右两儿子找， 时间复杂度nlogn
+class Solution {
+    List<String> res = new ArrayList<>();
+    public List<String> binaryTreePaths(TreeNode root) {
+        getPath(root, "");
+        return res;
+    }
+    private void getPath(TreeNode root, String cur) {
+        if (root == null) return;   //上次递归的左/右儿子是null，后面就加不了val
+        cur += root.val;
+        if (root.left == null && root.right == null) {  //到叶子节点了，说明cur = 一条路径的值
+            res.add(cur);
+            return;
+        } else {
+            cur += "->";            // 没到叶子节点拼接一个->为后面做准备
+            getPath(root.left, cur);    //去左儿子探索下去
+            getPath(root.right, cur);   //去右儿子探索下去
+        }   
+    }
+} 
+
+
+解法2:回溯，和递归一样，但多了一步：加完到叶子结点的路径/递归完要回溯，也就是把最后一个元素拿出，同时承载每个路径也不再是string而是List。时间复杂度可能是N！/2^n
+class Solution {
+    List<String> res = new ArrayList<>();
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> cur = new ArrayList<>();
+        GetPath(root, "");
+        return res;
+    }
+    private void GetPath(TreeNode root, String cur) {
+        if (root == null) return;
+        cur += (root.val);
+        if (root.left == null && root.right == null) {
+            res.add(cur);
+            return;
+        } else {
+            cur += "->";
+            GetPath(root.left, cur);
+            GetPath(root.right, cur);
+        }
+        cur = cur.substring(0, cur.length()-3);   //回溯 删掉最后一个元素 
+    }
+}
