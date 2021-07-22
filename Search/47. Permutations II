@@ -1,0 +1,36 @@
+解法：和之前一题一样，但额外要1.先排序数组让相同的数字都相邻，2.在每次添加的时候遇到和前一个数字一样，而且前一个数字被没被访问过就continue
+如果nums[i-1]访问过了，回溯到num[i]的时候，nums[i-1]的状态已经被清空了(visited里标记为false)，所以如果vis[i-1]的状态是访问过的(被标记为false了)，说明被访问过了直接跳过
+
+
+class Solution {
+    List<List<Integer>> res = new ArrayList<>();
+    int n;
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        n = nums.length;
+        boolean[] visited = new boolean[n];
+        List<Integer> cur = new ArrayList<>();
+        Arrays.sort(nums);  //使得之后好判断前一个是不是相同的数，是不是用过了
+        backTrack(nums, visited, cur);
+        return res;
+    }
+    private void backTrack(int[] nums, boolean[] visited, List<Integer> cur) {
+        if (cur.size() == n) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int i = 0; i < n; i++) {
+            //和前一个数字一样，而且前一个数字用过了(被置为false)就continue；
+            if (i > 0 && nums[i] == nums[i-1] && !visited[i-1]) {  
+                continue;
+            }
+            if (visited[i]) {
+                continue;
+            }
+            visited[i] = true;
+            cur.add(nums[i]);
+            backTrack(nums, visited, cur);
+            cur.remove(cur.size()-1);   //回溯
+            visited[i] = false;         //回溯
+        }
+    }
+}
