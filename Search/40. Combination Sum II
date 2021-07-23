@@ -1,0 +1,32 @@
+解法：也是用res和cur记录就行，终止条件是target刚好是0，则说明condidates里的刚好满足了target，就加到res。
+还有每次遍历candidates数组要用一个startIndex记录上次递归的地方，这样不用每轮递归里都从头开始取，还要注意只有当前candidate里的数小于等于target才去加和递归
+
+class Solution {
+    List<List<Integer>> res = new ArrayList<>();
+    List<Integer> cur = new ArrayList<>();
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        boolean[] visited = new boolean[candidates.length];
+        backTrack(candidates, target, 0, visited);
+        return res;
+    }
+    private void backTrack(int[] candidates, int target, int startIndex, boolean[] visited) {
+
+        if (target == 0) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int i = startIndex; i < candidates.length; i++) {
+            if (i > 0 && candidates[i] == candidates[i-1] &&!visited[i-1]) { //判断是不是前一个数字
+                continue;
+            }
+            if (target >= candidates[i]) {
+                cur.add(candidates[i]);
+                visited[i] = true;
+                backTrack(candidates, target-candidates[i], i+1, visited);
+                cur.remove(cur.size()-1);
+                visited[i] = false;
+            }
+        }
+    }
+}
