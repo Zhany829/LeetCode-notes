@@ -1,0 +1,24 @@
+解法：也是用res和cur记录就行，终止条件是target刚好是0，则说明condidates里的刚好满足了target，就加到res。
+还有每次遍历candidates数组要用一个startIndex记录上次递归的地方，这样不用每轮递归里都从头开始取，还要注意只有当前candidate里的数小于等于target才去加和递归
+
+class Solution {
+    List<List<Integer>> res = new ArrayList<>();
+    List<Integer> cur = new ArrayList<>();
+ public List<List<Integer>> combinationSum(int[] candidates, int target) {
+     backtrack(candidates, target, 0);
+     return res;
+    }
+    private void backtrack(int[] candidates, int target, int startIndex) {
+        if (target == 0) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int i = startIndex; i < candidates.length; i++) { //用startIndex记录之前拿的位置，防止重复拿
+            if (target >= candidates[i]) {  //终止条件之一
+                cur.add(candidates[i]);
+                backtrack(candidates, target-candidates[i], i); //更新target
+                cur.remove(cur.size()-1);
+            }
+        }
+    }
+}
