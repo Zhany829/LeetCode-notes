@@ -1,0 +1,24 @@
+解法：和上题多了一个条件k，也就是要保证返回的每个组合的元素数量=k。同时candidate变成了1到n，，target变成了n自己
+
+class Solution {
+    List<List<Integer>> res = new ArrayList<>();
+    List<Integer> cur = new ArrayList<>();
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        backtrack(k, n, 1);
+        return res;
+    }
+    private void backtrack(int k, int n, int startIndex) {
+        if (cur.size() == k && n == 0) {    //要满足两个要求：1.每个组合的元素数量=k 2.组合的总和=n
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int i = startIndex; i <= 9; i++) {
+            if (n >= i) {
+                cur.add(i);
+                backtrack(k, n-i, i+1); //更新target，更新startIndex防止重复使用
+                cur.remove(cur.size()-1);
+            }
+               
+        }
+    }
+}
