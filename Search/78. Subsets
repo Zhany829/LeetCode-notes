@@ -1,0 +1,25 @@
+解法：子集问题和组合不同的是要去获得长度为0到nums.length的组合
+
+class Solution {
+    List<List<Integer>> res = new ArrayList<>();
+    List<Integer> cur = new ArrayList<>();
+    public List<List<Integer>> subsets(int[] nums) {
+        //如果数组长度=3，则去得到长度为0 1 2 3的子集
+        for (int i = 0; i <= nums.length; i++) {    //注意这里和他长度一样长的子集也可以
+            backtrack(nums, 0, i);
+        }
+        
+        return res;
+    }
+    private void backtrack(int[] nums, int startIndex, int size) {
+        if (cur.size() == size) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int i = startIndex; i < nums.length; i++) {
+            cur.add(nums[i]);
+            backtrack(nums, i+1, size); //下次递归的startIndex+1来防止重复
+            cur.remove(cur.size()-1);
+        }
+    }
+}
