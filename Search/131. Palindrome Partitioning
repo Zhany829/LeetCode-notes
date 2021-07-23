@@ -1,0 +1,31 @@
+解法：把字母串等价于一个nums数组，就是用里面的char来求排列
+
+class Solution {
+    List<List<String>> res = new ArrayList<>();
+    List<String> cur = new ArrayList<>();
+    public List<List<String>> partition(String s) {
+        backtrack(s); //排列
+        return res;
+    }
+    private void backtrack(String s) {
+        if (s.length() == 0) {  //说明切割完了
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (isPalindrome(s, 0, i)) {    
+                cur.add(s.substring(0,i+1)); //把这段加到cur
+                backtrack(s.substring(i+1)); //递归后面没被切割的部分
+                cur.remove(cur.size()-1);
+            }
+        }
+    }
+    private boolean isPalindrome(String s, int l, int r) {
+        while (l < r) {
+            if (s.charAt(l) != s.charAt(r))  return false;
+            l++;
+            r--;
+        }
+        return true;
+    }
+}
