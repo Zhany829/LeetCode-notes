@@ -1,0 +1,28 @@
+解法：因为不能有重复子集，所以要去重：1.sort原数组 2.加visited数组 3.for loop里判断是否重复
+
+class Solution {
+    List<List<Integer>> res = new ArrayList<>();
+    List<Integer> cur = new ArrayList<>();
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        boolean[] visited = new boolean[nums.length];   //去重准备1
+        Arrays.sort(nums);                              //去重准备2
+        for (int i = 0; i <= nums.length; i++) {        //子集问题
+            backtrack(nums, visited, 0, i);
+        }
+        return res;
+    }
+    private void backtrack(int[] nums, boolean[] visited, int startIndex, int size) {
+        if (cur.size() == size) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int i = startIndex; i < nums.length; i++) {
+            if (i != 0 && nums[i] == nums[i-1] && !visited[i-1]) continue; //判断是否重复
+            cur.add(nums[i]);
+            visited[i] = true;
+            backtrack(nums, visited, i+1, size);
+            cur.remove(cur.size()-1);
+            visited[i] = false;
+        }
+    }
+}
