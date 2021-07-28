@@ -1,0 +1,14 @@
+解法：用map记录16进制的可能的数，只要num没有被位运算变成0，一直用无符号右移，同时sb append num低4位的值转化为16进制的值(用map[num & 0xf])
+
+class Solution {
+    public String toHex(int num) {
+        if (num == 0) return "0";
+        char[] map = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+        StringBuilder sb = new StringBuilder();
+        while (num != 0) {  
+            sb.append(map[num & 0xf]);  //用& 0xf获取num的低4位
+            num >>>= 4; // 因为考虑的是补码形式，因此符号位就不能有特殊的意义，需要使用无符号右移，左边填 0
+        }
+        return sb.reverse().toString();
+    }
+}
