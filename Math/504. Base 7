@@ -1,0 +1,16 @@
+解法：先把负的转化成正的，再用stringBuilder来append num%7，并且num /= 7，之后还要把sb反一下，因为把高位append在后面了
+
+class Solution {
+    public String convertToBase7(int num) {
+       if (num == 0) return "0";
+       boolean isNegative = num < 0;
+       StringBuilder sb = new StringBuilder();
+       if (isNegative) num = -num; //先把num转化成正的来换算
+       while (num > 0) {    //转化
+           sb.append(num % 7); 
+           num /= 7;
+       } 
+       String res = sb.reverse().toString();  //前面是append在末尾，所以这里要反一下
+       return isNegative ? "-" + res : res; //是负数要把负号添加回去
+    }
+}
