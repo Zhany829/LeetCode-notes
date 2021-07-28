@@ -1,0 +1,14 @@
+解法：首先先-1原来的数值，之后sb再append上数值%26再+A的值—相当于看A后面第几个字母，这里+A相当于加了一个1，所以之前才要-1
+
+class Solution {
+    public String convertToTitle(int columnNumber) {
+        if (columnNumber <= 0) return "0";
+        StringBuilder sb = new StringBuilder();
+        while (columnNumber > 0) {
+            columnNumber--;     //-1为了抵消之后+A的相当多加了一个1
+            sb.append((char)(columnNumber % 26 + 'A')); //在A的基础上往后第columnNumber%26个字母
+            columnNumber /= 26;
+        }
+        return sb.reverse().toString();
+    }
+}
