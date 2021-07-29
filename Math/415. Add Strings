@@ -1,0 +1,22 @@
+解法：也是while里判断carry==1或者没走光任意一个字符串，while里对于任意一个字符串，
+如果没走光i>=0,就把当前数字的值-‘0’加到carry，然后sb.append (carry+前面两个字符串的值)%10,同时carry /= 10
+
+class Solution {
+    public String addStrings(String num1, String num2) {
+        int carry = 0;
+        int i = num1.length()-1, j = num2.length()-1;
+        StringBuilder sb = new StringBuilder();
+        while (carry == 1 || i >= 0 || j >= 0) {
+            int x = 0, y = 0;
+            if (i >= 0) {
+                x = num1.charAt(i--) - '0';
+            }
+            if (j >= 0) {
+                y = num2.charAt(j--) - '0';
+            }
+            sb.append((x+y+carry)%10);
+            carry = (x+y+carry)/10;
+        }
+        return sb.reverse().toString();
+    }
+}
