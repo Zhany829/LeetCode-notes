@@ -1,0 +1,21 @@
+解法：因为要进位，所以要carry，只有carry == 1或者两个字符串没走完就while，while里对于单个字符串，如果没走完(i>=0)，如果当前字符串位置是‘1’,carry就+1。
+之后sb再append carry%2，同时carry /= 2.当然最后while完要对sb反转和toString()
+
+class Solution {
+    public String addBinary(String a, String b) {
+        int carry = 0;
+        int i = a.length()-1, j = b.length()-1;
+        StringBuilder sb = new StringBuilder();
+        while (carry == 1 || i >= 0 || j >= 0) {
+            if (i >= 0 && a.charAt(i--) == '1') {
+                carry++;
+            }
+            if (j >= 0 && b.charAt(j--) == '1') {
+                carry++;
+            }
+            sb.append(carry % 2);
+            carry /= 2;
+        }
+        return sb.reverse().toString();
+    }
+}
