@@ -1,0 +1,13 @@
+解法：一直除3，直到%3不等于0，最后看剩下的值是不是0
+
+class Solution {
+    public boolean isPowerOfThree(int n) {
+        if (n < 1) {
+            return false;
+        }
+        while (n % 3 == 0) {
+            n /= 3;
+        }
+        return n == 1;
+    }  
+}
