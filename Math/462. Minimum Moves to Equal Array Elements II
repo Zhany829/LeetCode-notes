@@ -1,0 +1,39 @@
+解法：先用快速选择找到median，也就是k = nums.length/2，之后遍历数组把和每个数字和median的差的和加起来
+
+class Solution {
+    public int minMoves2(int[] nums) {
+        int median = findKthSmallest(nums, nums.length/2);
+        int res = 0;
+        for (int num : nums) {
+            res += Math.abs(num-median);
+        }
+        return res;
+    }
+    private int findKthSmallest(int[] nums, int k) {
+        int l = 0, r = nums.length-1;
+        while (l < r) {
+            int split = partition(nums, l, r);
+            if (split == k) break;
+            else if (split < k) l = split + 1;
+            else r = split - 1;
+        }
+        return nums[k];
+    }
+    private int partition(int[] nums, int l, int r) {
+        int leftMark = l, rightMark = r + 1;
+        int pivot = nums[l];
+        while (true) {
+            while (nums[++leftMark] < pivot && leftMark < r);
+            while (nums[--rightMark] > pivot && rightMark > l);
+            if (leftMark >= rightMark) break;
+            swap(nums, leftMark, rightMark);
+        }
+        swap(nums, rightMark, l);
+        return rightMark;
+    }
+    private void swap(int[] nums, int i, int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
+    }
+}
