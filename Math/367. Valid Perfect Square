@@ -1,0 +1,12 @@
+解法：平方序列1，4，9，16... 间隔3，5，7...
+
+class Solution {
+    public boolean isPerfectSquare(int num) {
+        int subNum = 1;
+        while (num > 0) {
+            num -= subNum;
+            subNum += 2;
+        }
+        return num == 0;
+    }
+}
