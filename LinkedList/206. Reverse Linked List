@@ -1,0 +1,15 @@
+用一个pre和一个cur，只要cur不为null(为null就返回pre，因为pre刚好是最后一个元素)就先用一个新节点记录cur后面的节点防止断了，之后把cur指向前面一个节点，再把cur和pre都往后移
+
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if (head == null) return null;
+        ListNode pre = null, cur = head;
+        while (cur != null) {
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+}
