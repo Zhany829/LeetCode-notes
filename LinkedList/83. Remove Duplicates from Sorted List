@@ -1,0 +1,29 @@
+解法1：递归，如果head或者head.next是空就返回空，head的下一个去递归，同时传head.next，返回的值取决于是否重复，如果重复就返回head.next，否则就返回head
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null || head.next == null) return head;
+        head.next = deleteDuplicates(head.next);
+        if (head.val == head.next.val) {
+            return head.next;
+        } else {
+            return head;
+        }
+    }
+}
+
+解法2:用cur去trace，如果遇到一样的就去设置next来删除下个节点，并且不更新当前节点，因为可能下下个也是重复的
+
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null) return null;
+        ListNode cur = head;
+        while (cur != null && cur.next != null) {
+            if (cur.val == cur.next.val) {      //不更新cur，因为说不定当前和下下个节点的值也是一样的
+                cur.next = cur.next.next;
+            } else {
+                cur = cur.next;
+            }
+        }
+        return head;
+    }
+}
