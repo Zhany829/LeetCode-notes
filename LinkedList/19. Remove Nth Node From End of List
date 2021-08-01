@@ -1,0 +1,19 @@
+解法：快慢指针，先让快指针走n个元素，这时候要判断快指针是不是null，是的话说明n等于链表长度，也就是要删掉链表头部元素，直接返回head后一个元素即可。
+之后快慢指针一起走，直到快指针到最后一个元素，也就是快指针的next==null就停止，然后再做删除操作
+
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode fast = head;
+        ListNode slow = head;
+        while (n-- > 0) {
+            fast = fast.next;
+        }
+        if (fast == null) return head.next; //说明就是删除掉头节点
+        while (fast.next != null) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        slow.next = slow.next.next; //做删除操作，slow.next肯定不为null因为n不会为0，所以slow肯定不会到尾部
+        return head;
+    }
+}
