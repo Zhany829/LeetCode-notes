@@ -1,0 +1,14 @@
+分别从两个链表开始trace，遇到尾部就从另一个链表开始。trace的结束条件是两个结点一样。一轮完两个trace会平行，所以如果没相交的结点最后两个都是null也会结束
+
+ 
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode l1 = headA;
+        ListNode l2 = headB;
+        while (l1 != l2) {
+            l1 = l1 == null ? headB : l1.next;
+            l2 = l2 == null ? headA : l2.next;
+        }
+        return l1;
+    }
+}
