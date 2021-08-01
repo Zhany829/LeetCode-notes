@@ -1,0 +1,30 @@
+解法:先把节点的val分别放到两个stack，再创建一个head来接node，while循环里只要有一个stack不为空或者carry不为0就从里面拿，每次while产生一个新的node，值为两个stack里的节点+carry的总和%10，
+再更新carry，也就是sum/10，stack没元素 = 0. 注意在接新节点的时候要接在head后一个，也就是先用新node的next接head的next，再用head的next接node
+
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        Stack<Integer> s1 = buildStack(l1);
+        Stack<Integer> s2 = buildStack(l2);
+        ListNode head = new ListNode(-1);
+        int carry = 0;
+        while (!s1.isEmpty() || !s2.isEmpty() || carry != 0) {
+            int x = s1.isEmpty() ? 0 : s1.pop();
+            int y = s2.isEmpty() ? 0 : s2.pop();
+            int sum = x + y + carry;
+            ListNode node = new ListNode(sum%10);
+            node.next = head.next;
+            head.next = node;
+            carry = sum / 10;
+        }
+        return head.next;
+    }
+    private Stack<Integer> buildStack(ListNode l) {
+        ListNode cur = l;
+        Stack<Integer> res = new Stack<>();
+        while (cur != null) {
+            res.push(cur.val);
+            cur = cur.next;
+        }
+        return res;
+    }
+}
