@@ -1,0 +1,17 @@
+解法：用3个节点，两个分别用跳过法去掉奇数/偶数的节点，还有一个记录偶数节点的开头，之后把偶数节点们接在奇数节点后面
+
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode odd = head, even = head.next;
+        ListNode evenHead = even;   //record the start of even nodes
+        while (odd.next != null && even.next != null) {
+            odd.next = odd.next.next;   // get the odd nodes linkedlist
+            even.next = even.next.next; //get the even nodes linkedlist
+            odd = odd.next;
+            even = even.next;
+        }
+        odd.next = evenHead;    //link the even nodes linkedlist
+        return head;
+    }
+}
