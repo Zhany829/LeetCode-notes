@@ -1,0 +1,10 @@
+解法：递归-终止条件(root是null)，递归左右两边，比较左右两边拿更深的深度加1来返回
+
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if (root == null) return 0;      //递归终止条件
+        int left = maxDepth(root.left); //获得左边最大深度
+        int right = maxDepth(root.right);  //获得右边最大深度
+        return Math.max(left, right) + 1;   //返回左边/右边下去的深度+1
+    }
+}
