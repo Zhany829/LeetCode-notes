@@ -1,0 +1,28 @@
+解法：先获得总长度用于后面分len/k组来反转
+
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        ListNode visit = head;
+        ListNode cur = head;
+        ListNode dummy = new ListNode(-1);
+        ListNode pre = dummy;
+        pre.next = head;
+        int len = 0;
+        while (visit != null) { //获得长度后面好分组
+            len++;
+            visit = visit.next;
+        }
+        for (int i = 0; i < len/k; i++) {
+            for (int j = 0; j < k-1; j++) {
+                ListNode next = cur.next;
+                ListNode nNext = next.next;
+                cur.next = nNext;
+                next.next = pre.next;  //不能是cur，因为要k个组反转
+                pre.next = next;
+            }
+            pre = cur;
+            cur = cur.next;
+        }
+        return dummy.next;
+    }
+}
