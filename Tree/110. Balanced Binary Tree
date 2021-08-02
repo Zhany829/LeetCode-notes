@@ -1,0 +1,17 @@
+解法：用一个变量去记录，用计算最大深度的方法，每次递归判断左右深度的差的绝对值，如果大于1就把变量设置成false，最后返回这个变量
+
+class Solution {
+    boolean balence = true;
+    public boolean isBalanced(TreeNode root) {
+        if (root == null) return true;
+        determineBalance(root);
+        return balence;
+    }
+    private int determineBalance(TreeNode root) {
+        if (root == null) return 0;
+        int left = determineBalance(root.left);
+        int right = determineBalance(root.right);
+        if (Math.abs(left-right) > 1) balence = false;  //左右深度大于1就变false
+        return Math.max(left, right) + 1;
+    }
+}
