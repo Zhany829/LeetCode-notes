@@ -1,0 +1,16 @@
+解法：和求最大深度一样，但一个变量记录每次递归left+right的最大值
+
+class Solution {
+    int max = 0;
+    public int diameterOfBinaryTree(TreeNode root) {
+        getMax(root);
+        return max;
+    }
+    private int getMax(TreeNode root) {
+        if (root == null) return 0;
+        int left = getMax(root.left);
+        int right = getMax(root.right);
+        max = Math.max(max, left+right);
+        return Math.max(left, right) + 1;
+    }
+}
