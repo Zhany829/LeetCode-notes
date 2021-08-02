@@ -1,0 +1,24 @@
+解法：先用快慢指针找中点，然后用慢指针把后半段链表反转，再和head比较值，有一个节点不一样就返回false
+
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        ListNode slow = head, fast = head;
+        ListNode pre = null;
+        while (fast.next != null && fast.next.next != null) { //find mid point
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        while (slow != null) {  //reverse right half LinkedList
+            ListNode tmp = slow.next;
+            slow.next = pre;
+            pre = slow;
+            slow = tmp;
+        }
+        while (pre != null && head != null) {   //compare value
+            if (pre.val != head.val) return false;
+            pre = pre.next;
+            head = head.next;
+        }
+        return true;
+    }
+}
