@@ -1,0 +1,29 @@
+解法：先获得总长度，再得到每组的长度和每组分配完相同数量的元素后剩余的元素数量。对于每组都先把cur放进去，之后cur运动制定数量后断开，这样这个res的index就有了需要的元素
+需要注意的是要判断mod是不是大于0，如果是的话就要在当前组多放一个元素，同时mod--
+
+class Solution {
+    public ListNode[] splitListToParts(ListNode head, int k) {
+        ListNode visit = head;
+        int len = 0;
+        while (visit != null) { //获得总长度
+            len++;
+            visit = visit.next;
+        }
+        int size = len / k;
+        int mod = len % k;  //每组放完相同数量元素后剩下几个元素--之后每组各分配一个
+        ListNode[] res = new ListNode[k];
+        ListNode cur = head;
+        for (int i = 0; i < k && cur != null; i++) {
+            res[i] = cur;
+            int curSize = size + (mod-- > 0 ? 1 : 0); //如果mod有剩余>0，则加上1，因为每个元素大小不能超过1
+            for (int j = 0; j < curSize - 1; j++) { //到指定长度元素后
+                cur = cur.next;
+            }
+            //断开
+            ListNode next = cur.next;
+            cur.next = null;
+            cur = next;
+        }
+        return res;
+    }
+}
