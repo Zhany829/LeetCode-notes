@@ -1,0 +1,20 @@
+解法：用dummy node记录头，pre=dummy并且不能为null，用pre连接cur。每次交换把next记录一下，用cur连接next的后面一个，再把next接到cur后面，再更新pre和cur
+
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        ListNode dummy = new ListNode(-1);
+        ListNode pre = dummy;
+        ListNode cur = head;
+        pre.next = cur;
+        while (cur != null && cur.next != null) {
+            ListNode next = cur.next;
+            ListNode nNext = next.next;
+            cur.next = nNext;
+            next.next = cur;
+            pre.next = next;
+            pre = cur;
+            cur = nNext;
+        }   
+        return dummy.next;
+    }
+}
