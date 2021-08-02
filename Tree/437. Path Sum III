@@ -1,0 +1,15 @@
+解法：对于root和他的左右儿子递归去找路径，每次递归先判断当前值是不是等于节点值，是的话ret++，之后ret再去加上递归左/右儿子和减掉了节点值的targetSum
+
+class Solution {
+    public int pathSum(TreeNode root, int targetSum) {
+        if (root == null) return 0;
+        return getPathNum(root, targetSum) + pathSum(root.left, targetSum) + pathSum(root.right, targetSum);
+    }
+    private int getPathNum(TreeNode root, int targetSum) {
+        if (root == null) return 0;
+        int ret = 0;
+        if (root.val == targetSum) ret++;
+        ret += getPathNum(root.left, targetSum-root.val) + getPathNum(root.right, targetSum-root.val);
+        return ret;
+    }
+}
