@@ -1,0 +1,15 @@
+解法：用root的自己去执行找的方法，并且root的左右两个子树递归本方法，这三个有一个返回true了就行。找的方法里判断1.都是null返回true 2.只有一个节点为null/两个节点的值不一样返回false
+最后递归地去看两个节点分别的左节点和右节点
+
+class Solution {
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        if (root == null) return false;
+        return isSubtreeWithRoot(root, subRoot) || isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
+    }
+    private boolean isSubtreeWithRoot(TreeNode t, TreeNode s) {
+        if (s == null && t == null) return true;
+        if (s == null || t == null) return false;
+        if (t.val != s.val) return false;
+        return isSubtreeWithRoot(t.left, s.left) && isSubtreeWithRoot(t.right, s.right);
+    }
+}
