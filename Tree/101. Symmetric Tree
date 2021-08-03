@@ -1,0 +1,15 @@
+解法：从root的左右两儿子去找的方法里判断，判断的方法有：1.两个节点都null，返回true 2.有任意一个节点不为null/两个节点的值不一样，返回false 
+之后递归地找一个节点的左/右节点和另一个节点的右/左节点
+
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) return true;
+        return isSymmetricWithRoot(root.left, root.right);
+    }
+    private boolean isSymmetricWithRoot(TreeNode s, TreeNode t) {
+        if (s == null && t == null) return true;
+        if (s == null || t == null) return false;
+        if (s.val != t.val) return false;
+        return isSymmetricWithRoot(s.left, t.right) && isSymmetricWithRoot(s.right,t.left);
+    }
+}
