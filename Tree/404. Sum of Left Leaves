@@ -1,0 +1,14 @@
+解法：先判断左儿子是不是叶子节点，如果是就用左儿子的值+右儿子去递归。
+最后还是要递归自己的左右儿子
+
+class Solution {
+    public int sumOfLeftLeaves(TreeNode root) {
+        if (root == null) return 0;
+        if (isLeaf(root.left)) return root.left.val + sumOfLeftLeaves(root.right);
+        return sumOfLeftLeaves(root.left) + sumOfLeftLeaves(root.right);
+    }
+    private boolean isLeaf(TreeNode root) {
+        if (root == null) return false;
+        return root.left == null && root.right == null;
+    }
+}
