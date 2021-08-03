@@ -1,0 +1,11 @@
+解法：同样先得到左右深度，如果有一个深度是0，就返回另一个深度+1，否则返回两者里最小的+1
+
+class Solution {
+    public int minDepth(TreeNode root) {
+        if (root == null) return 0;
+        int left = minDepth(root.left);
+        int right = minDepth(root.right);
+        if (left == 0 || right == 0) return left + right + 1;
+        return Math.min(left, right) + 1;
+    }
+}
