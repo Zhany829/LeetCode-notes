@@ -1,0 +1,39 @@
+解法1：递归步骤多加一个记录每次第一个节点的值的变量，这样BFS到最后一层变量就是记录最左边的值
+
+class Solution {
+    public int findBottomLeftValue(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        int res = 0;
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode cur = queue.poll();
+                if (i == 0) res = cur.val;  //最后一次更新就是最后一行的第一个元素
+                if (cur.left != null) queue.add(cur.left);
+                if (cur.right != null) queue.add(cur.right);
+            }
+        }
+        return res;
+    }
+}
+
+解法2:先往queue里加右儿子节点，再加左儿子节点，这样最后读取的节点就是符合题目要求的最后一层的最左的节点
+
+class Solution {
+    public int findBottomLeftValue(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        TreeNode res = null;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            while (size-- > 0) {
+                TreeNode cur = queue.poll();
+                res = cur;  //这样最后一次更新是最后一次的最左的节点
+                if (cur.right != null) queue.add(cur.right);  //先遍历当前层右边节点
+                if (cur.left != null) queue.add(cur.left);    //最后再遍历当前层左边节点
+             }
+        }
+        return res.val;
+    }
+}
