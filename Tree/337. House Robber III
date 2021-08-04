@@ -1,0 +1,23 @@
+解法：找自己和孙子还是儿子的哪个总值大，每次找val都是一次递归，同时要把两者大的用map存起来下次递归到这个同样的节点就可以直接返回
+
+class Solution {
+    Map<TreeNode, Integer> memo = new HashMap<>();
+    public int rob(TreeNode root) {
+        if (root == null) return 0;
+        if (memo.containsKey(root)) return memo.get(root);  //记忆化存储
+        //获得自己和孙子们的值
+        int val1 = root.val;
+        if (root.left != null) {
+            val1 += rob(root.left.left) + rob(root.left.right);
+        }
+        if (root.right != null) {
+            val1 += rob(root.right.left) + rob(root.right.right);
+        }
+        // 获得儿子们的值
+        int val2 = rob(root.left) + rob(root.right);
+        // 比较之后取最大的存
+        int res = Math.max(val1, val2);
+        memo.put(root, res);
+        return res;
+    }
+}
