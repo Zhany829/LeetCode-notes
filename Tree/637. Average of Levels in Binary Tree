@@ -1,0 +1,22 @@
+解法：BFS在每层的时候都记录总和同时把下层节点放到queue里去，同时把这层平均值(总和/节点数)放到res
+
+class Solution {
+    public List<Double> averageOfLevels(TreeNode root) {
+        List<Double> res = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            int divide = size;      //记录一下防止之后size--把size变0
+            double sum = 0;
+            while (size-- > 0) {
+                TreeNode cur = queue.poll();
+                sum += cur.val;
+                if (cur.left != null) queue.add(cur.left);  //把儿子节点们加到队列
+                if (cur.right != null) queue.add(cur.right);
+            }
+            res.add(sum / divide);  //把平均值加到res
+        }
+        return res;
+    }
+}
