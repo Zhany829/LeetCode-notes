@@ -1,0 +1,13 @@
+解法：用反序的中序遍历，就是先到最右下角，再把节点的值一直加起来，同时从右下角往上的时候一个个往上把值赋予给节点，同时这个值每次赋予都会加上当前节点的值。之后再去递归左子树
+
+class Solution {
+    int sum = 0;
+    public TreeNode convertBST(TreeNode root) {
+        if (root == null) return null;
+        convertBST(root.right);
+        sum += root.val;
+        root.val = sum;
+        convertBST(root.left);
+        return root;
+    }
+}
