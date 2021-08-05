@@ -1,0 +1,29 @@
+解法1：前序遍历先看自己节点的情况，如果超过边界了再去处理，自己太小了，也就是超过左边界了就要递归去右儿子找，因为右儿子比自己大，可能能在边界之内，所以自己和左儿子被抛弃了，右儿子可能被保留。
+反之亦然。之后再处理左和右节点
+
+class Solution {
+    public TreeNode trimBST(TreeNode root, int low, int high) {
+        if (root == null) return null;
+        if (root.val < low) {   //自己比左边界小了，传右儿子(比自己大)因为可能保留下来的只能是右儿子
+            return trimBST(root.right, low, high);
+        }
+        if (root.val > high) {  //自己比右边界大了，传左儿子(比自己小)因为可能保留下来的只能是左儿子
+            return trimBST(root.left, low, high);
+        }
+        //处理正常节点
+        root.left = trimBST(root.left, low, high);  
+        root.right = trimBST(root.right, low, high);
+        return root;
+    }
+}
+解法2：中序遍历就是先处理左儿子再判断自己节点，再去处理右儿子
+class Solution {
+    public TreeNode trimBST(TreeNode root, int low, int high) {
+        if (root == null) return null;
+        root.left = trimBST(root.left, low, high);
+        if (root.val < low) return trimBST(root.right, low, high);
+        if (root.val > high) return trimBST(root.left, low, high);
+        root.right = trimBST(root.right, low, high);
+        return root;
+    }
+}
