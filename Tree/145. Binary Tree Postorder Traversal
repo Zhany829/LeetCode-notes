@@ -1,0 +1,33 @@
+解法1：递归，左右中的顺序
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        traversal(root, res);
+        return res;
+    }
+    private void traversal(TreeNode root, List<Integer> res) {
+        if (root == null) return;
+        traversal(root.left, res);
+        traversal(root.right, res);
+        res.add(root.val);
+    }
+}
+
+解法2:先变成中右左，也就是先加本身再在stack里加左和右节点，之后反转一下res里面就变成了左右中
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        Stack<TreeNode> s = new Stack<>();
+        s.push(root);
+        while (!s.isEmpty()) {
+            TreeNode cur = s.pop();
+            if (cur == null) continue;
+            // 变成中右左
+            res.add(cur.val);
+            s.push(cur.left);
+            s.push(cur.right);
+        }
+        Collections.reverse(res);   //反转一下变成左右中
+        return res;
+    }
+}
