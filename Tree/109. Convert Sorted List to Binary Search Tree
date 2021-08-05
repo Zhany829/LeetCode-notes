@@ -1,0 +1,26 @@
+解法：用快慢指针的方法去获得mid前一个元素(也就是fast先走一步，之后再同时走：慢一步 快两步)。找到了mid前一个节点，再保存mid节点，同时把mid前一个节点与mid断开(设置前一个节点的next为null)
+构造mid节点,同时设置左右子树，左子树传head，右子树传mid的后一个。递归终止条件是head是null，或者只有head一个元素则直接返回head构造的节点
+
+class Solution {
+    public TreeNode sortedListToBST(ListNode head) {
+        if (head == null) return null;
+        if (head.next == null) return new TreeNode(head.val);
+        ListNode preMid = findPreMid(head);
+        ListNode mid = preMid.next;
+        preMid.next = null; //断开前后两段
+        TreeNode midNode = new TreeNode(mid.val);
+        midNode.left = sortedListToBST(head);
+        midNode.right = sortedListToBST(mid.next);
+        return midNode;
+    }
+    private ListNode findPreMid(ListNode head) {
+        ListNode slow = head, fast = head.next;
+        ListNode pre = slow;
+        while (fast != null && fast.next != null) {
+            pre = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return pre;
+    }
+}
