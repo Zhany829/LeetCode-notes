@@ -1,0 +1,36 @@
+解法1:递归，中序遍历能保证把元素从小到大放到List直到第k个，之后再返回List里最后一个元素
+class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        List<Integer> res = new ArrayList<>();
+        traversal(root, res, k);
+        return res.get(res.size()-1);
+    }
+    private void traversal(TreeNode root, List<Integer> res, int k) {
+        if (root == null) return;
+        traversal(root.left, res, k);
+        if (res.size() == k) return;    //剪枝
+        res.add(root.val);
+        traversal(root.right, res, k);
+    }
+}
+
+解法2:迭代法，中序遍历遍历到左下角，然后removeLast出来
+
+class Solution {
+  public int kthSmallest(TreeNode root, int k) {
+      Stack<TreeNode> st = new Stack<>();
+      st.add(root);
+      while (!st.isEmpty() || root != null) {
+          while (root != null) {
+              st.push(root);
+              root = root.left;
+          }
+          root = st.pop();  //把左下角的拿出来
+          if (--k == 0) return root.val;  //中序遍历拿出了k个节点，这次就是第k小的
+          root = root.right;
+      }
+      return 0;
+  }
+}
+
+
