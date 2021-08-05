@@ -1,0 +1,17 @@
+解法：递归终止条件左区间大于右区间，取到nums的中间值来构造节点，设置这个节点的left和right，设置left的时候去递归nums的左半边，也就是left到mid+1，右边同理。最后返回这个节点
+
+class Solution {
+    public TreeNode sortedArrayToBST(int[] nums) {
+        TreeNode root = changeToBST(nums, 0, nums.length-1);
+        return root;
+    }
+    private TreeNode changeToBST(int[] nums, int l, int r) {
+        if (l > r) return null;
+        int mid = l + (r-l) / 2;
+        TreeNode root = new TreeNode(nums[mid]); //用中点作为根节点
+        // 分别用左右两边数字去设置左右两边的节点
+        root.left = changeToBST(nums, l, mid-1);    
+        root.right = changeToBST(nums, mid+1, r);
+        return root;
+    }
+}
