@@ -1,0 +1,19 @@
+解法：先创建两个变量，一个记录min，一个记录之前节点。用中序遍历，每次看当前节点和之前节点的差值，用min记录其中最小的，再把记录之前节点的变量设置成当前节点
+
+class Solution {
+    int min = Integer.MAX_VALUE;
+    TreeNode pre = null;
+    public int getMinimumDifference(TreeNode root) {
+        inOrder(root);
+        return min;
+    }
+    private void inOrder(TreeNode root) {
+        if (root == null) return;
+        inOrder(root.left);
+        if (pre != null) {
+            min = Math.min(min, root.val - pre.val);
+        }
+        pre = root;
+        inOrder(root.right);
+    }
+}
