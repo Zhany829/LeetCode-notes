@@ -1,0 +1,26 @@
+解法1：把输入string变成char数组，从第一个元素开始如果是‘(’,则在stack上push‘)’，以此类推，最有比较剩下每个元素是不是和stack上push过的一样
+
+class Solution {
+    public boolean isValid(String s) {
+        Stack<Character> st = new Stack<>();
+        for (char c : s.toCharArray()) {
+            if (c == '(') st.push(')');
+            else if (c == '{') st.push('}');
+            else if (c == '[') st.push(']');
+            else if (st.isEmpty() || c != st.pop()) return false;
+        }
+        return st.isEmpty();
+    }
+}
+
+解法2：把输入的string的(),{},[]都替换成“”（循环一半的string长度），最后看这个string是不是empty的
+
+class Solution {
+    public boolean isValid(String s) {
+        int len = s.length();
+        while (len-- > s.length()/2) {
+            s = s.replace("()", "").replace("[]", "").replace("{}", "");
+        }
+        return s == "";
+    }
+}
