@@ -1,0 +1,52 @@
+解法1：在遍历数组时用栈把数组中的数存起来，如果当前遍历的数比栈顶元素来的大，说明栈顶元素的下一个比它大的数就是当前元素
+每次都先比较第i和i+1个，第i个就是stack的peek，i+1就是curInd的元素，
+如果i+1比i小则继续往后比较i+1和i+2，如果i+2比i+1大则把i+1这个元素(也就是stack的顶端元素)pop出，再比较i+2和i，如果大，则继续pop出，小则用i+3去和他比
+
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        int n = temperatures.length;
+        int[] res = new int[n];
+        Stack<Integer> st = new Stack<>();
+        for (int curIdx = 0; curIdx < n; curIdx++) {
+            while (!st.isEmpty() && temperatures[curIdx] > temperatures[st.peek()]) {
+                int preIdx = st.pop();
+                res[preIdx] = curIdx - preIdx;
+            }
+            st.push(curIdx);
+        }
+        return res;
+    }
+}
+
+解法2：根据题意，从最后一天推到第一天，这样会简单很多。因为最后一天显然不会再有升高的可能，结果直接为0。再看倒数第二天的温度，如果比倒数第一天低，那么答案显然为1，
+如果比倒数第一天高，又因为倒数第一天对应的结果为0，即表示之后不会再升高，所以倒数第二天的结果也应该为0。自此我们容易观察出规律，要求出第i天对应的结果，只需要知道第i+1天对应的结果就可以：
+若T[i] < T[i+1]，那么res[i]=1；
+若T[i] > T[i+1]：
+  - res[i+1] = 0，那么res[i] = 0;
+   - res[i+1] != 0，那就比较T[i]和T[i+1+res[i+1]]（即将第i天的温度与比第i+1天大的那天的温度进行比较）
+最后一个元素直接标为0，因为后面没有day了
+所以是从倒数第三个开始，与倒数第二个元素比较
+如果前者小于后者，则直接j-i看之间差了几天
+如果前者大于等于后者，而且后者res上对应位置是0，则说明后者后面的元素没有比他大的了，所以后面的元素也不会有比前者大的元素，所以前者对应的res上也是0.
+如果前者大于等于后者，但后者对应的res位置上不是0(说明后面还有比后者大的元素，所以后者的位置(j)要加其对应的res上的数(res[j])来得到比后者大的那个数，再用这个数与前者比较，反复这样)
+break不能少不然会一直往后面比
+
+
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        int n = temperatures.length;
+        int[] res = new int[n];
+        for (int i = n-2; i >=0; i--) {
+            for (int j = i+1; j < n; j += res[j]) {
+                if (temperatures[i] < temperatures[j]) {
+                    res[i] = j-i;
+                    break;
+                } else if (res[j] == 0) {
+                    res[i] = 0;
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+}
