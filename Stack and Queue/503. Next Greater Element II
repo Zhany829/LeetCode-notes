@@ -1,0 +1,25 @@
+Arrays.fill(array,-1) 把array里每个元素都变为-1
+解法1：先把返回的数组填满-1，对于每个index，index+1比index大则直接放
+如果后面比前面的小则放stack上，之后继续比较index+1和index+2，同上，
+但是因为是circular array，所以cur表示的数可以用nums[cur%给的数组的长度](这样就可以遍历到最后再从头遍历)，只要设置成小于2倍的length就行。但只有当cur<n时候才在stack上加index，这样确保元素不会被重复加
+用num这个变量去记录cur的位置的值
+
+class Solution {
+    public int[] nextGreaterElements(int[] nums) {
+        Stack<Integer> st = new Stack<>();
+        int n = nums.length;
+        int[] res = new int[n];
+        Arrays.fill(res, -1);
+        for (int curIdx = 0; curIdx < 2*n; curIdx++) {
+            int num = nums[curIdx % n];
+            while (!st.isEmpty() && num > nums[st.peek()]) {
+                res[st.pop()] = num;
+            }
+            if (curIdx < n) {
+                st.push(curIdx);
+            }
+        }
+        return res;
+    }
+}
+
