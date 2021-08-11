@@ -1,0 +1,23 @@
+题目：substring的0和1的数量要一样，而且相同digit要连续 不能0101
+解法：用两个指针，pre记录前面连续的0或1，cur记录现在的连续的0或1，如果pre>cur说明前后肯定有配对，现在有1个1，那么之前有1个,2个or3个，都可以符合条件01
+当pre和cur位置的元素不一样时候，把cur的数量转给pre，这样pre就是之前连续的1or0的数量。每当pre>cur都能有一种substring组合，所以每次+1即可
+比如00110011先用cur记录0的数量再给pre，再用
+
+class Solution {
+    public int countBinarySubstrings(String s) {
+        //pre记录前一个数字连续出现的次数 cur记录当前数字连续出现的次数
+        int cur = 1, pre = 0, res = 0;
+        for (int i = 1; i < s.length(); i++) {
+            // 判断当前数字是否和前一个相同
+            if (s.charAt(i) == s.charAt(i-1)) {
+                cur++;
+            } else { //不同则当前数字实际上变成了前一个数字，当前数字重置为1
+                pre = cur;
+                cur = 1;
+            } 
+            //只要前面数字次数>=后一个数字出现次数，则一定包含满足要求的字串 比如上次0(01) 这次0011
+            if (pre >= cur) res++; 
+        }
+        return res;
+    }
+}
