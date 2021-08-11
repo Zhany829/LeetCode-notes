@@ -1,0 +1,15 @@
+解法：用一个变量记录x每次右边的数，同时x/10，下次就把变量*10来加x的尾部数，这样相当于变量记录了x反过来的数，当变量值超过x就可以停止了
+最后比较x和变量是不是一样，或者变量/10是否等于x，因为可能把中间的数字加到了变量上
+
+class Solution {
+    public boolean isPalindrome(int x) {
+        if (x == 0) return true;
+        if (x < 0 || x % 10 == 0) return false;
+        int right = 0;
+        while (right < x) {
+            right = right * 10 + x % 10;
+            x /= 10;
+        }
+        return x == right || right/10 == x;
+    }
+}
