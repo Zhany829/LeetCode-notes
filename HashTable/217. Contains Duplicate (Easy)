@@ -1,0 +1,12 @@
+解法1：用hashset加，因为set不会加重复元素，所以最后比较能和原数组size一样，不一样说明有重复
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            set.add(num);
+        }
+        return set.size() != nums.length;
+    }
+}
+
+解法2：用哈希表加，只要contain了就返回true
