@@ -1,0 +1,17 @@
+解法：遍历其中一个string，获得同位置上的char，用这个char去两个数组里分别看记录的值一不一样，不一样说明不是同步的，因为接下去两个数组都要在char位置存从这次的i+1，
+所以下次迭代发现值不一样就说明上次的位置不对应，没有存一样的i+1
+
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        int[] arr1 = new int[256];
+        int[] arr2 = new int[256];
+        for (int i = 0; i < s.length(); i++) {
+            char sc = s.charAt(i);
+            char tc = t.charAt(i);
+            if (arr1[sc] != arr2[tc]) return false;
+            arr1[sc] = i+1; //用于这次看这次对不对应
+            arr2[tc] = i+1;
+        }
+        return true;
+    }
+}
