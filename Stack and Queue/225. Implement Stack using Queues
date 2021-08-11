@@ -1,0 +1,33 @@
+解法：因为queue可以是把最先加的元素pop，所以每次加的时候把元素加在最前面，这样pop时候也和stack一样能把刚加的pop出
+
+class MyStack {
+    Queue<Integer> q;
+    /** Initialize your data structure here. */
+    public MyStack() {
+        q = new LinkedList<>();
+    }
+    
+    /** Push element x onto stack. */
+    public void push(int x) {
+        int size = q.size();
+        q.add(x);
+        while (size-- > 0) {
+            q.add(q.poll());
+        }
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    public int pop() {
+        return q.poll();
+    }
+    
+    /** Get the top element. */
+    public int top() {
+        return q.peek();
+    }
+    
+    /** Returns whether the stack is empty. */
+    public boolean empty() {
+        return q.isEmpty();
+    }
+}
