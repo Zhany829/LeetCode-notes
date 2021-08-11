@@ -1,0 +1,21 @@
+解法：对于每个数字，如果哈希表里没有，就去看哈希表里这个数字+-1的key的值，这个值代表了左右连续的长度，用左长度+右长度去更新记录最长的变量。最后往哈希表里放这个长度范围两个端点数with当前的长度
+
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int res = 1;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            if (!map.containsKey(num)) {
+                int left = map.getOrDefault(num-1, 0);
+                int right = map.getOrDefault(num+1, 0);
+                int curLen = left + right + 1;
+                if (curLen > res) res = curLen;
+                map.put(num, -1);
+                map.put(num-left, curLen);
+                map.put(num+right, curLen);
+            }
+        }
+        return res;
+    }
+}
