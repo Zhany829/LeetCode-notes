@@ -1,0 +1,19 @@
+解法：用两个指针从string的每个char开始向两边扩散去找。同时有两种情况：1.两个指针从同一个位置开始，则找的substring都是奇数的 2.一个指针在一个指针右边，则找的substring都是偶数的
+
+class Solution {
+    private int cnt = 0;
+    public int countSubstrings(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            count(s, i, i); //去找奇数长度的substring
+            count(s, i, i+1);  //去找偶数长度的substring
+        }
+        return cnt;
+    }
+    private void count(String s, int start, int end) {
+        while (start >=0 && end < s.length() && s.charAt(start) == s.charAt(end)) {
+            start--;
+            end++;
+            cnt++;
+        }
+    }
+}
