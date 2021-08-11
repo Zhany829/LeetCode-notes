@@ -1,0 +1,16 @@
+解法：先记录下每个数字出现次数，再遍历每个数字，在存在num+1这个key的情况下看当前数字和num+1这个数字出现次数的总和是不是最大的。每次遍历更新这个记录的变量
+class Solution {
+    public int findLHS(int[] nums) {
+        Map<Integer, Integer> count = new HashMap<>();
+        for (int num : nums) {
+            count.put(num, count.getOrDefault(num, 0) + 1);
+        }
+        int longest = 0;
+        for (int num : nums) {
+            if (count.containsKey(num+1)) {
+                longest = Math.max(longest, count.get(num) + count.get(num+1));
+            }
+        }
+        return longest;
+    }
+}
