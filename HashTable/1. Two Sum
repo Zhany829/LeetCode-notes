@@ -1,0 +1,15 @@
+解法：双指针需要对数组排序，时间复杂度为O(nlogn)，但哈希表可以O(N),虽然空间复杂度也是O(N)。遍历一遍数组，每次都去看哈希表里有没有target-当前数这个key，如果有就返回下标，没有就放进去
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (!map.containsKey(target - nums[i])) {
+                map.put(nums[i], i);
+            } else {
+                return new int[]{i, map.get(target-nums[i])};
+            }
+        }
+        return new int[2];
+    }
+}
