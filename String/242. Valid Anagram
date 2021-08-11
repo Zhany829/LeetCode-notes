@@ -1,0 +1,17 @@
+解法：用一个26长度的数组记录一个string里每个char的数量，遍历到一个char这个代表的值++，之后遍历另外一个string，对每个char对应位置--。最后看这个数组是不是都抵消光了--是不是都是0
+
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        int[] arr = new int[26];
+        for (char c : s.toCharArray()) {
+            arr[c - 'a']++;
+        }
+        for (char c : t.toCharArray()) {
+            arr[c - 'a']--;
+        }
+        for (int num : arr) {
+            if (num != 0) return false;
+        }
+        return true;
+    }
+}
