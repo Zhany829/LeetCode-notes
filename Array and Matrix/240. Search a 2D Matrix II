@@ -1,0 +1,16 @@
+解法：从右上角开始找，每次先在这行往左找,如果发现当前比target小就直接到下一行因为左边都是比当前还小的数。用while比双层嵌套快
+
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return false;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int row = 0, col = n-1;
+        while (row < m && col >= 0) {
+                if (matrix[row][col] == target) return true;
+                else if (matrix[row][col] < target) row++;
+                else col--;
+            }
+        return false;
+    }
+}
