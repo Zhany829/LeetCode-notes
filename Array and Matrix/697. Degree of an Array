@@ -1,0 +1,28 @@
+解法：用几个哈希表存开始和结束的index以及每个数字的cnt。对于有着最大cnt的数字，用两个记录开始和结束的哈希表记录比较他们其中最短的长度
+
+class Solution {
+    public int findShortestSubArray(int[] nums) {
+        Map<Integer, Integer> firstIdx = new HashMap<>();
+        Map<Integer, Integer> lastIdx = new HashMap<>();
+        Map<Integer, Integer> countNum = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (!firstIdx.containsKey(nums[i])) {
+                firstIdx.put(nums[i],i);
+            }
+            lastIdx.put(nums[i], i);
+            countNum.put(nums[i], countNum.getOrDefault(nums[i], 0)+1);
+        }
+        int maxCnt = 0;
+        for (int num : nums) {
+            maxCnt = Math.max(maxCnt, countNum.get(num));
+        }
+        int ret = nums.length;
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+            int cnt = countNum.get(num);
+            if (cnt < maxCnt) continue;
+            ret = Math.min(ret, lastIdx.get(num) - firstIdx.get(num) + 1);
+        }
+        return ret;
+    }
+}
