@@ -1,0 +1,15 @@
+解法：用一个指针从头开始，同时遍历数组，如果遍历到非0就把指针位置赋予这个值，同时指针向后移一格，相当于把数都向前移动(跳过放0了)。之后再把非0数字后面全变成0
+
+class Solution {
+    public void moveZeroes(int[] nums) {
+        int idx = 0;
+        for (int num : nums) {
+            if (num != 0) {
+                nums[idx++] = num;
+            }
+        }
+        for (int i = idx; i < nums.length; i++) {
+            nums[i] = 0;
+        }
+    }
+}
