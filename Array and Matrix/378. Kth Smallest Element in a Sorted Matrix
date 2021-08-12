@@ -1,0 +1,23 @@
+解法：用双指针，一个初始化第一行第一个元素，另一个初始化最后一行最后一个元素。只要左指针值小于右指针，找出他们的中间值，然后从2D数组从头开始找计数直到当前数比中间数大。
+再根据计数和k比，计数小就把左指针向右，这样就扩大了下次的mid，也就扩大了找的范围。最后左指针就是第k个位置
+
+class Solution {
+    public int kthSmallest(int[][] matrix, int k) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int l = matrix[0][0], r = matrix[m-1][n-1];
+        while (l <= r) {
+            int cnt = 0;
+            int mid = l + (r-l)/2;
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (matrix[i][j] <= mid) cnt++;
+                }
+            }
+            if (cnt < k) l = mid+1;
+            else r = mid-1;
+        }
+        return l;
+    }
+}
