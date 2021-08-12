@@ -1,0 +1,39 @@
+解法1：用一个数组记录每个数字出现的次数，之后去看里面出现2次和0次的，也就是重复和缺失的，返回他们
+
+class Solution {
+    public int[] findErrorNums(int[] nums) {
+        int n = nums.length;
+        int[] tmp = new int[n+1];
+        int[] res = new int[2];
+        for (int num : nums) {
+            tmp[num]++;
+        }
+        for (int i = 1; i < n+1; i++) {
+            if (tmp[i] == 2) res[0] = i;
+            else if (tmp[i] == 0) res[1] = i;
+        }
+        return res;
+    }
+}
+
+解法2：先把数组每个数字放到对应位置，再去看重复情况
+class Solution {
+    public int[] findErrorNums(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] != i + 1 && nums[i] != nums[nums[i] - 1]) { //不一样再换，不然死循环
+                swap(nums, i, nums[i] - 1);
+            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != i + 1) {
+                return new int[]{nums[i], i + 1};
+            }
+        }
+        return null;
+    }
+    private void swap(int[] nums, int i, int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
+    }
+}
