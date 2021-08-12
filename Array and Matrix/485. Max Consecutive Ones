@@ -1,0 +1,16 @@
+解法：每遇到0就一直++，遇到就置0重新开始计算，同时记录下当前count是不是最大的
+
+class Solution {
+    public int findMaxConsecutiveOnes(int[] nums) {
+        int cur = 0, max = 0;
+        for (int num : nums) {
+            if (num != 0) {
+                cur++;
+            } else {
+                cur = 0;
+            }
+            max = Math.max(max, cur);
+        }
+        return max;
+    }
+}
