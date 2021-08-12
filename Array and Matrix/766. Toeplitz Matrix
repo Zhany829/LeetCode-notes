@@ -1,0 +1,25 @@
+解法：从第一行和第一列的每个元素斜着检查过去看看一不一样
+
+class Solution {
+    int m, n;
+    public boolean isToeplitzMatrix(int[][] matrix) {
+        m = matrix.length;
+        n = matrix[0].length;
+        for (int i = 0; i < m; i++) {
+            if (!check(matrix, i, 0, matrix[i][0])) {
+                return false;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            if (!check(matrix, 0, i, matrix[0][i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean check(int[][] matrix, int row, int col, int expectVal) {
+        if (row >= m || col >= n) return true;
+        if (matrix[row][col] != expectVal) return false;
+        return check(matrix, row+1, col+1, expectVal);
+    }
+}
