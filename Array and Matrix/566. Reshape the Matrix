@@ -1,0 +1,18 @@
+解法：如果两个数组的元素总数量一样就返回原数组。之后遍历新数组，同时用一个变量/原数组的列数并且%原数组的列数来拿元素来放到新数组，并且每放一次变量++。这样能正确地遍历原数组每个元素
+
+class Solution {
+    public int[][] matrixReshape(int[][] mat, int r, int c) {
+        if (mat == null || mat.length == 0 || mat[0].length == 0) return null;
+        int m = mat.length, n = mat[0].length;
+        if (m*n != r*c) return mat;
+        int[][] res = new int[r][c];
+        int idx = 0;
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                res[i][j] = mat[idx/n][idx%n];
+                idx++;
+            }
+        }
+        return res;
+    }
+}
