@@ -1,0 +1,51 @@
+二分图就是每条边上的两个节点能被分到两个独立的子集
+解法1：DFS 第一轮遍历先把每个节点染色成相邻都不同的颜色，set里比如这样1，-1，1，-1. 之后用1和-1的颜色去检查，只要是1或-1就行。因为如果有环则set里会有0 会返回false
+
+class Solution {
+    public boolean isBipartite(int[][] graph) {
+        //集合0表示unvisited 1和-1分别表示两个集合
+        int[] set = new int[graph.length];
+        for (int i = 0; i < graph.length; i++) { 
+            //染色两个集合  
+            if (!dfs(graph, set, i, 1) && !dfs(graph, set, i, -1)) return false;
+        }
+        return true;
+    }
+    private boolean dfs(int[][]graph, int[] set, int curNode, int color) {
+        //如果相邻节点颜色和我们要给他们染的相反色一样返回true
+        if (set[curNode] != 0) return set[curNode] == color; 
+        set[curNode] = color; //给相邻的节点着上相反的颜色
+        //dfs去判断相邻节颜色是不是相反，不相反return false收敛上去
+        for (int node : graph[curNode]) {
+            if (!dfs(graph, set, node, -color)) return false;
+        } 
+        return true;
+    }
+}
+
+解法2：BFS 对于每个没染色的节点，先染色并且把这个节点加到queue，之后进行bfs，每次拿出一个节点，并且去看他邻居节点，颜色一样直接返回false，没染色的放到queue并且染上相反的颜色
+时间复杂度O(M+N) 也就是点数+边数量
+
+class Solution {
+    public boolean isBipartite(int[][] graph) {
+        Queue<Integer> queue = new LinkedList<>();
+        int[] colors = new int[graph.length];
+        for (int i = 0; i < graph.length; i++) { //对于每个节点
+            if (colors[i] == 0) {  //把当前节点染色
+                queue.add(i);
+                colors[i] = 1;
+            }
+            while (!queue.isEmpty()) {
+                int cur = queue.poll(); //拿出一个节点对其邻居染相反色
+                for (int next : graph[cur]) {
+                    if (colors[next] == colors[cur]) return false; //邻居颜色一样 false
+                    if (colors[next] == 0) {
+                        queue.add(next);
+                    }
+                    colors[next] = -colors[cur]; //染上相反的色
+                }
+            }
+        }
+        return true;
+    }
+}
