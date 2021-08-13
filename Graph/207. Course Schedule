@@ -1,0 +1,37 @@
+解法1：BFS 把每个数的入度和邻居节点都记录一下。之后先把入度为0的放到queue，再做bfs，每次拿出一个节点同时--课程数量，对于这个节点的邻居再--他的入度，如果为0了就加到queue。
+最后看课程数量是不是刚好是0.是0说明没有环，否则会多减
+
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        int[] degrees = new int[numCourses]; //存每个节点的入度 也就是需要的前课的数量
+        //存当前节点相邻的节点，因为会有几个相邻节点，所以要用list
+        List<List<Integer>> adjacency = new ArrayList<>(); 
+        //存入度为0的节点
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            adjacency.add(new ArrayList<>()); //每个课加一个list去放相邻节点
+        }
+        //得到每个节点的入度和邻居们
+        for (int[] set : prerequisites) {
+            degrees[set[0]]++; //小数组里要先上index1上的课再上index0上的，所以增加index0的入读
+            adjacency.get(set[1]).add(set[0]);//把小数组的第一个数作为邻居给第二个数
+        }
+        // 把入读为0的数放到queue
+        for (int i = 0; i < numCourses; i++) {
+            if (degrees[i] == 0) {
+                queue.add(i);
+            }
+        }
+        while (!queue.isEmpty()) {
+            int pre = queue.poll();//拿去每个入度为0的节点
+            numCourses--; //没环就能减到0
+            for (int next : adjacency.get(pre)) {
+                // 前面require的课被弹出了所以当前课的入度--
+                if (--degrees[next] == 0) queue.add(next);
+            }
+        }
+        return numCourses == 0; 
+    }
+}
+
+解法2：DFS 把queue换成stack就行
