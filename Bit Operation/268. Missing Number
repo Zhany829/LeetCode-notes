@@ -1,0 +1,24 @@
+解法1：因为是0到n的数，所以每次xor i和当前数， 最后再xor一下总长度，也就是i=nums.length，这样假设没有missing number，那么剩下的应该是0，但有个miss的number，说明还会剩下数组长度和那个缺失的数
+因为我们之前没有xor掉数组的长度
+
+class Solution {
+    public int missingNumber(int[] nums) {
+        int res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            res = res ^ i ^ nums[i];
+        }
+        return res ^ nums.length;
+    }
+}
+
+解法2：每次都加当前的i并且减去num[i]，最后再加上数组总长，这样剩下的就是缺失的num，因为把所有i都加上了，但只加上了除了缺失num的其他num，所以最后抵消完会剩下这个缺失的num
+class Solution {
+    public int missingNumber(int[] nums) {
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += i - nums[i];
+        }
+        sum += nums.length;
+        return Math.abs(sum);
+    }
+}
