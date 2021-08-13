@@ -1,0 +1,35 @@
+解法1：先用x异或y来获得一串bit，里面的1代表不同的位。之后对这串bit每次右移1位，同时与1，如果与的结果是1就++cnt。直到这串bit全是0
+
+class Solution {
+    public int hammingDistance(int x, int y) {
+        int cnt = 0;
+        int z = x ^ y;
+        while (z != 0) {
+            z = z & (z-1);
+            cnt++;
+        }
+        return cnt;
+    }
+}
+解法2：先用x异或y来获得一串bit，里面的1代表不同的位。之后对这串bit每次去掉最后一个1，同时++cnt，直到这串bit是0.这样就能记录出有几个1
+
+class Solution {
+    public int hammingDistance(int x, int y) {
+        int cnt = 0;
+        int z = x ^ y;
+        while (z != 0) {
+            z = z & (z-1);
+            cnt++;
+        }
+        return cnt;
+    }
+}
+
+解法3：同样对这串bit，用Integer.bitCount方法来计算1的数量就行
+
+class Solution {
+    public int hammingDistance(int x, int y) {
+        int z = x ^ y;
+        return Integer.bitCount(z);
+    }
+}
