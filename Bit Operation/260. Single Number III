@@ -1,0 +1,20 @@
+解法：先用0把数组里的数都xor一遍剩下两个不重复的数xor的结果，再用n&(-n)来得到最后一个1的位置，比如0000100，这是两个不重复的数的不同的地方
+把数组里在这个位数，也就是倒数第三位不同的数分成两组(用&是否==0)，同时在分组的时候和前面一样用数组的值去做xor，这样每组就可以把重复的数都抵消掉剩下不重复的数，这样每组各剩下一个不重复的数
+
+class Solution {
+    public int[] singleNumber(int[] nums) {
+        int diff = 0;
+        for (int num : nums) {
+            diff = diff ^ num;
+        }
+        diff = diff & (-diff); //获得最后面一个1的位置 比如 000100
+        // 把里面的数分成两组，一组diff的1位数上能变成0，一组不能。两个不重复分别其中一组。
+        // 对于每组和前面一样再用组的值去xor新的值来把重复的都抵消掉 每组就各自剩下不重复的数
+        int[] ret = new int[2];
+        for (int num : nums) {
+            if ((num & diff) == 0) ret[0] = ret[0] ^ num;
+            else ret[1] = ret[1] ^ num; 
+        }
+        return ret;
+    }
+}
