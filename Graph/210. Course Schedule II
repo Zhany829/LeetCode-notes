@@ -1,0 +1,31 @@
+解法：解法课程表1的题目里加上每次while记录课程就行
+
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        int[] res = new int[numCourses];
+        int[] degrees = new int[numCourses];
+        List<List<Integer>> adjacency = new ArrayList<>();
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            adjacency.add(new ArrayList<>());
+        } 
+        for (int[] ele : prerequisites) {
+            degrees[ele[0]]++;
+            adjacency.get(ele[1]).add(ele[0]);
+        }
+        for (int i = 0; i < numCourses; i++) {
+            if (degrees[i] == 0) queue.add(i);
+        }
+        int idx = 0;
+        while (!queue.isEmpty()) {
+            int cur = queue.poll();
+            numCourses--;
+            res[idx++] = cur;
+            for (int next : adjacency.get(cur)) {
+                if (--degrees[next] == 0) queue.add(next);
+            }
+        }
+        if (numCourses == 0) return res;
+        else return new int[0];
+    }
+}
