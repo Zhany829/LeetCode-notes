@@ -1,0 +1,9 @@
+解法：异或相同的数等于0，异或0等于自己，所以可以用0异或每个数最后没被抵消成0的就是单独的那个数
+
+class Solution {
+    public int singleNumber(int[] nums) {
+        int res = 0;
+        for (int num : nums) res = res ^ num;
+        return res;
+    }
+}
