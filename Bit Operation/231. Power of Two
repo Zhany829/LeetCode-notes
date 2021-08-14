@@ -1,0 +1,19 @@
+解法1：因为如果是2的幂(不是倍数) 那么二进制只会有1个1。所以只要用n&(n-1)来去掉最后一个1并且判断最后是不是等于0
+n是0100 n-1则是1011  他们作与就能把第三位的1去掉变成0
+
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        if (n <= 0) return false;
+        return (n & (n-1)) == 0;
+    }
+}
+
+解法2：如果n只有一个1(也就是2的倍数)，n&(-n) = n, 因为n=1000 -n=0111+1 = 1000，两个相与还是n本身
+
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        if (n <= 0) return false;
+        return (n & (-n)) == n;
+    }
+}
+
