@@ -1,0 +1,14 @@
+解法：用一个变量去装这个反转完的bit，用&1取n的最后一位放到变量并且把白能量左一位，这样最后n的最后一位最后就被移到第一位了. 每次也要移动变量的bit。这样loop32次 因为32bit
+
+public class Solution {
+    // you need treat n as an unsigned value
+    public int reverseBits(int n) {
+        int res = 0;
+        for (int i = 0; i < 32; i++) {
+            res = res << 1;
+            res |= (n&1);
+            n = n >>> 1;
+        }
+        return res;
+    }
+}
