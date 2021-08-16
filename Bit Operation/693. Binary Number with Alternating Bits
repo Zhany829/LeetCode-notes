@@ -1,0 +1,8 @@
+解法：凡是符合题目中的交替位二进制，那必然错位异或的话全是1，所以将错位异或的值+1后就会生成只有1个二进制1的值，再用n ^ (n-1) 进行检查消除一个二进制1后是否为0即可
+
+class Solution {
+    public boolean hasAlternatingBits(int n) {
+        int num = n ^ (n >> 1);
+        return (num & (num+1)) == 0;
+    }
+}
