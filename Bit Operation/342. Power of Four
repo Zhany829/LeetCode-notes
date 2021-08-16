@@ -1,0 +1,17 @@
+解法1：先判断是不是2的幂：n & (n-1)去掉最后一个1后看是不是0，因为2的幂只有1个1，4的幂也只有1个1而且只能在奇数位上。是2的幂了之后再用n%3==1来判断是不是4的幂
+
+class Solution {
+    public boolean isPowerOfFour(int n) {
+        if (n < 0 || (n & (n-1)) != 0) return false; //判断是不是2的幂
+        return n % 3 == 1;
+    }
+}
+
+解法2：也是先判断是不是2的幂可以用n&(-n)来获得最后一位1，其实应该是和n一样的因为n也只有1个1，再用n-这个1就得到0。再判断是不是4的幂
+
+class Solution {
+    public boolean isPowerOfFour(int n) {
+        if (n < 0 || n - (n & (-n)) != 0) return false; //判断是不是2的幂
+        return n % 3 == 1;
+    }
+}
