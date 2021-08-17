@@ -1,0 +1,14 @@
+解法：用一个指针，遍历数组的时候看这个指针是否<2或者当前元素和前前元素不一样，则加入，因为这样就能确保只能有两个元素一样。同时指针移动一位
+len < 2是为了防止判断时候溢出 所以先判断了
+
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int len = 0;
+        for (int num : nums) {
+            if (len < 2 || nums[len-2] != num) {
+                nums[len++] = num;
+            }
+        }
+        return len;
+    }
+}
