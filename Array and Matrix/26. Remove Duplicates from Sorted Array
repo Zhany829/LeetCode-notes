@@ -1,0 +1,16 @@
+解法：双指针，i从0 j从index1开始，遇到一样的，j一直走，遇到了不一样就在i的右边一个位置放上j位置的元素。最后返回i+1
+
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int i = 0, j = 1;
+        while (j < nums.length) {
+            if (nums[i] == nums[j]) {
+                j++;
+            } else {
+                i++;
+                nums[i] = nums[j];
+            }
+        }
+        return i+1;
+    }
+}
