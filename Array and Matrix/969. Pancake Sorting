@@ -1,0 +1,55 @@
+解法：先用一个数组记录每个元素出现的index，也就是每个index+1代表一个数，里面放着这个数出现的index。
+再从最大元素开始遍历，每次把最大元素翻转index0再翻转到当前的最后位置(i-1)，如果最大元素刚好就在0，那么翻转一次就行，也就是翻转当前元素大小的范围，否则就要i++加回来去下次循环再翻转到0先
+res里放的是当前元素的位置+1，如果当前元素在0，则放当前元素大小的距离
+
+class Solution {
+     public List<Integer> pancakeSort(int[] arr) {
+        int len = arr.length;
+        List<Integer> result = new ArrayList<>();
+        if (len < 2) return result;
+        // 根据题目给定范围，数组元素的值是在1 到 len 之间的
+        // 所以可以用另外一个数组记录每个元素所在的位置，下标为元素，值为元素所在原数组的位置
+        int[] record = new int[len + 1];
+
+        for (int i= 0; i < len; i++){
+            record[arr[i]] = i;
+        }
+
+        // 这样record数组下标也就是有序的了，我们先从最大的元素开始，一个个的调整到合适的位置
+        for (int i = len; i >= 1; i--){
+            // 如果当前最大元素的在合适的位置，就不做处理，直接操作下一个
+            if (i == record[i] + 1) continue;
+
+            int curPosition = record[i]; // 当前最大元素所在位置
+
+            // 每个元素需继续两步翻转：
+            //      第一步：翻转到0位置；
+            //      第二步：再翻转到当前最后的位置(i - 1)
+            // 首先看是否在0的位置，是的话省去第一步
+            if (curPosition == 0){
+                result.add(i);  //需要翻转当前元素大小的位置
+                swap(arr, record, 0, i - 1);
+            }else {
+                // 第一步：翻转到0位置
+                result.add(record[i] + 1); //要翻转当前元素位置+1
+                swap(arr, record, 0, record[i]);
+                i++; // 加回去，下次遍历再来，走第二步
+            }
+        }
+
+        return result;
+    }
+    private void swap(int[] arr, int[] record, int left, int right){
+        while (left < right){
+            record[arr[left]] = right; // 更新位置记录
+            record[arr[right]] = left;
+
+            int temp = arr[left];
+            arr[left] = arr[right];
+            arr[right] = temp;
+
+            left++;
+            right--;
+        }
+    }
+}
