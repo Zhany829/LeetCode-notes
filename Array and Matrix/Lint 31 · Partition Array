@@ -1,0 +1,29 @@
+解法：用双指针，遇到比k小或者大于等于k就分别移动左右指针，如果遇到左指针指的值大于等于k而且右指针值小于k就交换位置，最后左指针就是partition的位置
+
+public class Solution {
+    /**
+     * @param nums: The integer array you should partition
+     * @param k: An integer
+     * @return: The index after partition
+     */
+    public int partitionArray(int[] nums, int k) {
+        // write your code here
+        int res = 0;
+        if (nums.length == 0) return res;
+        int l = 0, r = nums.length-1;
+        while (l <= r) {
+            if (nums[l] < k) l++;
+            else if (nums[r] >= k) r--;
+            else if (nums[l] >= k && nums[r] < k) {
+                swap(nums, l, r);
+                l++; r--;
+            } 
+        }
+        return l;
+    }
+    private void swap(int[] nums, int l, int r) {
+        int tmp = nums[l];
+        nums[l] = nums[r];
+        nums[r] = tmp;
+    }
+}
