@@ -1,0 +1,32 @@
+解法：用3个指针，l r i，i遍历到r为止，如果num[i]比low小则和l指针位置元素交换，同时指针和i都移动。如果比当前元素比high大则交换i和r位置的元素，只移动指针。否则移动i就行
+i和r交换元素时候不移动i是因为换来的元素可能还是比high大，这样下次r--后下一轮就可以再把这个元素换到右边
+
+public class Solution {
+    /**
+     * @param nums: an integer array
+     * @param low: An integer
+     * @param high: An integer
+     * @return: nothing
+     */
+    public void partition2(int[] nums, int low, int high) {
+        // write your code here
+        int l = 0, r = nums.length-1, i = 0;
+        while (i <= r) {
+            if (nums[i] < low) {
+                swap(nums, i, l);
+                l++;
+                i++;
+            } else if (nums[i] > high) {
+                swap(nums, i, r);
+                r--;
+            } else {
+                i++;
+            }
+        }
+    }
+    private void swap(int[] nums, int l, int r) {
+        int tmp = nums[l];
+        nums[l] = nums[r];
+        nums[r] = tmp;
+    }
+}
