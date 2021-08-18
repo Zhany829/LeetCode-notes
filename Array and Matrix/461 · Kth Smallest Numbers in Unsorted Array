@@ -1,0 +1,37 @@
+解法：用快速选择找第k个小的元素
+
+public class Solution {
+    /**
+     * @param k: An integer
+     * @param nums: An integer array
+     * @return: kth smallest element
+     */
+    public int kthSmallest(int k, int[] nums) {
+        // write your code here
+        int l = 0, r = nums.length-1;
+        while (l < r) {
+            int split = partition(nums, l, r);
+            if (split == k-1) break;
+            else if (split < k) l = split + 1;
+            else r = split - 1;
+        }
+        return nums[k-1];
+    }
+    private int partition(int[] nums, int l, int r) {
+        int leftMark = l, rightMark = r+1;
+        int pivot = nums[l];
+        while (true) {
+            while (nums[++leftMark] < pivot && leftMark < r);
+            while (nums[--rightMark] > pivot && rightMark > l);
+            if (leftMark >= rightMark) break;
+            swap(nums, leftMark, rightMark);
+        }
+        swap(nums, rightMark, l);
+        return rightMark;
+    }
+    private void swap(int[] nums, int l, int r) {
+        int tmp = nums[l];
+        nums[l] = nums[r];
+        nums[r] = tmp;
+    }
+}
