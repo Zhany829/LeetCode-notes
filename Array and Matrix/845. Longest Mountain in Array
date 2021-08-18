@@ -1,0 +1,24 @@
+解法：用两个数组分别表示当前位置向左右两边扩散可以得到的山脉长度，最后再去找山顶，也就是某个index有最长的左右两边
+得到左边最长的扩散长度可以先去比较左边元素大小，如果左边小说明可以扩展，就用左边的值+1，如果当前index=0，则说明不能扩展则=0
+右边同理
+
+class Solution {
+    public int longestMountain(int[] arr) {
+        int res = 0;
+        int n = arr.length;
+        int[] left = new int[n];
+        int[] right = new int[n];
+        for (int i = 1; i < n; i++) {
+            left[i] = arr[i] > arr[i-1] ? left[i-1] + 1 : 0;
+        }
+        for (int i = n-2; i >= 0; i--) {
+            right[i] = arr[i] > arr[i+1] ? right[i+1] + 1 : 0;
+        }
+        for (int i = 0; i < n; i++) {
+            if (left[i] > 0 && right[i] > 0) {
+                res = Math.max(res, left[i]+right[i]+1);
+            }
+        }
+        return res;
+    }
+}
