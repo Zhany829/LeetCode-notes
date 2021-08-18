@@ -1,0 +1,45 @@
+解法：下标 ii 处能接的雨水量由leftMax[i]和rightMax[i]中的最小值决定
+使用height[left] 和height[right] 的值更新leftMax 和 rightMax 的值；
+如果 height[left]<height[right]，则必有leftMax<rightMax，下标left 处能接的雨水量等于leftMax−height[left]，将下标left 处能接的雨水量加到能接的雨水总量，然后将 left 加 11（即向右移动一位
+如果height[left]≥height[right]，则必有leftMax≥rightMax，下标right 处能接的雨水量等于rightMax−height[right]，将下标right 处能接的雨水量加到能接的雨水总量，然后将right 减1（即向左移动一位
+当两个指针相遇时，即可得到能接的雨水总量
+
+left_max：左边的最大值，它是从左往右遍历找到的
+right_max：右边的最大值，它是从右往左遍历找到的
+left：从左往右处理的当前下标
+right：从右往左处理的当前下标
+定理一：在某个位置i处，它能存的水，取决于它左右两边的最大值中较小的一个。
+
+定理二：当我们从左往右处理到left下标时，左边的最大值left_max对它而言是可信的，但right_max对它而言是不可信的。（见下图，由于中间状况未知，对于left下标而言，right_max未必就是它右边最大的值）
+
+定理三：当我们从右往左处理到right下标时，右边的最大值right_max对它而言是可信的，但left_max对它而言是不可信的。
+
+                                   right_max
+ left_max                             __
+   __                                |  |
+  |  |__   __??????????????????????  |  |
+__|     |__|                       __|  |__
+        left                      right
+对于位置left而言，它左边最大值一定是left_max，右边最大值“大于等于”right_max，这时候，如果left_max<right_max成立，那么它就知道自己能存多少水了。
+无论右边将来会不会出现更大的right_max，都不影响这个结果。 所以当left_max<right_max时，我们就希望去处理left下标，反之，我们希望去处理right下标。
+
+
+class Solution {
+    public int trap(int[] height) {
+        int ans = 0;
+        int left = 0, right = height.length - 1;
+        int leftMax = 0, rightMax = 0;
+        while (left < right) {
+            leftMax = Math.max(leftMax, height[left]);
+            rightMax = Math.max(rightMax, height[right]);
+            if (height[left] < height[right]) {
+                ans += leftMax - height[left];
+                ++left;
+            } else {
+                ans += rightMax - height[right];
+                --right;
+            }
+        }
+        return ans;
+    }
+}
