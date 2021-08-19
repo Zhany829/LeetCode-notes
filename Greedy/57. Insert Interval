@@ -1,0 +1,65 @@
+解法1：用3个while一共遍历一次数组，用一个指针，刚开始遍历直到遇到需要合并，同时把区间加到res。在需要合并的时候用while更新要加的这个合并之后的左右区间，也就是用min和max一直更新直到不能合并。
+再把这个区间加到res。最后把右边剩下的不能合并的区间都加到res。指针始终在移动
+
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        List<int[]> res = new ArrayList<>();
+        int len = intervals.length;
+        int i = 0;
+        // 把左边不能合并的区间加上
+        while (i < len && intervals[i][1] < newInterval[0]) {
+            res.add(new int[]{intervals[i][0], intervals[i][1]});
+            i++;
+        }
+        // 把中间区间合并并且加上最终合并完的区间
+        while (i < len && intervals[i][0] <= newInterval[1]) {
+            newInterval[0] = Math.min(intervals[i][0], newInterval[0]);
+            newInterval[1] = Math.max(intervals[i][1], newInterval[1]);
+            i++;
+        }
+        res.add(new int[]{newInterval[0], newInterval[1]});
+        // 把右边不能合并的区间加上
+        while (i < len && intervals[i][0] > newInterval[1]) {
+            res.add(new int[]{intervals[i][0], intervals[i][1]});
+            i++;
+        }
+        int[][] ret = new int[res.size()][2];
+        for (int j = 0; j < res.size(); j++) {
+            ret[j] = res.get(j);
+        }
+        return ret;
+    }
+}
+
+
+
+
+解法2：先把新的区间加到原来的区间再去把所有区间合并
+
+  class Solution {
+      public int[][] insert(int[][] intervals, int[] newInterval) {
+          int[][] newIntervals = new int[intervals.length+1][2];
+          for (int i = 0; i < intervals.length; i++) {
+              newIntervals[i] = intervals[i];
+          }
+          newIntervals[newIntervals.length-1] = newInterval;
+          Arrays.sort(newIntervals, Comparator.comparingInt(o -> o[0]));
+          List<int[]> res = new ArrayList<>();
+          int i = 0;
+          while (i < newIntervals.length) {
+              int curStart = newIntervals[i][0];
+              int curEnd = newIntervals[i][1];
+              while (i < newIntervals.length-1 && curEnd >= newIntervals[i+1][0]) {
+                  i++;
+                  curEnd = Math.max(curEnd, newIntervals[i][1]);
+              }
+              i++;
+              res.add(new int[]{curStart, curEnd});
+          }
+          int[][] ret = new int[res.size()][2];
+          for (int j = 0; j < res.size(); j++) {
+              ret[j] = res.get(j);
+          }
+          return ret;
+      }
+  }
