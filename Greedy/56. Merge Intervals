@@ -1,0 +1,26 @@
+解法：先把数组按照开始时间从小到大排序，用一个指针traverse这个2D数组，如果后一个元素的index0在范围内就一直while往后找，每次更新最大的end，最后把这个区间加到res再移动指针
+
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        List<int[]> res = new ArrayList<>();
+        Arrays.sort(intervals, Comparator.comparingInt(o -> o[0]));
+        int i = 0;
+        while (i < intervals.length) {
+            int curStart = intervals[i][0];
+            int curEnd = intervals[i][1];
+            // 扩大重复区间的范围
+            while (i < intervals.length-1 && curEnd >= intervals[i+1][0]) {
+                i++;
+                curEnd = Math.max(curEnd, intervals[i][1]);
+            }
+            res.add(new int[]{curStart, curEnd});
+            i++;
+        }
+        // 处理结果
+        int[][] ret = new int[res.size()][2];
+        for (int j = 0; j < res.size(); j++) {
+            ret[j] = res.get(j);
+        }
+        return ret;
+    }
+}
