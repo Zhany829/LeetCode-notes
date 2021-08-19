@@ -1,0 +1,15 @@
+解法：看是否有重叠即可
+
+class Solution {
+    public boolean canAttendMeetings(int[][] intervals) {
+        if (intervals.length == 0) return true;
+        Arrays.sort(intervals, Comparator.comparingInt(o->o[1]));
+        int end = intervals[0][1];
+        int cnt = 0;
+        for (int i = 1; i < intervals.length; i++) {
+            if (intervals[i][0] < end) return false;
+            end = intervals[i][1];
+        }
+        return true;
+    }
+}
