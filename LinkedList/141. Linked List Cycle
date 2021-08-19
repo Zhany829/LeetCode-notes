@@ -1,0 +1,13 @@
+解法：快慢指针相遇就说明有环
+
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        ListNode fast = head, slow = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) return true;
+        }
+        return false;
+    }
+}
