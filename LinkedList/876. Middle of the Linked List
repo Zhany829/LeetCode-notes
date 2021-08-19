@@ -1,0 +1,17 @@
+解法：获得链表长度之后走一半或者快慢指针快指针走完则慢指针刚好到中间
+class Solution {
+    public ListNode middleNode(ListNode head) {
+        ListNode visit = head;
+        int len = 0;
+        while (visit != null) {
+            visit = visit.next;
+            len++;
+        }
+        ListNode mid = head;
+        len /= 2;
+        while (len-- > 0) {
+            mid = mid.next;
+        }
+        return mid;
+    }
+}
