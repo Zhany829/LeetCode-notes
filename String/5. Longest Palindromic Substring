@@ -1,0 +1,21 @@
+解法：遍历一遍string，每次两个指针从当前位置或者一个从当前位置一个从后一个位置(为了分别得到奇数和偶数的回文串)分别向左右扩散来获得回文子串，每次更新最大的回文子串。
+
+class Solution {
+    public String longestPalindrome(String s) {
+        String res = "";
+        for (int i = 0; i < s.length(); i++) {
+            String s1 = getPalindrome(s, i, i);
+            String s2 = getPalindrome(s, i, i+1);
+            res = s1.length() > res.length() ? s1 : res;
+            res = s2.length() > res.length() ? s2 : res;
+        }
+        return res;
+    }
+    private String getPalindrome(String s, int start, int end) {
+        while (start >= 0 && end < s.length() && s.charAt(start) == s.charAt(end)) {
+            start--;
+            end++;
+        }
+        return s.substring(start+1, end);
+    }
+}
