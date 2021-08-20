@@ -1,0 +1,20 @@
+解法：用哈希表存char和其出现的位置。
+随着 end 不断遍历向后，会遇到与 [start, end] 区间内字符相同的情况，此时将字符作为 key 值，获取其 value 值，并更新 start(取他位置作为start)，此时 [start, end] 区间内不存在重复字符
+每次遍历都要更新res，也就是end和start直接的char数，并且要更新每个char的位置
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        int res = 0;
+        int start = 0;
+        for (int end = 0; end < s.length(); end++) {
+            char c = s.charAt(end);
+            if (map.containsKey(c)) {
+                start = Math.max(start, map.get(c));
+            }
+            res = Math.max(res, end - start + 1);
+            map.put(c, end + 1);
+        }
+        return res;
+    }
+}
