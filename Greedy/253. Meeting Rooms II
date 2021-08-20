@@ -1,0 +1,16 @@
+解法：先按照开始时间排序，再用一个优先队列每次加进去元素按照结束时间排列。对于每个间隔，如果优先队列头上，也就是最小的结束时间比当前间隔的开始时间早或等于就拿出顶部间隔。
+每次把当前间隔放进去，同时记录最大的pq的size，也就是最大的间隔重叠的数量
+
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        Arrays.sort(intervals, (a,b) -> (a[0]-b[0]));
+        Queue<int[]> pq = new PriorityQueue<>((a,b) -> (a[1]-b[1]));
+        int cnt = 0;
+        for (int[] interval : intervals) {
+            if (!pq.isEmpty() && pq.peek()[1] <= interval[0]) pq.poll();
+            pq.offer(interval);
+            cnt = Math.max(cnt, pq.size());
+        }
+        return cnt;
+    }
+}
