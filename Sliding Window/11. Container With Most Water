@@ -1,0 +1,19 @@
+解法：双指针从两头开始，每次把较短的那块板子向内移动，因为移动短板下次的板可能更大，而移动长板下次即使遇到更长的板，面积还是由短板决定，所以面积只会更小(新板比短板还短)或相等
+每次记录最大面积
+
+class Solution {
+    public int maxArea(int[] height) {
+        int l = 0, r = height.length - 1;
+        int max = 0;
+        while (l < r) {
+            if (height[l] < height[r]) {
+                max = Math.max(max, height[l] * (r-l));
+                l++;
+            } else {
+                max = Math.max(max, height[r] * (r-l));
+                r--;
+            }
+        }
+        return max;
+    }
+}
