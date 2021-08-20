@@ -1,0 +1,21 @@
+解法：初始状态下，start和end都指向下标0，sum 的值为0。
+每一轮迭代，将nums[end] 加到sum，如果sum≥s，则更新子数组的最小长度（此时子数组的长度是end−start+1），然后将nums[start] 从sum中减去并将start右移，直到sum<s，在此过程中同样更新子数组的最小长度。
+在每一轮迭代的最后，将end右移。
+
+class Solution {
+    public int minSubArrayLen(int target, int[] nums) {
+        int res = Integer.MAX_VALUE;
+        int start = 0, end = 0;
+        int sum = 0;
+        while(end < nums.length) {
+            sum += nums[end];
+            while (sum >= target) {
+                res = Math.min(res, end - start + 1);
+                sum -= nums[start];
+                start++;
+            }
+            end++;
+        }
+        return res == Integer.MAX_VALUE ? 0 : res;
+    }
+}
