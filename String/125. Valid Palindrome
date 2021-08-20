@@ -1,0 +1,15 @@
+解法：先把string变小写，再用stringBuilder把符合要求的char加到sb里，之后比较sb和sb.reverse分别toString后一不一样就行
+
+class Solution {
+    public boolean isPalindrome(String s) {
+        if (s == null) return false;
+        s = s.toLowerCase();
+        StringBuilder sb = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z')) {
+                sb.append(c);
+            }
+        }
+        return sb.toString().equals(sb.reverse().toString());
+    }
+}
