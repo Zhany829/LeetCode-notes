@@ -1,0 +1,24 @@
+解法：首先把航班按照出发时间排序。
+再开一个最小堆，按照到达时间排序。
+按出发时间枚举所有航班，如果有之前的航班在新航班起飞前降落，则出堆。
+新航班入堆，并记录堆的最大size
+
+public class Solution {
+    /**
+     * @param airplanes: An interval array
+     * @return: Count of airplanes are in the sky.
+     */
+    public int countOfAirplanes(List<Interval> airplanes) {
+        // 用lambda 排序
+        airplanes.sort((a,b) -> a.start-b.start);
+        //lambda 开一个最小堆
+        Queue<Interval> pq = new PriorityQueue<Interval>((a,b) -> a.end-b.end);
+        int ans = 0;
+        for (Interval airplane : airplanes) {
+            if (!pq.isEmpty() && pq.peek().end <= airplane.start) pq.poll();
+            pq.offer(airplane);
+            ans = Math.max(ans, pq.size());
+        }
+        return ans;
+    }
+}
