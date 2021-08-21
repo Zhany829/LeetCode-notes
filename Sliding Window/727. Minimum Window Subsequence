@@ -1,0 +1,27 @@
+解法：用两个指针分别走两个字符串，当一个指针走到了目标字符串的尽头就说明走完了。现在要去找目标字符串的第一个字母出现的位置，就开始往后遍历。但要记录一下现在的位置等下作为end算距离
+两个指针都往回走，s的指针没找到t的指针指的char就一直走，t被找到后才走，直到t走到第一个char。这时候记录下当前字符串的长度，更新最小的。再移动两个指针，下次遍历从当前char后一位开始
+
+class Solution {
+    public String minWindow(String s1, String s2) {
+        int i = 0, j = 0, start = -1, min = Integer.MAX_VALUE;
+        while (i < s1.length()) {
+            if (s1.charAt(i) == s2.charAt(j)) {
+                if (++j == s2.length()) {
+                    int end = i;
+                    while (--j >= 0) { // 两个指针回到目标字符串的第一个char位置
+                        while (s1.charAt(i--) != s2.charAt(j));
+                    }
+                    i++;
+                    j++;
+                    if (end - i + 1 < min) {
+                        min = end - i + 1;
+                        start = i;
+                    }
+                }
+            }
+            i++;
+        }
+        if (start == -1) return "";
+        else return s1.substring(start, start+min);
+    }
+}
