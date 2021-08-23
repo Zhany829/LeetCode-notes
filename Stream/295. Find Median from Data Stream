@@ -2,6 +2,7 @@
 这样数据从小到大就是：maxheap从后往前到minHeap从前往后。
 每次加完还要维持每个堆的数量，如果数据量是奇数则maxHeap会多一个数，如果maxHeap比minHeap多两个则要移一个到minHeap，如果maxHeap比minHeap少了就要移一个到maxHeap
 最后找中位数，如果maxHeap比minHeap多一个数说明总量是奇数，直接返回maxHeap第一个数就行，如果是偶数则要把两个堆的头元素加起来除以2
+时间复杂度logn
 
 // 大顶堆 + 小顶堆
 class MedianFinder {
