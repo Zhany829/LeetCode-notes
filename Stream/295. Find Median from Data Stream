@@ -1,0 +1,58 @@
+解法：用两个堆，一个max heap 一个min heap，都用优先队列实现，但max heap要把顺序反一下。之后添加元素，比maxheap的头元素小就加到maxheap后面。
+这样数据从小到大就是：maxheap从后往前到minHeap从前往后。
+每次加完还要维持每个堆的数量，如果数据量是奇数则maxHeap会多一个数，如果maxHeap比minHeap多两个则要移一个到minHeap，如果maxHeap比minHeap少了就要移一个到maxHeap
+最后找中位数，如果maxHeap比minHeap多一个数说明总量是奇数，直接返回maxHeap第一个数就行，如果是偶数则要把两个堆的头元素加起来除以2
+
+// 大顶堆 + 小顶堆
+class MedianFinder {
+
+    // 大顶堆用于存储较小的一半元素
+    private PriorityQueue<Integer> maxHeap;
+    // 小顶堆用于存储较大的一半元素
+    private PriorityQueue<Integer> minHeap;
+
+    // 注意：如果元素的个数是奇数的话，那么大顶堆中的元素个数比小顶堆中元素个数多 1
+
+    /** initialize your data structure here. */
+    public MedianFinder() {
+        maxHeap = new PriorityQueue<>((a, b) -> b - a);
+        minHeap = new PriorityQueue<>();
+    }
+    
+    // 时间复杂度：O(logn)
+    public void addNum(int num) {
+        if (maxHeap.isEmpty()) {
+            maxHeap.add(num);
+            return;
+        }
+
+        if (num <= maxHeap.peek()) { 
+            // 到这里，说明 num 属于较小的元素，所以存储在大顶堆
+            maxHeap.add(num);
+        } else {
+            // 到这里，num 属于较大的元素
+            minHeap.add(num);
+        }
+
+        // 维护好两个堆中的元素个数，原则：
+        // 1. 如果是有偶数个元素的话，那么大顶堆和小顶堆是相同的
+        // 2. 如果是有奇数个元素的话，那么大顶堆元素的个数比小顶堆多 1 个
+        if (maxHeap.size() > minHeap.size() + 1) {
+            minHeap.add(maxHeap.remove());
+        }
+
+        if (maxHeap.size() < minHeap.size()) {
+            maxHeap.add(minHeap.remove());
+        }
+    }
+    
+    // 时间复杂度：O(1)
+    public double findMedian() {
+        if (maxHeap.size() > minHeap.size()) {
+            // 说明有奇数个元素，那么大顶堆堆顶元素就是中位数
+            return maxHeap.peek();
+        } else {
+            return (maxHeap.peek() + minHeap.peek()) * 0.5;
+        }
+    }
+}
