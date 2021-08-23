@@ -16,6 +16,6 @@ class Solution {
             start--;
             end++;
         }
-        return s.substring(start+1, end);
+        return s.substring(start+1, end); //左闭右开所以只要start往后返还就行，因为上面跳出循环是start和end各自多走了一步
     }
 }
