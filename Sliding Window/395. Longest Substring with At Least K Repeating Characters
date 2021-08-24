@@ -13,7 +13,7 @@ class Solution {
         for (int p = 1; p <= 26; p++) {
             Arrays.fill(cnt, 0);
             // tot 代表 [j, i] 区间所有的字符种类数量；sum 代表满足「出现次数不少于 k」的字符种类数量
-            for (int i = 0, j = 0, tot = 0, sum = 0; i < n; i++) {
+            for (int i = 0, j = 0, tot = 0, sum = 0; i < n; i++) { //把变量放到这里下个loop不会重置为0，还能继续用
                 int u = cs[i] - 'a';
                 cnt[u]++;
                 // 如果添加到 cnt 之后为 1，说明字符总数 +1
