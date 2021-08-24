@@ -1,0 +1,48 @@
+解法：在add的时候就处理好区间，get时候直接返回就行。先把num作为左右边界，并且用一个变量来记录新的区间，也就是两个指针l, r是否被添加过。
+之后遍历已经有的区间，每次先判断当前左区间是否比新加的左区间大2，因为大1还是会被合并。如果大2，则说明不用合并，如果新区间没被加，也就是变量值没变，则加上区间l,r。再去加上本次区间
+同样地去判断如果当前区间的右边界比要插入的区间的左边界小2以上就把当前区间加上。
+最后如果两个都不满足，说明区间要被合并，则用当前区间更新l和r到最小和最大。
+最后结束遍历如果没加新区间就放在最后加。
+
+class SummaryRanges {
+
+    List<int[]> intervals;
+
+    /** Initialize your data structure here. */
+    public SummaryRanges() {
+        intervals = new ArrayList<>();
+    }
+    
+    public void addNum(int val) {
+        int l = val, r = val;
+        boolean placed = false; //把合并后的区间加进去就变true了，因为只会合并一次就不会回到false
+        List<int[]> ansList = new ArrayList<>();
+        for (int[] interval: intervals) {
+            if (interval[0] > r + 1) { //当前区间的左比前面区间的右大2才不会被合并(不被用去更新)
+                if (!placed) {
+                    ansList.add(new int[] {l, r}); //把合并的/新的区间加进去
+                    placed = true;
+                }
+                ansList.add(interval); //同时也要把遍历到当前的区间加进去
+            } else if (interval[1] < l - 1) { //不能和后一个区间合并就把当前区间加进去
+                ansList.add(interval);
+            } else {    //说明区间有重合 去更新合并之后的左右边界
+                l = Math.min(l, interval[0]);
+                r = Math.max(r, interval[1]);
+            }
+        }
+        if (!placed) ansList.add(new int[] {l, r}); //一直没把新的加进去说明要加在最后
+        intervals = ansList;
+    }
+    
+    public int[][] getIntervals() {
+        return intervals.toArray(new int[intervals.size()][2]);
+    }
+}
+
+/**
+ * Your SummaryRanges object will be instantiated and called as such:
+ * SummaryRanges obj = new SummaryRanges();
+ * obj.addNum(val);
+ * int[][] param_2 = obj.getIntervals();
+ */
