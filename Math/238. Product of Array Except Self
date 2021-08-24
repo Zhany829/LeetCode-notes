@@ -10,7 +10,7 @@ class Solution {
         int[] products = new int[n];
         Arrays.fill(products, 1);
         int left = 1, right = 1;
-        for (int i = 1; i < n; i++) {
+        for (int i = 1; i < n; i++) { 
             left *= nums[i-1];  //把当前数左边的乘积收集起来，每轮收集一次
             products[i] *= left;    //乘到对应位置
         }
