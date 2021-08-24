@@ -1,0 +1,20 @@
+解法：我们可以使用一个大小为 kk 的优先队列来存储前 kk 大的元素，其中优先队列的队头为队列中最小的元素，也就是第 kk 大的元素。
+在单次插入的操作中，我们首先将元素 \textit{val}val 加入到优先队列中。如果此时优先队列的大小大于 kk，我们需要将优先队列的队头元素弹出，以保证优先队列的大小为 kk
+
+class KthLargest {
+    int k;
+    PriorityQueue<Integer> queue;
+    public KthLargest(int k, int[] nums) {
+        this.k = k;
+        this.queue = new PriorityQueue<>();
+        for (int num : nums) {
+            add(num);
+        }
+    }
+    
+    public int add(int val) {
+        queue.offer(val);
+        if (queue.size() > k) queue.poll();
+        return queue.peek();
+    }
+}
