@@ -1,0 +1,31 @@
+解法：先判断数组长度是否小于3，如果小于直接返回。总体就是先看一个数，再用二分搜索他后面的数看看是否能组成0。
+先数组进行排序，再用一个指针遍历nums，如果当前数字>0就说明后面不可能找出两个数字让他们3个等于0了，因为是排序过的
+如果i>0而且i和前一个元素一样就continue，这样排除了重复的三元数组。之后用两个指针对当前数的后面的数进行二分搜索，如果三者加起来等于0就加到list里，并且要一直移动两个指针来去重，去重完还要移动一次
+
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) return res;
+            if (i > 0 && nums[i] == nums[i-1]) continue;
+            int l = i + 1, r = nums.length - 1;
+            while (l < r) {
+                int k = nums[i] + nums[l] + nums[r];
+                if (k == 0) {
+                    res.add(Arrays.asList(nums[i], nums[l], nums[r]));
+                    // 去重
+                    while (l < r && nums[l] == nums[l+1]) l++;
+                    while (r > l && nums[r] == nums[r-1]) r--;
+                    l++;
+                    r--;
+                } else if (k < 0) {
+                    l++;
+                } else {
+                    r--;
+                }
+            }
+        }
+        return res;
+    }
+}
