@@ -1,0 +1,26 @@
+解法：用一个List存前缀和，第一个位置放第一个数，之后的位置都是当前数加上之前的前缀和也就是前一个index的值。
+随机产生一个1到总和的之间的数，之后用二分查找去找数组里找前缀和和这个随机数，如果mid位置前缀和小了或者等于则l+1因为等于说明是到了下个区间的起始位置
+list里前缀和的数量=返回的结果的index数量，比如(1,3)，那么随机数是1-4，前缀和有1，4，除了随机数正好是1，其他情况都会因为网上找而取到4，也就是index1.所以最后返回index1 3次 index0 1次
+
+class Solution {
+    List<Integer> pre = new ArrayList<>();
+    int sum = 0;
+    Random rand = new Random();
+    public Solution(int[] w) {
+        for (int num : w) {
+            sum += num;
+            pre.add(sum);
+        }
+    }
+    
+    public int pickIndex() {
+        int l = 0, r = pre.size()-1;
+        int target = rand.nextInt(sum);
+        while (l < r) {
+            int mid = l + (r-l)/2;
+            if (pre.get(mid) <= target) l = mid + 1;
+            else r = mid;
+        }
+        return l;
+    }
+}
