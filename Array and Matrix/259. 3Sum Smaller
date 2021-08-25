@@ -1,0 +1,29 @@
+解法：先对数组排序，固定一个数再用两个指针对这个数右边的数进行二分搜索，搜到三个数和小于目标数就把指针距离加到result，
+可以理解为这个时候固定l，r可以往左移动的位置，也就是两个指针距离都是一个满足题意的三元数组。再把左指针右移，这样改变了左指针的值，即使右边值一样，
+下一轮如果新的三个数还是符合题意就再加上新的左指针和右指针距离。如果和大于等于目标值了就要把右指针左移来获得一个更小的数
+
+class Solution {
+    public int threeSumSmaller(int[] nums, int target) {
+        // 先排序
+        Arrays.sort(nums);
+        int sum;
+        int result = 0;
+        for (int i = 0; i < nums.length; i++) {
+            int left = i + 1;
+            int right = nums.length - 1;
+            while (left < right) {
+                sum = nums[i] + nums[left] + nums[right];
+                if (sum < target) {
+                    // 说明right的位置满足条件，那么right和left之间的元素作为right时均满足条件
+                    result += (right - left);
+                    // left向右移动
+                    left++;
+                } else {
+                    // 三个数字的和大于等于target，将right向左移动
+                    right--;
+                }
+            }
+        }
+        return result;
+    }
+}
