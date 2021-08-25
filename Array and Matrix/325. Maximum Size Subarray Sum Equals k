@@ -1,26 +1,49 @@
-解法：用一个List存前缀和，第一个位置放第一个数，之后的位置都是当前数加上之前的前缀和也就是前一个index的值。
-随机产生一个1到总和的之间的数，之后用二分查找去找数组里找前缀和和这个随机数，如果mid位置前缀和小了或者等于则l+1因为等于说明是到了下个区间的起始位置
-list里前缀和的数量=返回的结果的index数量，比如(1,3)，那么随机数是1-4，前缀和有1，4，除了随机数正好是1，其他情况都会因为网上找而取到4，也就是index1.所以最后返回index1 3次 index0 1次
+解法：把每个前项和第一次出现的indx放到哈希表里，每次https://github.com/Zhany829/LeetCode-notes/tree/main/Array%20and%20Matrix如果遇到pre-k这个key则更新max。当然还要检查0..i前项和等于k的情况
+之所以仅仅需要记录第一个出现的位置，是因为要保证整个子数组最长，因此只需要记录最前面的位置就好了
 
 class Solution {
-    List<Integer> pre = new ArrayList<>();
-    int sum = 0;
-    Random rand = new Random();
-    public Solution(int[] w) {
-        for (int num : w) {
-            sum += num;
-            pre.add(sum);
+    public int maxSubArrayLen(int[] nums, int k) {
+        int n = nums.length;
+        // 哈希表，映射前缀和值到第一次出现的下标位置
+        Map<Integer, Integer> preSumIndex = new HashMap<>();
+        int ans = 0;
+        // 前缀和
+        int preSum = 0;
+        // 0 出现的位置在 -1 位置处
+        preSumIndex.put(0, -1);
+        for (int i = 0; i < n; ++i) {
+            // 累加前缀和
+            preSum += nums[i];
+            // 确保记录的是第一次出现的位置
+            if (!preSumIndex.containsKey(preSum)) {
+                preSumIndex.put(preSum, i);
+            }
+            // 检查一下是否需要更新答案
+            if (preSumIndex.containsKey(preSum - k)) {
+                ans = Math.max(ans, i - preSumIndex.get(preSum - k));
+            }
         }
+        return ans;
     }
-    
-    public int pickIndex() {
-        int l = 0, r = pre.size()-1;
-        int target = rand.nextInt(sum);
-        while (l < r) {
-            int mid = l + (r-l)/2;
-            if (pre.get(mid) <= target) l = mid + 1;
-            else r = mid;
+}
+
+class Solution {
+    public int maxSubArrayLen(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int pre = 0, max = 0;
+        //map.put(0, -1);
+        for (int i = 0; i < nums.length; i++) {
+            pre += nums[i];
+            if (pre == k) {
+                max = Math.max(max, i+1);
+            }
+            if (!map.containsKey(pre)) {
+                map.put(pre, i);
+            }
+            if (map.containsKey(pre - k)) {
+                max = Math.max(max, i - map.get(pre - k));
+            }
         }
-        return l;
+        return max;
     }
 }
