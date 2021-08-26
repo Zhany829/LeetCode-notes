@@ -1,0 +1,25 @@
+解法：如果两条短边大于最长边则说明能符合题意。先排序数组，把i当作最长边，在i的左边进行二分搜索，用两个指针代表两条短边，
+如果遇到短边和大于长边则把两个指针的距离加上并且移动右指针(去看看减小点短边和还能不能大于长边)，否则移动左指针(要加到短边和了)。
+
+public class Solution {
+    /**
+     * @param S: A list of integers
+     * @return: An integer
+     */
+    public int triangleCount(int[] S) {
+        // write your code here
+        Arrays.sort(S);
+        int cnt = 0;
+        for (int i = 0; i < S.length; i++) {
+            int l = 0, r = i - 1;
+            while (l < r) {
+                if (S[l] + S[r] > S[i]) {
+                    cnt += r - l;
+                    r--;
+                }
+                else l++;
+            }
+        }
+        return cnt;
+    }
+}
