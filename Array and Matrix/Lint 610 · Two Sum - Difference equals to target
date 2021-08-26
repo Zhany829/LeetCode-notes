@@ -1,0 +1,28 @@
+解法：先把target变成正数，用两个指针，一个指针永远在另一个右边，如果两指针的差小于target则右指针往右去增大差，如果等于target就直接返回结果。
+如果大于target就移动左指针去减小他们的差，但要确保右指针在左指针移动一格后的右边，所以用r = Math.max(r, l+1)
+
+public class Solution {
+    /**
+     * @param nums: an array of Integer
+     * @param target: an integer
+     * @return: [num1, num2] (num1 < num2)
+     */
+    public int[] twoSum7(int[] nums, int target) {
+        // write your code here
+        target = Math.abs(target);
+       int l = 0, r = 1;
+       int[] res = new int[]{-1, -1};
+       while (r < nums.length) {
+           if (nums[r] - nums[l] == target) {
+               return new int[]{nums[l], nums[r]};
+           }
+           if (nums[r] - nums[l] < target) {
+               r++;
+           } else {
+               l++;
+               r = Math.max(r, l+1);
+           }
+       }
+       return res;
+    }
+}
