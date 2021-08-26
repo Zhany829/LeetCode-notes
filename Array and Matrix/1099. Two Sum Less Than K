@@ -1,0 +1,20 @@
+解法：先排序在用双指针，遇到两指针数的和小于k，就用变量记录一下最大的，再用左指针不停移动直到和比k大，因为是排序的，所以和会越来越大，同时变量会记录下最大的小于k的和
+如果和大于等于k了就移动右指针
+
+class Solution {
+    public int twoSumLessThanK(int[] nums, int k) {
+        Arrays.sort(nums);
+        int max = Integer.MIN_VALUE, l = 0, r = nums.length-1;
+        while (l < r) {
+            int sum = nums[l] + nums[r];
+            if (sum < k) {
+                max = Math.max(max, nums[l] + nums[r]);
+                l++;
+            } else {
+                r--;
+            }
+        }
+        if (max == Integer.MIN_VALUE) return -1;
+        else return max;
+    }
+}
