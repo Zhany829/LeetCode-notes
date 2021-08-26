@@ -1,0 +1,29 @@
+解法：用哈希表放每个num及其出现次数，之后find里用for (map.Entry<Integer, Integer> entry : map.entrySet()) 遍历每个entry来得到各自的key和value。
+先去得到target和当前key的差，之后去看这个差和key一不一样，如果一样说明可以有一种情况是两个当前key满足一个target，所以去检查key的数量是否大于1就行。
+如果不一样则去找map里有没有这个差作为key的entry，找到也能满足target
+
+class TwoSum {
+    Map<Integer, Integer> map;
+    /** Initialize your data structure here. */
+    public TwoSum() {
+        map = new HashMap<>();
+    }
+    
+    /** Add the number to an internal data structure.. */
+    public void add(int number) {
+        map.put(number, map.getOrDefault(number, 0) + 1);
+    }
+    
+    /** Find if there exists any pair of numbers which sum is equal to the value. */
+    public boolean find(int value) {
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int complement = value - entry.getKey();
+            if (complement != entry.getKey()) {
+                if (map.containsKey(complement)) return true;
+            } else {
+                if (entry.getValue() > 1) return true;
+            }
+        }
+        return false;
+    }
+}
