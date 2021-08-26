@@ -1,0 +1,17 @@
+解法：先排序再用二分找，记录每次的差值绝对值的最小值，如果一样了要直接返回0，不然会超时
+
+ public int twoSumClosest(int[] nums, int target) {
+        // write your code here
+        int min = Integer.MAX_VALUE;
+        Arrays.sort(nums);
+        int l = 0, r = nums.length - 1;
+        while (l < r) {
+            int sum = nums[l] + nums[r];
+            if (Math.abs(target - sum) < min) min = Math.abs(target - sum);
+            if (sum > target) r--;
+            else if (sum < target) l++;
+            else return 0;
+        }
+        return min;
+    }
+}
