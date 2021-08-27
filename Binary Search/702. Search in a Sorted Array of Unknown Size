@@ -1,0 +1,22 @@
+解法：先把左右指针分别设置成0和1，然后用while移动指针，直到右指针指的数比target大，每次移动把左指针设置成右指针再把右指针设置成当前2倍。
+确定了边界后就进行二分搜索即可
+
+class Solution {
+    public int search(ArrayReader reader, int target) {
+        int l = 0, r = 1;
+        while (reader.get(r) < target) {
+            l = r;
+            r *= 2;
+        }
+        //此时target在l和r的范围内
+        int mid, num;
+        while (l <= r) {
+            mid = l + (r-l) / 2;
+            num = reader.get(mid);
+            if (num == target) return mid;
+            else if (num < target) l = mid + 1;
+            else r = mid - 1;
+        }
+        return -1;
+    }
+}
