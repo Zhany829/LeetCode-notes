@@ -1,0 +1,14 @@
+解法：中间数比右边大则说明最小元素在右边，调整左指针。反之调整左指针，如果遇到中间数等于右边的则--右指针，因为可能最小元素在中间，比如11101，mid和r都是1，只能一步步减小右指针
+
+class Solution {
+    public int findMin(int[] nums) {
+        int l = 0, r = nums.length-1;
+        while (l < r) {
+            int mid = l + (r-l)/2;
+            if (nums[mid] > nums[r]) l = mid + 1;
+            else if (nums[mid] < nums[r]) r = mid;
+            else r--; //防止重复数字是最小元素
+        }
+        return nums[l];
+    }
+}
