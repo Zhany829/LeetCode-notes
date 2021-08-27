@@ -1,0 +1,35 @@
+解法1：O(logn + K) 如果左边界与 x 的差值的绝对值较小，删除右边界；如果右边界与 x 的差值的绝对值较小，删除左边界；如果左、右边界与 x 的差值的绝对值相等，删除右边界。
+就是对于mid, mid+k这个区间不断用左右边界和x的差值调整
+class Solution {
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        List<Integer> res = new ArrayList<>();
+        int l = 0, r = arr.length-k;
+        while (l < r) {
+            int mid = l + (r-l)/2;
+            if (x - arr[mid] > arr[mid+k] - x) l = mid + 1;
+            else r = mid;
+        }
+        for (int i = l; i < l+k; i++) {
+            res.add(arr[i]);
+        }
+        return res;
+    }
+}
+
+解法2：O(n) 最后要剩下k个元素，那么就要删除总量-k个元素，每次比较两个指针的值，如果x到左指针的差值大于右指针的，说明左边的元素太远了要删掉所以左指针右移，反之删掉右边，左右差距一样也是删右边元素
+
+class Solution {
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        int l = 0, r = arr.length - 1;
+        int cnt = arr.length - k;
+        while (cnt-- > 0) {
+            if (x - arr[l] > arr[r] - x) l++;
+            else r--;
+        }
+        List<Integer> res = new ArrayList<>();
+        for (int i = l; i < l+k; i++) {
+            res.add(arr[i]);
+        }
+        return res;
+    }
+}
