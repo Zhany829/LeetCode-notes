@@ -1,0 +1,37 @@
+解法：二分答案的区间，设为[l,r]。然后针对每个时间m，求一下需要的人数，如果算出来需要的人数小于等于k，说明还有可能加快抄写，于是在[l,m]继续寻找答案；
+如果算出来需要的人数大于了k，说明要求的时间太短了，完成不了，则在(m+1,r]中寻找答案。之后对于每个时间用每个page需要的时间去消减，消减一个人数+1，最后返回需要的人数
+
+public class Solution {
+    /**
+     * @param pages: an array of integers
+     * @param k: An integer
+     * @return: an integer
+     */
+    public int copyBooks(int[] pages, int k) {
+       int l = 0, r = 0;
+       for (int page : pages) {
+           l = Math.max(l, page); // 左边界是最少也要的时间，比如[1,2,3]，即使有3个人也要3 mins
+           r += page;
+       }
+       while (l < r) {
+           int mid = l + (r-l)/2;
+           if (needPeople(pages, mid, k) <= k) r = mid;
+           else l = mid + 1;
+       }
+       return l;
+    }
+    // 给定耗时，看看要几个人能做完
+    private int needPeople(int[] pages, int time, int k) {
+        int sum = 0, cnt = 1;
+        for (int i = 0; i < pages.length; i++) {
+            sum += pages[i];
+            // 如果sum大于time说明要交给下个人做，
+            if (sum > time) {
+                cnt++;
+                sum = 0;
+                i--;
+            }
+        }
+        return cnt;
+    }
+}
