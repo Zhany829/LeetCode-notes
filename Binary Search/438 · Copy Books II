@@ -1,0 +1,33 @@
+解法：确定左右边界，右边界是全由第一个人来copy的时间。二分每次取一个中间时间去看能不能完成，能完成就减小右边界，否则增加左边界。
+检查能否在给定中间值时间完成的方法是遍历每个人要的时间，去加上每个人在给定时间能copy完多少书，也就是用指定时间除以每个人copy一本书的时间，如果最后总数大于n说明可以copy完，则去调整右指针。
+意思就是在给定时间内所有人同时开工最多copy几本书，看这个总数是否达到要求，达到就缩减时间
+
+public class Solution {
+    /**
+     * @param n: An integer
+     * @param times: an array of integers
+     * @return: an integer
+     */
+    // 判断所有人同时开工在给定time能完成多少书，如果大于等于n说明时间多 可以完成
+    static boolean check(int[] times, int n, int time) {
+        int sum = 0, len = times.length;
+        for (int i = 0; i < len; i++) {
+            sum += time / times[i];
+        }
+        return sum >= n;
+    }
+    
+    public int copyBooksII(int n, int[] times) {
+        int left = 0, right = n * times[0];
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (check(times, n, mid)) {
+                right = mid;
+            }
+            else {
+                left = mid+1;
+            }
+        }
+        return left;
+    }
+}
