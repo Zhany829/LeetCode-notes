@@ -1,0 +1,25 @@
+解法：如果左边和mid一样则左指针往右移动一个位置再继续，因为不然分不清是左右哪边是有序的。之后看左元素比中间小说明左部分有序，如果target在左右指针中间则去左边找，否则去右边。右边有序亦然
+
+class Solution {
+    public boolean search(int[] nums, int target) {
+        int l = 0, r = nums.length - 1;
+        while (l <= r) {
+            int mid = l + (r-l)/2;
+            if (nums[mid] == target) return true;
+            if (nums[l] == nums[mid]) { //分不清是左部分有序还是右部分有序 去掉左边一个
+                l++;
+                continue;
+            }
+            if (nums[l] < nums[mid]) { // nums左边部分有序
+                // target在左边部分 去左边找
+                if (nums[l] <= target && target < nums[mid]) r = mid - 1;
+                else l = mid + 1;
+            } else { //nums右边有序
+                // target在右边部分 去右边找
+                if (nums[mid] < target && target <= nums[r]) l = mid + 1;
+                else r = mid - 1;
+            }
+        }
+        return false;
+    }
+}
