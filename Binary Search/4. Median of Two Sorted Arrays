@@ -1,0 +1,41 @@
+解法：对两个数组分别用i((iMin+iMax)/2)和j((m+n+1)/2-i)进行切分，i和j左边是左半部分，右边是右半部分，当前数组A和B总长度是偶数则两部分长度一样，中位数就是(左半部分最大值+右半部分最小值)/2.
+如果总长度是奇数则左半部分长度比右半部分多1，中位数是左半部分最大值。之后要做的就是保证B[j]>=A[i]和A[i-1]>=B[j-1]，
+情况1 B [ j - 1 ] > A [ i ]，并且为了不越界，要保证 j != 0，i != m 需要增加 i ，为了数量的平衡还要减少 j ，幸运的是 j = ( m + n + 1) / 2 - i，i 增大，j 自然会减少。
+情况2 A [ i - 1 ] > B [ j ] ，并且为了不越界，要保证 i != 0，j != n 减少 i ，增大 j.左半部分当 j = 0 时，最大的值就是 A [ i - 1 ] ；
+当 i = 0 时 最大的值就是 B [j - 1] 。右半部分最小值和之前一样。右半部分当 j = n 时，最小值就是 A [ i ] ；当 i = m 时，最小值就是B [ j ]. 
+时间复杂度O(log (min(m, n))), 空间复杂度O(1)
+
+class Solution {
+    public double findMedianSortedArrays(int[] A, int[] B) {
+        int m = A.length;
+        int n = B.length;
+        if (m > n) { 
+            return findMedianSortedArrays(B,A); // 保证 m <= n
+        }
+        int iMin = 0, iMax = m;
+        while (iMin <= iMax) {
+            int i = (iMin + iMax) / 2;
+            int j = (m + n + 1) / 2 - i;
+            if (j != 0 && i != m && B[j-1] > A[i]){ // i 需要增大
+                iMin = i + 1; 
+            }
+            else if (i != 0 && j != n && A[i-1] > B[j]) { // i 需要减小
+                iMax = i - 1; 
+            }
+            else { // 达到要求，并且将边界条件列出来单独考虑
+                int maxLeft = 0;
+                if (i == 0) { maxLeft = B[j-1]; }
+                else if (j == 0) { maxLeft = A[i-1]; }
+                else { maxLeft = Math.max(A[i-1], B[j-1]); }
+                if ( (m + n) % 2 == 1 ) { return maxLeft; } // 奇数的话不需要考虑右半部分
+                int minRight = 0;
+                if (i == m) { minRight = B[j]; }
+                else if (j == n) { minRight = A[i]; }
+                else { minRight = Math.min(B[j], A[i]); }
+
+                return (maxLeft + minRight) / 2.0; //如果是偶数的话返回结果
+            }
+        }
+        return 0.0;
+    }
+}
