@@ -1,0 +1,14 @@
+解法：因为两边都是负无穷，可以理解为都是山脚，
+如果mid元素比mid+1元素小，如果mid+1或者其右边一定有一个山顶，因为mid+2..mid+3比mid+1小说明mid+1就是山顶，如果mid+1后面都比他大，但是最后一个元素是负无穷所以倒数第二个元素就是山顶
+
+class Solution {
+    public int findPeakElement(int[] nums) {
+        int l = 0, r = nums.length - 1;
+        while (l < r) {
+            int mid = l + (r-l)/2;
+            if (nums[mid] < nums[mid+1]) l = mid + 1; //右边肯定有一个坡顶
+            else r = mid;
+        }
+        return l;
+    }
+}
