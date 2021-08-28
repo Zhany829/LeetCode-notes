@@ -1,6 +1,7 @@
-解法：要去找能框住所有黑色区域的最小方框的面积，也就是找到最左右上下然后再把边长相乘就可以。对于找最左，可以去看第0列到第y列(l=0 r = y)，也就是出现黑色块的列之间找。
+解法1：要去找能框住所有黑色区域的最小方框的面积，也就是找到最左右上下然后再把边长相乘就可以。对于找最左，可以去看第0列到第y列(l=0 r = y)，也就是出现黑色块的列之间找。
 首先先增加top知道当前块是黑色的，也就是不等于'0',但不能超过bottom了，之后再判断(用一个变量)是不是找最左，是的而且top没超过bottom的话就把右边界设置为mid
 对于找最右就是把变量反过来并且去y+1到整个矩阵的右边界去找。对于找上和下，一个是0到x行一个是x+1到矩阵的下边界，他们的左右边界直接用刚才算的
+时间复杂度(mlogn + nlogm)
 
 public class Solution {
     public int minArea(char[][] image, int x, int y) {
@@ -32,5 +33,52 @@ public class Solution {
                 i = mid + 1;
         }
         return i;
+    }
+}
+
+
+解法2：扫描矩阵每个点去找最左右上下，先把左和右初始化为y，上下初始化为x，遍历每个点，如果当前是‘1’找最左边和上边可以用min去更新，右边和下边用max
+时间O(mn) 空间O(1)
+
+class Solution {
+    public int minArea(char[][] image, int x, int y) {
+        int left = y, right = y, top = x, bottom = x;
+        for (int i = 0; i < image.length; i++) {
+            for (int j = 0; j < image[0].length; j++) {
+                if (image[i][j] == '1') {
+                    left = Math.min(left, j);
+                    right = Math.max(right, j+1);
+                    top = Math.min(top, i);
+                    bottom = Math.max(bottom, i+1);
+                }
+            }
+        }
+        return (bottom-top) * (right-left);
+    }
+}
+
+解法3：DFS, 每次递归先确定结束条件+标记访问过+更新左右上下+递归四个方向
+
+class Solution {
+    int left, right, top, bottom;
+    public int minArea(char[][] image, int x, int y) {
+        left = right = y;
+        top = bottom = x;
+        dfs(image, x, y);
+        return (bottom-top) * (right-left);
+    }
+    private void dfs(char[][] image, int x, int y) {
+        if (x < 0 || x > image.length-1 || y < 0 || y > image[0].length-1 || image[x][y] == '0'){
+            return;
+        }
+        image[x][y] = '0';
+        left = Math.min(left, y);
+        right = Math.max(right, y+1);
+        top = Math.min(top, x);
+        bottom = Math.max(bottom, x+1);
+        dfs(image, x+1, y);
+        dfs(image, x-1, y);
+        dfs(image, x, y+1);
+        dfs(image, x, y-1);
     }
 }
