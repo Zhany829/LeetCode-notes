@@ -1,0 +1,20 @@
+解法：用mid这个divisor去看，如果最后每个数除完这个divisor可以小于等于要求的threshold，则去减小右边界去减小mid从而加大每个数除完mid后的和来靠近threshold
+
+class Solution {
+    public int smallestDivisor(int[] nums, int threshold) {
+        int l = 1, r = 1000000;
+        while (l < r) {
+            int mid = l + (r-l)/2;
+            if (isPossible(nums, mid, threshold)) r = mid;
+            else l = mid + 1;
+        }
+        return l;
+    }
+    private boolean isPossible(int[] nums, int total, int threshold) {
+        int sum = 0;
+        for (int num : nums) {
+            sum += (num-1) / total + 1;
+        }
+        return sum <= threshold;
+    }
+}
