@@ -1,0 +1,20 @@
+解法：因为要有浮点数所以要left + 1e-10 < right. 若x<1将右边界扩大到1可避免结果错误（比如0.04=0.2*0.2）如果我们不将x右边界扩大到1，则无法在[0,0.04]的区间范围内找到正解
+
+public class Solution {
+    /**
+     * @param x: a double
+     * @return: the square root of x
+     */
+    public double sqrt(double x) {
+        // write your code here
+        double l = 0, r = x;
+        if (x < 1) r = 1;
+        while (l + 1e-10 < r) {
+            double mid = l + (r-l)/2;
+            if (mid*mid < x) l = mid;
+            else if (mid*mid > x) r = mid;
+            else return mid;
+        }
+        return l;
+    }
+}
