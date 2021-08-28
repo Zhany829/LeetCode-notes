@@ -1,0 +1,24 @@
+解法：遍历一个时间范围内最少多少个小时可以满足吃掉所有香蕉，每次取中间量的小时数去检测，如果检测可以在规定小时数h内吃完则去缩小时间，也就是缩小右边界。
+检查的方法是用给的时间去除以每个pile，并且把每个pile要花的时间加起来得到总共需要的小时数，最后和规定的h比较。但要注意除法时候要向上取整，也就是每个pile先-1再除最后再+1。
+ex：k=4 pile=4那么4-1再除就得0，+1正好得到正确答案。
+k=4，pile=5，5-1再除就得1，+1也是正好得到正确答案
++1是为了pile=4的情况 -1是为了pile=5到7的情况
+
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        int l = 1, r = 1000000000;
+        while (l < r) {
+            int mid = l + (r-l)/2;
+            if (!isPossible(piles, mid, h)) l = mid + 1;
+            else  r = mid;
+        }
+        return l;
+    }
+    private boolean isPossible(int[] piles, int k, int h) {
+        int sum = 0;
+        for (int pile : piles) {
+            sum += (pile-1) / k + 1;
+        }
+        return sum <= h;
+    }
+}
