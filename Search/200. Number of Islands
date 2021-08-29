@@ -28,41 +28,34 @@ class Solution {
 }
 解法2:BFS，一般dfs转变成bfs的都不用去看size，因为没有层的概念，只是把四周去探索完
 class Solution {
-    int m,n;
-    int[][] directions = {{1,0},{-1,0},{0,1},{0,-1}};
+    int m, n;
+    int[][] directions = {{1,0}, {-1,0},{0,1},{0,-1}};
     public int numIslands(char[][] grid) {
+        int res = 0;
         m = grid.length;
         n = grid[0].length;
-        int num = 0;
-        int[][] visited = new int[m][n];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (grid[i][j] == '1' && visited[i][j] != 1) {  //这个地是岛而且没被访问过才去探索
-                    num++;
-                    dfs(grid, i, j, visited);
+                if (grid[i][j] == '0') continue;
+                res++;
+                Queue<int[]> queue = new LinkedList<>();    
+                queue.add(new int[]{i, j});
+                grid[i][j] = '0';
+                while (!queue.isEmpty()) {
+                    int[] cur = queue.poll();
+                    int x = cur[0], y = cur[1];
+                    for (int[] d : directions) {
+                        int x1 = x + d[0], y1 = y + d[1];
+                        if (x1 < 0 || x1 > m-1 || y1 < 0 || y1 > n-1 || grid[x1][y1] == '0'){
+                            continue;
+                        }
+                        grid[x1][y1] = '0';
+                        queue.add(new int[]{x1, y1});
+                    }
                 }
             }
         }
-        return num;
-    }
-    private void dfs(char[][] grid, int i, int j, int[][] visited) {
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[] {i, j});
-        visited[i][j] = 1;
-        while (!queue.isEmpty()) {
-            int[] cur = queue.poll();
-            int x = cur[0];
-            int y = cur[1];
-            for (int[] d : directions) {
-                int x1 = x + d[0];
-                int y1 = y + d[1];
-                if (x1 < 0 || x1 > m-1 || y1 < 0 || y1 > n-1 || visited[x1][y1] == 1 || grid[x1][y1] == '0') {
-                    continue;
-                }
-                queue.add(new int[]{x1, y1});   //入队就标记，之后可以访问到
-                visited[x1][y1] = 1;    //入队就标记
-            }
-        }
+        return res;
     }
 }
        
