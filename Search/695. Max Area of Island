@@ -64,52 +64,48 @@ Union就是把两个不相交的集合合并为一个集合
 Find就是查询两个元素是否在同一个集合
 并查集就是刚开始所有点都是一个独立子集，之后如果一个点赢了另一个点，比如和另一个点是连接的岛屿，就选择其中一个点作为代表元素。
 合并两个集合里的点就去看他们的代表节点，也就是根节点的深度，把深度也就是rank(秩)小的作为深度/秩小往大的合并，合并后深度+1. 时间复杂度O(N)
-
 class Solution {
-int[] parent=null;
-int[] size=null;
-int max=0;
-public void merge(int a,int b){
-    int fa=find(a);
-    int fb=find(b);
-    if(fa==fb) return;
-    if(size[fa]>size[fb]){
-        parent[fb]=fa;
-        size[fa]+=size[fb]; 
-        max=Math.max(max,size[fa]); //统计最大值
-    }else{
-        parent[fa]=fb;
-        size[fb]+=size[fa];
-        max=Math.max(max,size[fb]);
-    }
-}
-// 找到根节点,也就是当前集合的代表节点
-public int find(int p){
-    if(parent[p]==p) return p;
-    parent[p]=find(parent[p]); //路径压缩
-    return parent[p];
-}
-public int maxAreaOfIsland(int[][] grid) {
-    int m=grid.length;
-    int n=grid[0].length;
-    //init
-    parent=new int[m*n];
-    size=new int[m*n];
-    for (int i=0;i<m*n;i++){
-        parent[i]=i; // 每个人先都是一个代表节点
-        size[i]=1; //集合的大小为1
-    }
-    for (int i=0;i<m;i++) {
-        for (int j=0;j<n;j++) {
-            if(grid[i][j]==1){
-                //特判一下 hahaha~ 感觉如果不是lc有wacase我还挺难发现这个
-                max=Math.max(max,1);
-                if(i>0 && grid[i-1][j]==1) merge(i*n+j,(i-1)*n+j); //合并上面
-                if(j>0 && grid[i][j-1]==1) merge(i*n+j,i*n+j-1); //合并左边
+    int[] parent = null;
+    int[] rank = null;
+    int max = 0;
+    public int maxAreaOfIsland(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        parent = new int[m*n]; //用来放根节点
+        rank = new int[m*n]; //用来放每个集合的秩
+        // 初始化,每个节点是一个集合, 代表节点就是自己, 同时秩 = 1
+        for (int i = 0; i < m*n; i++) {
+            parent[i] = i;
+            rank[i] = 1;
+        }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    max = Math.max(max, 1); //只有一块而且是岛的情况
+                    if (i > 0 && grid[i-1][j] == 1) union(i*n + j, (i-1)*n + j); //检查上面
+                    if (j > 0 && grid[i][j-1] == 1) union(i*n + j, i*n + j-1); //检查左边
+                }
             }
         }
+        return max;
     }
-    return max;
-}
+    private void union(int a, int b) {
+        int pa = find(a); //找到当前节点的根节点,也就是集合的代表节点
+        int pb = find(b);
+        if (pa == pb) return; //再同一个集合里不用合并
+        if (rank[pa] > rank[pb]) { //集合pa的秩比pb大所以合并pb到pa,并且把b的秩加到pa
+            parent[pb] = pa;
+            rank[pa] += rank[pb];
+            max = Math.max(max, rank[pa]); //更新最大的秩,也就是最大连通岛屿的面积
+        } else {
+            parent[pa] = pb;
+            rank[pb] += rank[pa];
+            max = Math.max(max, rank[pb]);
+        }
+    }
+    private int find(int a) {
+        if (parent[a] == a) return a;
+        parent[a] = find(parent[a]); // 路径压缩, 一级级往上找
+        return parent[a];
+    }
 
 }
