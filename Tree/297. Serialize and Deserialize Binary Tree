@@ -1,0 +1,54 @@
+解法:serialize的时候用一个""去接节点值,用前序遍历去做dfs递归,如果遇到null了就补一个"None,"上去,否则就把root的值+","拼接上去,还要再拼接上左右儿子的值(递归地拼接),最后返回这个string
+反序列时候把string先用,拆分成string数组,再把这个数组对应成list. 对于这个list(里面有None),每个去看第一个元素,如果是None就把他remove再返回null,否则就用带一个元素的值作为root,再递归地拼接左右儿子
+要注意的是每次用了root都要把这个元素remove,也就是每次都remove(0). 时间复杂度O(n)
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        return serializeHelper(root, "");
+    }
+    
+    private String serializeHelper(TreeNode root, String res) {
+        if (root == null) {
+            res += "None,";
+        } else {
+            res += res.valueOf(root.val) + ",";
+            res = serializeHelper(root.left, res);
+            res = serializeHelper(root.right, res);
+        }
+        return res;
+    }
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String[] dataArray = data.split(",");
+        List<String> dataList = new LinkedList<>(Arrays.asList(dataArray));
+        return deserializeHelper(dataList);
+    }
+    private TreeNode deserializeHelper(List<String> dataList) {
+        if (dataList.get(0).equals("None")) {
+            dataList.remove(0);
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.valueOf(dataList.get(0)));
+        dataList.remove(0);
+        root.left = deserializeHelper(dataList);
+        root.right = deserializeHelper(dataList);
+        return root;
+    }
+}
+
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));
