@@ -58,4 +58,62 @@ class Solution {
         return res;
     }
 }
-       
+解法3:并查集, 先创建一个并查集的类,构造器里初始化并查的大小(m*n), 集合parent-都是自己, 每个集合的秩rank-都=1,方法有find,union(每次合并都减小1个并查的范围,也就是一个1的地)
+之后在主方法里双层loop判断如果当前是海,则海的cnt++, 否则是岛屿的话去左边和上面,如果也是岛屿的情况下去合并,但i或者j要大于0.
+最后每次合并一个岛都会在总面积上减去岛屿面积-1, 所以最后用减去了每块岛面积-1的面积再减海就剩下岛数,因为每块岛面积cnt可以看作是1
+
+class Solution {
+    public int m, n;
+    public int numIslands(char[][] grid) {
+        m = grid.length;
+        n = grid[0].length;
+        int sea = 0;
+        UnionFind unionFind = new UnionFind(m*n);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '0') { //遇到海的地方
+                    sea++;
+                } else { //去看左边和上面,如果是岛就合并
+                    if (i > 0 && grid[i-1][j] == '1') unionFind.union(i*n+j, (i-1)*n+j);
+                    if (j > 0 && grid[i][j-1] == '1') unionFind.union(i*n+j, i*n+j-1);
+                }
+            }
+        }
+        return unionFind.getCnt() - sea;//总块数-(每块岛的面积-1,因为合并成一块)-海的块数 = 岛数
+    }
+}
+
+public class UnionFind {
+    int[] parent = null;
+    int[] rank = null;
+    int cnt = 0;
+    public UnionFind(int n) {
+        this.cnt = n;
+        parent = new int[n];
+        rank = new int[n];
+        for (int i = 0; i < n; i++) { //初始化
+            parent[i] = i;
+            rank[i] = 1;
+        }
+    }
+    public int getCnt() { return this.cnt;}
+    public int find(int a) {
+        if (a != parent[a]) parent[a] = find(parent[a]);
+        return parent[a];
+    }
+    public void union(int a, int b) { //合并掉一块岛所以cnt--
+        int pa = find(a);
+        int pb = find(b);
+        if (pa == pb) return;
+        if (rank[pa] > rank[pb]) {
+            parent[pb] = pa;
+            rank[pa] += rank[pb];
+        } else {
+            parent[pa] = pb;
+            rank[pb] += pa;
+        }
+        cnt--;
+    }
+}
+
+
