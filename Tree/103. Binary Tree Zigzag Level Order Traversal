@@ -1,0 +1,48 @@
+解法：用一个list在bfs的时候加上每层的元素，同时用一个变量判断是奇数层还是偶数层，如果是奇数层(root算第0层)就把加上的每层元素反转一下。每次加完一层要初始化list。
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        int level = 0;
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) return res;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        List<Integer> cur = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            while (size-- > 0) {    //遍历一层节点
+                TreeNode curRoot = queue.poll();
+                cur.add(curRoot.val); //把这层的节点加上
+                if (curRoot.left != null) {
+                    queue.add(curRoot.left);
+                }
+                if (curRoot.right != null) {
+                    queue.add(curRoot.right);
+                }
+            }
+            if (level % 2 == 1) {   //根节点算level0, level1 3 5...要反转一下
+                Collections.reverse(cur);
+            }
+            res.add(cur);
+            cur = new ArrayList<>();
+            level++; 
+ 
+        }
+        return res;
+    }
+}
