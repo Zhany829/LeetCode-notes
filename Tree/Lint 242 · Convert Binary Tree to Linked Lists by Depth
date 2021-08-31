@@ -1,0 +1,29 @@
+解法：BFS 每一轮用一个dummy节点和一个节点去把当前层的节点都串起来。最后每层节点就是dummy.next
+
+public class Solution {
+    /**
+     * @param root the root of binary tree
+     * @return a lists of linked list
+     */
+    public List<ListNode> binaryTreeToLists(TreeNode root) {
+        // Write your code here
+        List<ListNode> res = new ArrayList<>();
+        if (root == null) return res;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            ListNode cur = new ListNode(0);
+            ListNode head = cur;
+            while (size-- > 0) {
+                TreeNode node = queue.poll();
+                cur.next = new ListNode(node.val);
+                cur = cur.next;
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+            }
+            res.add(head.next);
+        }
+        return res;
+    }
+}
