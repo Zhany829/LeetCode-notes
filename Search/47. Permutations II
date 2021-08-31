@@ -1,6 +1,6 @@
 解法：和之前一题一样，但额外要1.先排序数组让相同的数字都相邻，2.在每次添加的时候遇到和前一个数字一样，而且前一个数字被没被访问过就continue
 如果nums[i-1]访问过了，回溯到num[i]的时候，nums[i-1]的状态已经被清空了(visited里标记为false)，所以如果vis[i-1]的状态是访问过的(被标记为false了)，说明被访问过了直接跳过
-
+时间复杂度O(N*N!)  N是复制到答案数组的时间 N!是backTrack调用时间
 
 class Solution {
     List<List<Integer>> res = new ArrayList<>();
