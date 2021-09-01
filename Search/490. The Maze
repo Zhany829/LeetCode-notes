@@ -1,0 +1,31 @@
+解法:用BFS,先存并标记起点,再对queue循环,每次poll出一个看看是不是终点,是的话直接返回true.每次都朝4个方向走到最远,也就是用while(不超出边界而且当前位置不是wall,不是1),把最远距离放到queue并标记
+
+class Solution {
+    public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+        int m = maze.length, n = maze[0].length;
+        int[][] directions = {{1,0},{-1,0},{0,1},{0,-1}};
+        Queue<int[]> queue = new LinkedList<>();
+        boolean[][] visited = new boolean[m][n];
+        queue.add(start);
+        visited[start[0]][start[1]] = true;
+        while (!queue.isEmpty()) {
+            int[] cur = queue.poll();
+            if (cur[0] == destination[0] && cur[1] == destination[1]) return true;
+            for (int[] d : directions) {
+                int x = cur[0] + d[0];
+                int y = cur[1] + d[1];
+                // 一直走,直到wall
+                while (x >= 0 && x < m && y >= 0 && y < n && maze[x][y] == 0) { 
+                    x += d[0];
+                    y += d[1];
+                }
+                // 把走到的最远的格子放到queue并标记, 因为上次跳出循环走多了所以要减1步
+                if (!visited[x-d[0]][y-d[1]]) {
+                    visited[x-d[0]][y-d[1]] = true;
+                    queue.add(new int[]{x-d[0], y-d[1]});
+                }
+            }
+        }
+        return false;
+    }
+}
