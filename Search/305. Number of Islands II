@@ -1,0 +1,72 @@
+解法:并查集 时间复杂度O(klog(mn)), 对于每个岛的位置,如果被访问过就把并查集里当前cnt放到res.
+如果没被访问过就先++cnt(发现是相邻岛屿之后可以--cnt),再去四周看,如果四周有一点被访问过而且不是isConnected(也就是不是不在同一个集合里(find(a) != find(b))), 就去做union,union里cnt会--.
+这个情况相当于比如当前岛屿(上次岛屿右边)左边是上次岛屿但没合并, 就要合并同时把前面加的cnt--
+
+class Solution {
+    public List<Integer> numIslands2(int m, int n, int[][] positions) {
+        List<Integer> res = new ArrayList<>();
+        int[][] directions = {{1,0}, {-1,0},{0,1},{0,-1}};
+        UnionFind uf = new UnionFind(m * n);
+        boolean[] visited = new boolean[m*n];
+        for (int[] pos : positions) {
+            int x = pos[0], y = pos[1];
+            int idx = x * n + y;
+            if (!visited[idx]) {
+                visited[idx] = true;
+                uf.addCnt();
+                for (int[] d : directions) {
+                    int x1 = x + d[0], y1 = y + d[1];
+                    int newIdx = x1 * n + y1;
+                    // 去四周发现自己比如左边有个岛(所以visited会true)而且没合并
+                    if (x1 >= 0 && x1 < m && y1 >= 0 && y1 < n 
+                    && visited[newIdx] && !uf.isConnected(idx, newIdx)) {
+                        uf.union(idx, newIdx); //每次合并都把前面加的cnt减去
+                    }
+                }
+            }
+            res.add(uf.getCnt());
+        }
+        return res;
+    }
+    
+    public class UnionFind {
+        int[] parent;
+        int[] rank;
+        int cnt;
+        public UnionFind(int n) {
+            parent = new int[n];
+            rank = new int[n];
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+                rank[i] = 1;
+            }
+            cnt = 0;
+        }
+        public void addCnt() {
+            this.cnt += 1;
+        }
+        public boolean isConnected(int a, int b) {
+            return find(a) == find(b);
+        }
+        public int find(int a) {
+            if (parent[a] != a) parent[a] = find(parent[a]);
+            return parent[a];
+        }
+        public void union(int a, int b) {
+            int pa = find(a);
+            int pb = find(b);
+            if (pa == pb) return;
+            if (rank[pa] > rank[pb]) {
+                parent[pb] = pa;
+                rank[pa] += rank[pb];
+            } else {
+                parent[pa] = pb;
+                rank[pb] += rank[pa];
+            }
+            this.cnt--;
+        }
+        public int getCnt() {
+            return this.cnt;
+        }
+    }
+}
