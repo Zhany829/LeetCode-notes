@@ -1,0 +1,38 @@
+解法:先统计出新鲜橘子数量并把腐烂橘子放到queue去迭代,之后只要新鲜橘子数量>0(为了及时停下,因为<=0说明没新鲜橘子了,继续迭代会使层数res偏大)并且queue里还有腐烂橘子,就poll出一个腐烂橘子并且res++
+再在他四周去找新鲜橘子,找到了就放到queue,并且标记为腐烂,新鲜橘子cnt--.最后看如果新鲜橘子cnt>0说明还有新鲜橘子就返回-1
+
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        int cnt = 0;
+        Queue<int[]> queue = new LinkedList<>();
+        int[][] directions = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+        int m = grid.length, n = grid[0].length;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) { //记录新鲜橘子数量
+                    cnt++;
+                } else if (grid[i][j] == 2){
+                    queue.add(new int[]{i, j}); //把腐烂橘子放到queue去迭代
+                }
+            }
+        }
+        int res = 0;
+        while (cnt > 0 && !queue.isEmpty()) { //没有cnt>0的限制可能没新鲜橘子了还在迭代导致res偏大
+            res++;
+            int size = queue.size();
+            while (size-- > 0) {
+                int[] cur = queue.poll();
+                for (int[] d : directions) {
+                    int x = cur[0] + d[0], y = cur[1] + d[1];
+                    if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == 1) {
+                        cnt--; //新鲜橘子数量--
+                        grid[x][y] = 2; //腐烂
+                        queue.add(new int[]{x, y}); //把腐烂橘子加到queue
+                    }
+                }
+            }
+        }
+        if (cnt > 0) return -1;
+        else return res;
+    }
+}
