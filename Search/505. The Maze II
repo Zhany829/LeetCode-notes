@@ -1,0 +1,69 @@
+BFS/DFS的时间复杂度都是O(MN max(M,N)) MN分别为宽高
+解法1:DFS 先用一个2D Array代表起点到某一个地点的距离,也就是cnt.初始化起来为0,其他位置为MAX_VALUE.
+之后去递归的dfs里去四个方向看,去看每次走到最远的cnt,如果当前起点+走的步数(用while去走,每次++cnt)比目标地点的值小就更新目标点的值.再用目标地点去递归.最后检查终点有没有被更新
+class Solution {
+    int m,n;
+    int[][] directions = {{1,0},{-1,0},{0,1},{0,-1}};
+    public int shortestDistance(int[][] maze, int[] start, int[] destination) {
+        m = maze.length;
+        n = maze[0].length;
+        int[][] distance = new int[m][n];
+        for (int[] row : distance) {
+            Arrays.fill(row, Integer.MAX_VALUE);
+        }
+        distance[start[0]][start[1]] = 0;
+        dfs(maze, distance, start);
+        return distance[destination[0]][destination[1]] == Integer.MAX_VALUE ? -1 : distance[destination[0]][destination[1]];
+    }
+    private void dfs(int[][] maze, int[][] distance, int[] start) {
+        for (int[] d : directions) {
+            int x = start[0] + d[0];
+            int y = start[1] + d[1];
+            int cnt = 0;
+            while (x >= 0 && x < m &&  y >= 0 && y < n && maze[x][y] == 0) {
+                x += d[0];
+                y += d[1];
+                cnt++;
+            }
+            if (distance[start[0]][start[1]] + cnt < distance[x-d[0]][y-d[1]]) {
+                distance[x-d[0]][y-d[1]] = distance[start[0]][start[1]] + cnt;
+                dfs(maze, distance, new int[]{x-d[0], y-d[1]});
+            }
+        }
+    }
+}
+
+
+解法2:BFS 区别是如果当前poll出的地点到最远的点的距离小于记录再最远点的距离就更新最远点的距离并且把最远的点重新放到queue里
+class Solution {
+    public int shortestDistance(int[][] maze, int[] start, int[] destination) {
+        int[][] directions = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+        int m = maze.length, n = maze[0].length;
+        int[][] distance = new int[m][n];
+        for (int[] row : distance) {
+            Arrays.fill(row, Integer.MAX_VALUE);
+        }
+        distance[start[0]][start[1]] = 0;
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(start);
+        while (!queue.isEmpty()) {
+            int[] cur = queue.poll();
+            for (int[] d : directions) {
+                int x = cur[0] + d[0];
+                int y = cur[1] + d[1];
+                int cnt = 0;
+                while (x >= 0 && x < m && y >= 0 && y < n && maze[x][y] == 0) {
+                    x += d[0];
+                    y += d[1];
+                    cnt++;
+                }
+                if (distance[cur[0]][cur[1]] + cnt < distance[x-d[0]][y-d[1]]) {
+                    distance[x-d[0]][y-d[1]] = distance[cur[0]][cur[1]] + cnt;
+                    queue.add(new int[]{x-d[0], y-d[1]});
+                }
+            }
+        }
+        return distance[destination[0]][destination[1]] == Integer.MAX_VALUE ? -1 : distance[destination[0]][destination[1]];
+    }
+}
+
