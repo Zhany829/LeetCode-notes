@@ -1,0 +1,48 @@
+解法:拓扑排序
+1.对于seqs中的每一个子序列seq，长度超过2的可以每两个取一条边。例如seq = [5,2,6,3],可以分为{{5,2},{2,6},{6,3}}三条边，计入度数表和邻接表。
+2.org的长度为n，同时也需要对seq中每一个元素，判断是否符合org中所有元素的范围[1, n]
+3.从度数表中每次取出度数为0的元素放入队列que开始循环检测，每次从que中取出唯一的度数为0的元素cur
+4.每次拿cur逐一与org中的元素进行比较，cur != org[index++]时说明重建失败
+5.通过邻接表adj，获取cur的唯一后继元素，继续进行比较
+6.当没有度数为0的元素，即que为empty后，判断index是否验证完全部的org
+
+class Solution {
+    public boolean sequenceReconstruction(int[] org, List<List<Integer>> seqs) {
+        int n = org.length, m = seqs.size(), index = 0;  //index为org的索引
+        if (m == 0) return false;
+        int[] inDegrees = new int[n + 1];  //每条边后继元素的度
+        HashMap<Integer, Set<Integer>> adj = new HashMap<>();  //邻接表，存入每个元素的后继表，同时排除重复邻接关系
+        for (int i = 1; i <= n; i++) adj.put(i, new HashSet<>());
+        Set<Integer> numSet = new HashSet<>();  //存入子序列中所有元素
+        for (List<Integer> seq : seqs) {  //更新三个表
+            int k = seq.size();
+            //要在这里判断和加最后一个元素因为后面loop只能到k-1,因为每次loop要看i+1元素
+            if (seq.get(k - 1) < 1 || seq.get(k - 1) > n)  return false;  //判断最后一个元素是否在[1, n]
+            numSet.add(seq.get(k - 1));  //存入最后一个元素，尤其当子序列只有一个元素时，刚好存入该元素
+            for (int i = 0; i < k - 1; i++) {  //对于每条边存入每个元素的度数和邻接表
+                if (seq.get(i) < 1 || seq.get(i) > n)  return false; //子序列每个元素必须在[1, n]之间
+                numSet.add(seq.get(i));  //存入子序列中所有元素
+                if (!adj.get(seq.get(i)).contains(seq.get(i + 1))) {
+                    inDegrees[seq.get(i + 1)]++;  //排除重复的邻接关系导致度数异常
+                }
+                adj.get(seq.get(i)).add(seq.get(i + 1));  //每条边的两个元素插入邻接表
+            }
+        }
+        if (numSet.size() != n) return false;  //从子序列获取的元素个数与org不一致
+        Queue<Integer> que = new LinkedList<>();;  //存入度为0的元素
+        for (int i = 1; i <= n; i++) {
+            if (inDegrees[i] == 0) que.add(i);  //从1开始查找度为0的元素
+        }
+        if (que.size() != 1) return false;  //元素只有一个可选，确保唯一性
+        while (!que.isEmpty()) {
+            if (que.size() != 1) return false;  //每次度为0的只能是一个元素，确保序列的唯一性
+            int cur = que.poll();
+            if (cur != org[index++]) return false;  //当前元素必须和org的元素一一对应
+            for (int next : adj.get(cur)) {  //查找后继
+                inDegrees[next]--;
+                if (inDegrees[next] == 0) que.add(next);  //后继度为0则压入队列
+            }
+        }
+        return index == n;  //判断org是否走到了所有的元素
+    }
+}
