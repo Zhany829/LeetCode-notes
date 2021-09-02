@@ -1,0 +1,42 @@
+解法:先遍历grid,把每个僵尸位置放到queue同时统计出人类的数量. 之后只要人类数量大于0而且queue不为空,
+每次poll出一个僵尸位置去把他周围(如果不是墙)的人变成僵尸(值改为1,这也相当于标记为visited)同时加到queue里去bfs,同时人类cnt--. 每轮要++一个变量来记录要几天. 最后要看人类数量是否减小到0了
+
+public class Solution {
+    /**
+     * @param grid: a 2D integer grid
+     * @return: an integer
+     */
+    public int zombie(int[][] grid) {       
+        int humanCnt = 0;
+        Queue<int[]> queue = new LinkedList<>();
+        int m = grid.length, n = grid[0].length;
+        int[][] directions = {{1,0},{-1,0},{0,1},{0,-1}};
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 0) { //记录人类数量
+                    humanCnt++;
+                } else if (grid[i][j] == 1) { //把每个僵尸地方放进queue去探索四周
+                    queue.add(new int[]{i, j});
+                }
+            }
+        }
+        int day = 0;
+        while (humanCnt > 0 && !queue.isEmpty()) {
+            int size = queue.size();
+            while (size-- > 0) {
+                int[] cur = queue.poll();
+                for (int[] d : directions) {
+                    int x = cur[0] + d[0], y = cur[1] + d[1];
+                    if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == 0) {
+                        humanCnt--;
+                        grid[x][y] = 1; //被感染
+                        queue.add(new int[]{x, y}); //放进作为僵尸去探索(感染)
+                    }
+                }
+            }
+            day++; //每轮都加1天
+        }
+        if (humanCnt > 0) return -1;
+        else return day;
+    }
+}
