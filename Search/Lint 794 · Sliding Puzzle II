@@ -1,0 +1,66 @@
+解法:先把开始状态和结束状态用stringBuilder转化成string,再对开始状态作bfs,放到queue并标记,每层更新res++,每次用poll出的状态去找所有下个状态,如果下个状态就是最后结果就返回,否则放到queue并标记
+找下个string的方法就是找到0的index,再把这个index周围的index的数和他交换得到下个string
+时间空间复杂度都是O((mn)!*mn).迷板状态有(mn)!种可能，每种状态要O(mn)的时间找出0的位置。空间因为最多需要在队列中存储O((mn)!)个长度为mn的字符串。
+
+public class Solution {
+    /**
+     * @param init_state: the initial state of chessboard
+     * @param final_state: the final state of chessboard
+     * @return: return an integer, denote the number of minimum moving
+     */
+    int[][] neighbors = {{1,3},{0,2,4},{1,5},{0,4,6},{1,3,5,7},{2,4,8},{3,7},{4,6,8},{5,7}};
+    int m, n;
+    public int minMoveStep(int[][] init_state, int[][] final_state) {
+        // # write your code here
+        m = init_state.length;
+        n = init_state[0].length;
+        StringBuilder sb = new StringBuilder();
+        StringBuilder finalSb = new StringBuilder();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                sb.append(init_state[i][j]);
+                finalSb.append(final_state[i][j]);
+            }
+        }
+        String str = sb.toString();
+        String target = finalSb.toString();
+        if (str.equals(final_state)) return 0;
+        int move = 0;
+        Queue<String> queue = new LinkedList<>();
+        queue.add(str);
+        Set<String> visited = new HashSet<>();
+        visited.add(str);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            move++;
+            while (size-- > 0) {
+                String cur = queue.poll();
+                for (String next : get(cur)) { //得到下次move可能的状态(0和周围数字换得到的str)
+                    if (!visited.contains(next)) {
+                        if (next.equals(target)) return move;
+                        queue.add(next);
+                        visited.add(next);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    private List<String> get(String str) {
+        List<String> res = new ArrayList<>();
+        int idx = str.indexOf('0');
+        char[] arr = str.toCharArray();
+        //得到0的idx，去看看这个idx周围的idx有哪些，然后去交换获得下个状态
+        for (int x : neighbors[idx]) { 
+            swap(arr, x, idx);
+            res.add(new String(arr));
+            swap(arr, x, idx);
+        }
+        return res;
+    }
+    private void swap(char[] arr, int i, int j) {
+        char tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+}
