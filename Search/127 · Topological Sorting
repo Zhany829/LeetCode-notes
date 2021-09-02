@@ -1,0 +1,47 @@
+解法:这题已经给了每个节点的邻居:node.neighbors,所以只要用哈希表设置每个节点的入度即可,先初始化每个节点的哈希表(此时入读为0),再遍历每个节点邻居把邻居的入读都+1,因为每个邻居之前都有个他
+再把入度为0的节点放到queue,每次poll出一个,再去看这个poll出的节点的邻居,对邻居的入度-1,因为这个节点没了(被访问了),如果邻居的入度==0了就放到queue,来实现BFS
+
+/**
+ * Definition for Directed graph.
+ * class DirectedGraphNode {
+ *     int label;
+ *     List<DirectedGraphNode> neighbors;
+ *     DirectedGraphNode(int x) {
+ *         label = x;
+ *         neighbors = new ArrayList<DirectedGraphNode>();
+ *     }
+ * }
+ */
+
+public class Solution {
+    /**
+     * @param graph: A list of Directed graph node
+     * @return: Any topological order for the given graph.
+     */
+    public ArrayList<DirectedGraphNode> topSort(ArrayList<DirectedGraphNode> graph) {
+        // write your code here
+        ArrayList<DirectedGraphNode> res = new ArrayList<>();
+        Map<DirectedGraphNode, Integer> indegree = new HashMap<>();
+        for (DirectedGraphNode node : graph) { //初始化每个节点来放其入读
+            indegree.put(node, 0);
+        }
+        for (DirectedGraphNode node : graph) { //对于每个节点，把他的邻居们的入度都+1，因为邻居之前还有个他
+            for (DirectedGraphNode neighbor : node.neighbors) {
+                indegree.put(neighbor, indegree.getOrDefault(neighbor, 0) + 1);
+            }
+        }
+        Queue<DirectedGraphNode> queue = new LinkedList<>();
+        for (DirectedGraphNode node : indegree.keySet()) {
+            if (indegree.get(node) == 0) queue.add(node); //把入度为0的节点放到queue
+        }
+        while (!queue.isEmpty()) {
+            DirectedGraphNode cur = queue.poll();
+            res.add(cur);
+            for (DirectedGraphNode neighbor : cur.neighbors) { //一个节点被poll，他的邻居的入度都要-1
+                indegree.put(neighbor, indegree.get(neighbor) - 1);
+                if (indegree.get(neighbor) == 0) queue.add(neighbor);
+            }
+        }
+        return res;
+    }
+}
