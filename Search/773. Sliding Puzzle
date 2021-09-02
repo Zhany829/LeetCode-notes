@@ -1,0 +1,57 @@
+解法：BFS 时间空间复杂度都是O((mn)!*mn).迷板状态有(mn)!种可能，每种状态要O(mn)的时间找出0的位置。空间因为最多需要在队列中存储O((mn)!)个长度为mn的字符串。
+首先先把原始input，也就是board用stringbuilder转化成一个string，如果这个string正好是123450就返回0.否则把他放到queue，并且用hashset标记访问过。之后迭代queue，每次迭代res++，也就是要多一次move。对于分层的要用size来迭代，每次poll出一个状态，用get方法得到这个状态的下个状态，如果下个状态没被访问过，如果正好是123450则返回res，不然就放到queue并标记。get方法用来得到下个状态，对于输入的状态先转化为charArray，获得0的index。因为每次操作可以把status中的0与相邻位置的数字交换，所以如果比如0在index0，则可以和index1和3交换 在index2可以和1和5换
+012
+345
+int[][] neighbors = {{1, 3}, {0, 2, 4}, {1, 5}, {0, 4}, {1, 3, 5}, {2, 4}}; 
+比如0在index1，那么就遍历0 2 4，分别交换index 1 0，1 2，1 4，把每次结果加到res，但每次交换完要交换回来防止影响下次
+
+class Solution {
+    int[][] directions = {{1,3},{0,2,4},{1,5},{0,4},{1,3,5},{2,4}};
+    public int slidingPuzzle(int[][] board) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                sb.append(board[i][j]);
+            }
+        }
+        String target = sb.toString();
+        if (target.equals("123450")) return 0;
+        Queue<String> queue = new LinkedList<>();
+        queue.add(target);
+        Set<String> visited = new HashSet<>();
+        visited.add(target);
+        int res = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            res++;
+            while (size-- > 0) {
+                String cur = queue.poll();
+                List<String> nextStrings = get(cur);
+                for (String next : nextStrings) {
+                    if (!visited.contains(next)) {
+                        if (next.equals("123450")) return res;
+                        visited.add(next);
+                        queue.add(next);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    private List<String> get(String cur) {
+        List<String> ret = new ArrayList<>();
+        char[] arr = cur.toCharArray();
+        int idx = cur.indexOf('0');
+        for (int d : directions[idx]) { //把index0周围的index的数和0交换来获得下个string
+            swap(arr, d, idx);
+            ret.add(new String(arr));
+            swap(arr, d, idx);
+        }
+        return ret;
+    }
+    private void swap(char[] arr, int i, int j) {
+        char tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+}
