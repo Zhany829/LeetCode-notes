@@ -1,0 +1,45 @@
+解法:把source先加到queue并标记再去作bfs, 每次poll出一个检查是不是终点,如果是就返回res,bfs的方向是8个方向日字,把下个地方加到queue并标记,继续bfs去找终点. 如果最后没找到终点则返回-1
+
+/**
+ * Definition for a point.
+ * class Point {
+ *     int x;
+ *     int y;
+ *     Point() { x = 0; y = 0; }
+ *     Point(int a, int b) { x = a; y = b; }
+ * }
+ */
+
+public class Solution {
+    /**
+     * @param grid: a chessboard included 0 (false) and 1 (true)
+     * @param source: a point
+     * @param destination: a point
+     * @return: the shortest path 
+     */
+    public int shortestPath(boolean[][] grid, Point source, Point destination) {
+        // write your code here
+        int m = grid.length, n = grid[0].length;
+        int[][] directions = {{1,2},{1,-2},{-1,2},{-1,-2},{2,1},{2,-1},{-2,1},{-2,-1}};
+        Queue<Point> queue = new LinkedList<>();
+        queue.add(source);
+        grid[source.x][source.y] = true;
+        int step = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            while (size-- > 0) {
+                Point cur = queue.poll();
+                if (cur.x == destination.x && cur.y == destination.y) return step;
+                for (int[] d : directions) {
+                    Point next = new Point(cur.x + d[0], cur.y + d[1]);
+                    if (next.x >= 0 && next.x < m && next.y >= 0 && next.y < n && grid[next.x][next.y] == false) {
+                        grid[next.x][next.y] = true;
+                        queue.add(next);
+                    }
+                }
+            }
+            step++;
+        }
+        return -1;
+    }
+}
