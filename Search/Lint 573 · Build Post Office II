@@ -1,0 +1,53 @@
+解法:遍历整个grid,每次遇到1就做一次bfs,同时step--(为了下次还能只探索空地,因为在刚开始探索的时候step是0,空地也是0,每次探索到空地会--,空地变成-1,下次遇到1还能探索空地因为step也是-1)
+用distance记录每块空地上所有1到这块空地的距离和.每次bfs先把1的位置放到queue里,迭代queue,每轮curDis++(用来记录空地离1的距离),这里是一层层得看,所以要用size
+之后去看1的四周,如果是空地(也就是grid上值==step)就把空地加到queue来下次继续遍历出去,并且在distance这个数组里加上这块空地到此时1的距离,还要做的是让这块空地值--,同时更新res,也就是最小的距离和
+要用step和不是直接看grid值是否==0是为了减少时间,比如这次bfs把一块空地访问过了但他的值还是0,那下次别的空地的四周访问还会访问到他,queue里就会一直加不会停
+
+public class Solution {
+    /**
+     * @param grid: a 2D grid
+     * @return: An integer
+     */
+    int m, n;
+    int[][] directions = {{1,0},{-1,0},{0,1},{0,-1}};
+    public int shortestDistance(int[][] grid) {
+        m = grid.length;
+        n = grid[0].length;
+        int res = 0, step = 0;
+        int[][] distance = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) { //对于每个1都去加上每块空地到他的距离
+                    res = bfs(grid, step, i, j, distance);
+                    step--;
+                }
+            }
+        }
+        if (res == Integer.MAX_VALUE) return -1;
+        else return res;
+    }
+    private int bfs(int[][] grid, int step, int i, int j, int[][] distance) {
+        int res = Integer.MAX_VALUE;
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{i, j});
+        int curDis = 0;
+        while (!queue.isEmpty()) {
+            curDis++;
+            int size = queue.size();
+            while (size-- > 0) {
+                int[] cur = queue.poll();
+                for (int[] d : directions) {
+                    int x = cur[0] + d[0], y = cur[1] + d[1];
+                    if (x >= 0 && x < m && y >=0 && y < n && grid[x][y] == step) {
+                        grid[x][y]--; //标记为本轮bfs访问过
+                        queue.add(new int[]{x, y}); //加到queue继续从这块地bfs出去
+                        distance[x][y] += curDis; //给这块地加上到目前的1的距离
+                        //其实是看最后一次bfs，因为每块空地正好加完到所有1的距离，取有着最小距离和的地的值
+                        res = Math.min(res, distance[x][y]); 
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
