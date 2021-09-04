@@ -1,0 +1,49 @@
+解法：并查集 把每个edge的两个点都合并 如果合并时候发现在同一个set则返回false
+最后还要看看是不是连通分量cnt被压缩成1了
+
+class Solution {
+    public boolean validTree(int n, int[][] edges) {
+        UnionFind uf = new UnionFind(n);
+        for (int[] edge : edges) {
+            if (!uf.union(edge[0], edge[1])) {
+                return false;
+            }
+        }
+        return uf.getCnt() == 1;
+    }
+}
+public class UnionFind {
+    int[] parent;
+    int[] rank;
+    int cnt;
+    public UnionFind(int n) {
+        parent = new int[n];
+        rank = new int[n];
+        cnt = n;
+        Arrays.fill(rank, 1);
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+    }
+    public boolean union(int a, int b) {
+        int pa = find(a);
+        int pb = find(b);
+        if (pa == pb) return false;
+        if (rank[pa] > rank[pb]) {
+            parent[pb] = pa;
+            rank[pa] += rank[pb];
+        } else {
+            parent[pa] = pb;
+            rank[pb] += rank[pa];
+        }
+        cnt--;
+        return true;
+    }
+    public int find(int a) {
+        if (parent[a] != a) parent[a] = find(parent[a]);
+        return parent[a];
+    }
+    public int getCnt() {
+        return this.cnt;
+    }
+}
