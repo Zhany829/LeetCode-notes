@@ -1,0 +1,29 @@
+解法：先把开始的index放到queue并标记，之后每次poll先判断是否该index上值为0，为0直接返回true。
+不为0则去看当前index +- 当前index位置的数的index会不会超过边界，如果在边界内而且没探索过就放到queue并标记去探索
+
+class Solution {
+    public boolean canReach(int[] arr, int start) {
+        int n = arr.length;
+        boolean[] visited = new boolean[n];
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(start);
+        while (!queue.isEmpty()) {
+            int curIdx = queue.poll();
+            if (arr[curIdx] == 0) return true;
+            // 把下次的move放到queue并标记
+            if (curIdx + arr[curIdx] < n) {
+                if (!visited[curIdx + arr[curIdx]]) {
+                    queue.add(curIdx + arr[curIdx]);
+                    visited[curIdx + arr[curIdx]] = true;
+                }
+            }
+            if (curIdx - arr[curIdx] >= 0) {
+                if (!visited[curIdx - arr[curIdx]]) {
+                    queue.add(curIdx - arr[curIdx]);
+                    visited[curIdx - arr[curIdx]] = true;
+                }
+            }
+        }
+        return false;
+    }
+}
