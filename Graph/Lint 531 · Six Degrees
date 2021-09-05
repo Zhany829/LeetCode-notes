@@ -1,0 +1,33 @@
+解法:BFS 时间空间都是O(N). 先把起点放到queue并标记,之后按照层数搜索,每次poll出一个节点,如果是目标节点则直接返回结果(也就是层数),之后去当前节点的邻居找,没访问过就放到queue并标记.
+
+public class Solution {
+    /*
+     * @param graph: a list of Undirected graph node
+     * @param s: Undirected graph node
+     * @param t: Undirected graph nodes
+     * @return: an integer
+     */
+    public int sixDegrees(List<UndirectedGraphNode> graph, UndirectedGraphNode s, UndirectedGraphNode t) {
+        // write your code here
+        Set<UndirectedGraphNode> visited = new HashSet<>();
+        Queue<UndirectedGraphNode> queue = new LinkedList<>();
+        visited.add(s);
+        queue.add(s);
+        int res = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            while (size-- > 0) {
+                UndirectedGraphNode cur = queue.poll();
+                if (cur == t) return res;
+                for (UndirectedGraphNode neighbor : cur.neighbors) {
+                    if (!visited.contains(neighbor)) {
+                        queue.add(neighbor);
+                        visited.add(neighbor);
+                    }
+                }
+            }
+            res++;
+        }
+        return -1;
+    }
+}
