@@ -1,0 +1,43 @@
+解法:  假设有n个单词，原字符串长度为m。因为长度为m的字符串，如果串中字符各不相同，则子串的个数为m(m+1)/2+1，因此最坏情况下字符串的子串是O(m^2)级别的,空间复杂度为O(m^2)；
+最坏情况队列中的字符串个数会是O(m^2)级别的，对于每一个字符串都要对n个单词进行查找处理，查找处理的时间复杂度是此时队列中头元素的长度ln，最坏取个平均值m/2，因此时间复杂度为O(m^3n).
+
+1.对于当前队列头元素s，枚举dict中的每一个单词word;
+2.当单词word存在于s中时，假设第一次出现的位置下标为pos，我们得到剩余字符串tmp为：
+tmp=s[0,pos-1]+s[pos+word.size(),len(s)]
+当这个字符串tmp没有出现过时，我们将tmp压入队列，并且更新答案。这里可以用哈希表记录字符串是否出现的状态。如果不存在则继续判断下一个单词。
+3.对于单词word，我们要寻找到word在s中的每一个位置，并依次对原字符串进行删除操作。比如当前找到的出现的首位置为pos，那么下一个位置的寻找从pos+1开始。
+4.最后输出在这个过程中维护的最小答案。
+
+public class Solution {
+    /**
+     * @param s: a string
+     * @param dict: a set of n substrings
+     * @return: the minimum length
+     */
+    public int minLength(String s, Set<String> dict) {
+        // write your code here
+        Queue<String> queue = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
+        queue.add(s);
+        visited.add(s);
+        int res = s.length();
+        while (!queue.isEmpty()) {
+            String cur = queue.poll();
+            for (String str : dict) {
+                int pos = cur.indexOf(str); //找到字典里str在s里出现的第一个位置
+                while (pos != -1) { //只要还能在s里找到str这个子串
+                    if (cur == str) return 0; //字典里的str能把s抵消完
+                    //获得抵消了str后的字符串
+                    String next = cur.substring(0, pos) + cur.substring(str.length() + pos); 
+                    if (!visited.contains(next)) {
+                        visited.add(next);
+                        queue.add(next);
+                        res = Math.min(res, next.length()); //看看当前字符串是不是最短的
+                    }
+                    pos = cur.indexOf(str, pos+1); //在s里找到的地方的之后找当前字典里str，找不到就=-1 跳出循环
+                }
+            }
+        }
+        return res;
+    }
+}
