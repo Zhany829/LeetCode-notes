@@ -1,0 +1,48 @@
+解法1:DFS 把访问过的房间都标记,每次都++num,每次递归都去当前房间里没被访问过的钥匙作为房间去访问, 最后看看是不是num == 房间数
+时间复杂度(m+n) 房间数+钥匙数 空间复杂度(n) 开辟了房间数的visited数组
+
+class Solution {
+    int num;
+    boolean[] visited;
+    public boolean canVisitAllRooms(List<List<Integer>> rooms) {
+        int n = rooms.size();
+        num = 0;
+        visited = new boolean[n];
+        dfs(rooms, 0);
+        return num == n;
+    }
+    private void dfs(List<List<Integer>> rooms, int room) {
+        visited[room] = true;
+        num++;
+        for (int key : rooms.get(room)) {
+            if (!visited[key]) {
+                dfs(rooms, key);
+            }
+        }
+    }
+}
+
+解法2: BFS 先把房间0加到queue并标记,之后去看poll出的房间的钥匙,再按照钥匙去访问对应房间
+时间复杂度(m+n) 房间数+钥匙数 空间复杂度(n) 开辟了房间数的visited数组
+
+class Solution {
+    public boolean canVisitAllRooms(List<List<Integer>> rooms) {
+        int n = rooms.size();
+        boolean[] visited = new boolean[n];
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(0);
+        visited[0] = true;
+        int num = 0;
+        while (!queue.isEmpty()) {
+            int cur = queue.poll();
+            num++;
+            for (int key : rooms.get(cur)) {
+                if (!visited[key]) {
+                    visited[key] = true;
+                    queue.add(key);
+                }
+            }
+        }
+        return num == n;
+    }
+}
