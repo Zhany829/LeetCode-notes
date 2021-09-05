@@ -1,0 +1,47 @@
+解法:BFS 先放进开始起点并标记,之后BFS 每次poll出 如果是目标节点就返回 再去看其邻居 没访问过就放到queue并标记
+
+/**
+ * Definition for graph node.
+ * class UndirectedGraphNode {
+ *     int label;
+ *     ArrayList<UndirectedGraphNode> neighbors;
+ *     UndirectedGraphNode(int x) { 
+ *         label = x; neighbors = new ArrayList<UndirectedGraphNode>(); 
+ *     }
+ * };
+ */
+
+
+public class Solution {
+    /*
+     * @param graph: a list of Undirected graph node
+     * @param values: a hash mapping, <UndirectedGraphNode, (int)value>
+     * @param node: an Undirected graph node
+     * @param target: An integer
+     * @return: a node
+     */
+    public UndirectedGraphNode searchNode(ArrayList<UndirectedGraphNode> graph,
+                                          Map<UndirectedGraphNode, Integer> values,
+                                          UndirectedGraphNode node,
+                                          int target) {
+        // write your code here
+        Queue<UndirectedGraphNode> queue = new LinkedList<>();
+        Set<UndirectedGraphNode> visited = new HashSet<>();
+        queue.add(node);
+        visited.add(node);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            while (size-- > 0) {
+                UndirectedGraphNode cur = queue.poll();
+                if (values.get(cur) == target) return cur;
+                for (UndirectedGraphNode neighbor : cur.neighbors) {
+                    if (!visited.contains(neighbor)) {
+                        visited.add(neighbor);
+                        queue.add(neighbor);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+}
