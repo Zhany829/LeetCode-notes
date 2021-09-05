@@ -1,0 +1,73 @@
+解法1：并查集 每次如果两个点已经被合并了，也就是parent一样就返回，否则就合并。每次合并会--cnt，最后看看还剩多少个cnt，也就是独立的集合数
+
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+        UnionFind uf = new UnionFind(n);
+        for (int[] edge : edges) {
+            uf.union(edge[0], edge[1]);
+        }
+        return uf.cnt; //看看合并后还剩多少集合 因为同一个集合的都被合并了 剩下的就是独立集合数
+    }
+}
+public class UnionFind {
+    int[] parent;
+    int[] rank;
+    int cnt;
+    public UnionFind(int n) {
+        parent = new int[n];
+        rank = new int[n];
+        cnt = n;
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            rank[i] = 1;
+        }
+    }
+    public int find(int a) {
+        if (a != parent[a]) parent[a] = find(parent[a]);
+        return parent[a];
+    }
+    public void union(int a, int b) {
+        int pa = find(a);
+        int pb = find(b);
+        if (pa == pb) return;
+        if (rank[pa] > rank[pb]) {
+            parent[pb] = pa;
+            rank[pa] += rank[pb];
+        } else {
+            parent[pa] = pb;
+            rank[pb] += rank[pa];
+        }
+        cnt--; //合并掉一个那么单独的集合就少一个
+    }
+}
+
+解法2: DFS 先把每个edge的点互相作为邻居存到list,也就是每个点有个list的邻居.之后遍历每个点,如果当前点没遇到过就++cnt,再去递归遍历这个点和他的邻居,每次遍历都标记这个点和邻居
+因为每次递归都会把连接的点都遍历完,所以独立集合数就等于遍历次数,因为一轮遍历下来剩下没遍历的edge就是不同集合里的
+
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+        List<List<Integer>> adjacency = new ArrayList<>();
+        boolean[] visited = new boolean[n];
+        for (int i = 0; i < n; i++) adjacency.add(new ArrayList<>());
+        for (int[] edge : edges) {
+            adjacency.get(edge[0]).add(edge[1]);
+            adjacency.get(edge[1]).add(edge[0]);
+        }
+        int cnt = 0;
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                cnt++;
+                dfs(adjacency, visited, i);
+            }
+        }
+        return cnt;
+    }
+    private void dfs(List<List<Integer>> adjacency, boolean[] visited, int cur) {
+        visited[cur] = true;
+        for (int neighbor : adjacency.get(cur)) {
+            if (!visited[neighbor]) {
+                dfs(adjacency, visited, neighbor);
+            }
+        }
+    }
+}
