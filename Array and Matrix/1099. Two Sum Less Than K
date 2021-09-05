@@ -17,4 +17,4 @@ class Solution {
         if (max == Integer.MIN_VALUE) return -1;
         else return max;
     }
-}
+} 
