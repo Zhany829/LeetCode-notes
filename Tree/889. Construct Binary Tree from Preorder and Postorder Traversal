@@ -1,0 +1,31 @@
+解法:先把后序遍历的节点和对应的index存起来,之后可以用来找最后一个左儿子的位置
+用前序遍历的第一个元素创建出根节点
+用前序遍历的第二个元素x，去后序遍历中找对应的下标y，用y-x+1来确定左儿子的数量
+将前序数组，后序数组拆分左右两部分
+递归的处理前序数组左边、后序数组右边
+递归的处理前序数组右边、后序数组右边
+返回根节点
+
+class Solution {
+    Map<Integer, Integer> postIndex = new HashMap<>();
+    public TreeNode constructFromPrePost(int[] preorder, int[] postorder) {
+        int n = preorder.length;
+        for (int i = 0; i < n; i++) {
+            postIndex.put(postorder[i], i);
+        }
+        return constructFromPrePostHelper(preorder, postorder, 0, n-1, 0, n-1);
+    }
+    private TreeNode constructFromPrePostHelper(int[] preorder, int[] postorder, int preLeft, int preRight, int postLeft, int postRight) {
+        if (preLeft > preRight) return null;
+        // 防止下面preorderLeft+1溢出
+        if (preLeft == preRight) return new TreeNode(preorder[preLeft]);
+        int preRoot = preLeft;
+        int firstLeftVal = preorder[preLeft+1];
+        int postLastLeft = postIndex.get(firstLeftVal);
+        int leftSize = postLastLeft - postLeft + 1;
+        TreeNode root = new TreeNode(preorder[preLeft]);
+        root.left = constructFromPrePostHelper(preorder, postorder, preLeft+1, preLeft+1+leftSize-1, postLeft, postLastLeft);
+        root.right = constructFromPrePostHelper(preorder, postorder, preLeft+1+leftSize, preRight, postLastLeft+1, postRight-1);
+        return root;
+    }
+}
