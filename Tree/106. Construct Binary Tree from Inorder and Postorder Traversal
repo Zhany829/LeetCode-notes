@@ -1,0 +1,25 @@
+前序:根 左儿子们 右儿子们
+中序: 左儿子们 根 右儿子们
+后序: 左儿子们 右儿子们 根
+解法:先把inorder每个节点的值和index用哈希表存起来,之后递归得找根节点然后递归地设置他们左右节点.根节点就是后序的右边界,设置左儿子就是把中序和后序的左儿子们放进去递归,右边同理
+
+class Solution {
+    Map<Integer, Integer> index = new HashMap<>();
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        int n = inorder.length;
+        for (int i = 0; i < n; i++) {
+            index.put(inorder[i], i);
+        }
+        return buildTreeHelper(inorder, postorder, 0, n-1, 0, n-1);
+    }
+    private TreeNode buildTreeHelper(int[] inorder, int[] postorder, int inorderLeft, int inorderRight, int postorderLeft, int postorderRight) {
+        if (inorderLeft > inorderRight) return null;
+        int postorderRoot = postorderRight;
+        int inorderRoot = index.get(postorder[postorderRoot]);
+        int leftSize = inorderRoot - inorderLeft;
+        TreeNode root = new TreeNode(postorder[postorderRoot]);
+        root.left = buildTreeHelper(inorder, postorder, inorderLeft, inorderRoot-1, postorderLeft, postorderLeft + leftSize - 1); //注意边界 是n-1
+        root.right = buildTreeHelper(inorder, postorder, inorderRoot + 1, inorderRight, postorderLeft+leftSize, postorderRoot-1);
+        return root;
+    }
+}
