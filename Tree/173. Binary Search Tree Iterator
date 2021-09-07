@@ -1,0 +1,29 @@
+解法：先用中序遍历把节点存到list，之后遍历同时用一个index记录遍历到哪了，next就是返回index位置的元素，hashNext就是看index是不是小于list的size，也就是有没有遍历完
+
+class BSTIterator {
+    private int idx;
+    private List<Integer> arr;
+
+    public BSTIterator(TreeNode root) {
+        idx = 0;
+        arr = new ArrayList<Integer>();
+        inorderTraversal(root, arr);
+    }
+
+    public int next() {
+        return arr.get(idx++);
+    }
+
+    public boolean hasNext() {
+        return idx < arr.size();
+    }
+
+    private void inorderTraversal(TreeNode root, List<Integer> arr) {
+        if (root == null) {
+            return;
+        }
+        inorderTraversal(root.left, arr);
+        arr.add(root.val);
+        inorderTraversal(root.right, arr);
+    }
+}
