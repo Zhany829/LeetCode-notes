@@ -1,0 +1,27 @@
+解法：时间复杂度O(logn) 最坏O(n) 空间O(1)
+先两个变量记录是否找到了p和记录后继。用中序遍历 每次先判断如果找到后继就直接返回，不然后面会更新错的后继，之后看如果找到p，则说明上一轮刚找到，则把本次的root存为后继并返回。
+否则说明没找到p，则判断当前节点是不是p来更新变量
+
+class Solution {
+    // 递归中序遍历DFS搜索
+    private boolean foundP = false; // 是否已经搜索到p节点
+    private TreeNode successor = null; // p的后继节点
+    
+    public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
+        foundP = false;
+        successor = null;
+        inOrder(root, p);
+        return successor;
+    }
+    private void inOrder(TreeNode root, TreeNode p) {
+        if (root == null) return;
+        inOrder(root.left, p);
+        if (successor != null) return; // 找到后继了
+        if (foundP) { // 还没找到后继，但是找到p节点了，那root就是后继
+            successor = root;
+            return;
+        }
+        foundP = root == p; // 尚未找到后继，有没有找到p？
+        inOrder(root.right, p);
+    }
+}
