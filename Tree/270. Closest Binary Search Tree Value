@@ -1,0 +1,40 @@
+解法1：当最接近k的元素的索引小于树高H时候用
+时间平均O(k) 最坏O(H+k) k是最接近元素的索引
+空间复杂度 最坏情况O(H)，树不是平衡树的情况
+初始化链表和pred为一个极小数，之后中序遍历，先把左儿子都加到链表，之后拿出最后一个节点removeLast看如果target在pred和目前root.val之间则说明找到了最接近元素，返回pred和root两者最接近的就行，
+没找到就把pred设置为root，root设置为右儿子--中序遍历 左中右
+
+class Solution {
+    public int closestValue(TreeNode root, double target) {
+        LinkedList<TreeNode> st = new LinkedList<>();
+        long pred = Long.MIN_VALUE;
+        while (!st.isEmpty() || root != null) {
+            while (root != null) {
+                st.add(root);
+                root = root.left;
+            }
+            root = st.removeLast();
+            if (pred <= target && target < root.val) {
+                return Math.abs(pred - target) < Math.abs(root.val - target) ? (int)pred : root.val;
+            }
+            pred = root.val;
+            root = root.right;
+        }
+        return (int)pred;
+    }
+}
+
+解法2：二分搜索  在k相对大的时候用。时间O(H) 空间O(1)
+用val记录当前遍历的节点，用closest记录最小的差，每次把val设置为当前root的值，之后更新closest，
+之后根据target值更新root，如果target比root小，说明在root左边，则更新root为左儿子，反之则更新为右儿子
+
+class Solution {
+    public int closestValue(TreeNode root, double target) {
+        int closest = root.val;
+        while (root != null) {
+            closest = Math.abs(root.val - target) < Math.abs(closest - target) ? root.val : closest;
+            root = target < root.val ? root.left : root.right;
+        }
+        return closest;
+    }
+}
