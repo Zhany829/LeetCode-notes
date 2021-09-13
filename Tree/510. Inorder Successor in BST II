@@ -1,0 +1,17 @@
+解法：时间复杂度O(logn), 最坏O(n) 空间O(1)
+如果有右儿子，则中序的后继是右儿子的最左儿子。
+如果没有右儿子，则后继在象堆较高的位置，则向上走直到节点的左儿子node的父亲
+也就是这个时候node是父亲的左儿子的最右儿子
+
+class Solution {
+    public Node inorderSuccessor(Node node) {
+        if (node.right != null) { //有右儿子，找右儿子的最左儿子
+            node = node.right;
+            while (node.left != null) node = node.left;
+            return node;
+        }
+        // 没有右儿子则去找最左父亲的右父亲
+        while (node.parent != null && node == node.parent.right) node = node.parent;
+        return node.parent;
+    }
+}
