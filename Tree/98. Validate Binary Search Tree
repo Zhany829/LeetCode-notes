@@ -1,0 +1,38 @@
+解法1：递归
+传入root和Long.MAX_VALUE和Long.MIN_VALUE作为upper和lower到递归的放大，如果root为null返回true，如果节点值不在upper和lower的范围内则返回false。
+之后再去递归左右两边，左边把lower作为lower upper作为当前节点值 右边相反。两边都返回true才可以
+时间复杂度 : O(n)，其中 n 为二叉树的节点个数。在递归调用的时候二叉树的每个节点最多被访问一次，因此时间复杂度为 O(n)
+空间复杂度 : O(n)，其中 n 为二叉树的节点个数。递归函数在递归过程中需要为每一层递归函数分配栈空间，所以这里需要额外的空间且该空间取决于递归的深度，即二叉树的高度。
+最坏情况下二叉树为一条链，树的高度为n，递归最深达到 nn 层，故最坏情况下空间复杂度为O(n)
+
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        return isValid(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+    private boolean isValid(TreeNode root, long lower, long upper) {
+        if (root == null) return true;
+        if (root.val <= lower || root.val >= upper) return false;
+        return isValid(root.left, lower, root.val) && isValid(root.right, root.val, upper);
+    }
+}
+
+解法2：迭代 时空O(n)
+用Node.val范围很大，所以要用-Double.MAX_VALUE来表示前一个值，之后用stack做中序遍历，也就是先把左边节点放到stack, 再把root设置为st.pop，对root和pre进行比较，如果比前一个小于等于则返回false
+之后再pre设置成当前值并且把root设置为right
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        Stack<TreeNode> st = new Stack<>();
+        double pre = -Double.MAX_VALUE;
+        while (!st.isEmpty() || root != null) {
+            while (root != null) {
+                st.push(root);
+                root = root.left;
+            }
+            root = st.pop();
+            if (root.val <= pre) return false;
+            pre = root.val;
+            root = root.right;
+        }
+        return true;
+    }
+}
