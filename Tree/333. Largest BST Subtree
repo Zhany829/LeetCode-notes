@@ -1,4 +1,62 @@
-解法1：先去从根节点开始检查是不是BST，是的话就获得根的儿子数去更新res，再去递归左右子树，也就是不停验证。验证是否是BST是用一个pre变量，用中序遍历，如果当前节点比pre小于等于就返回false
+解法1：先把信息封装成一个类Result，里面有根节点、节点数、最大最小值信息。之后用一个方法返回当前节点以下返回的信息。
+用这个方法递归左右子树，如果传入根节点是空的就返回一个空的Result。之后看如果左边的节点数是0或者左边的节点正好是当前节点的左儿子而且左边的最大值小于当前节点值。右边同理
+如果都符合 说明找到了BST，则返回一个Result，里面节点数是左右两边节点数+1，最小值是当前节点的值如果左边节点数=0，否则是左边的最小值。右边同理。
+如果不是BST则返回左右两边节点最多的一边
+
+class Solution {
+    private Result empty = new Result();
+    class Result {
+        TreeNode node;
+        int size;
+        int min;
+        int max;
+    }
+    public int largestBSTSubtree(TreeNode root) {
+        Result res = visit(root);
+        return res == null ? 0 : res.size;
+    }
+    private Result visit(TreeNode node) {
+        if (node == null) return empty;
+        Result l = visit(node.left);
+        Result r = visit(node.right);
+        boolean findLeft = (l.size == 0) || (l.node == node.left && l.max < node.val);
+        boolean findRight = (r.size == 0) || (r.node == node.right && r.min > node.val);
+        if (findLeft && findRight) {
+            Result res = new Result();
+            res.node = node;
+            res.size = l.size + r.size + 1;
+            res.min = l.size == 0 ? node.val : l.min;
+            res.max = r.size == 0 ? node.val : r.max;
+            return res;
+        }
+        if (l.size > r.size) return l;
+        else return r;
+    }
+}
+
+解法2：如果判断到root是BST，则直接返回root的儿子数，因为此时是最大的，不是的话就去递归左右子树，分别记录左右子树的儿子树，最后返回最大那个。
+因为这次有变量，所以左右分别递归到有个根是BST的根时候就会返回，第一次检测到的BST就是最大的。判断BST的方法用传最大最小值，再对左边传最小值，node.val 右边就是node.val 最大值
+时间复杂度O(n)
+class Solution {
+    public int largestBSTSubtree(TreeNode root) {
+        if (root == null) return 0;
+        if (isBST(root, Integer.MIN_VALUE, Integer.MAX_VALUE)) return getCnt(root);
+        int l = largestBSTSubtree(root.left);
+        int r = largestBSTSubtree(root.right);
+        return Math.max(l, r);
+    }
+    private int getCnt(TreeNode root) {
+        if (root == null) return 0;
+        return getCnt(root.left) + getCnt(root.right) + 1;
+    }
+    private boolean isBST(TreeNode root, int lower, int upper) {
+        if (root == null) return true;
+        if (root.val <= lower || root.val >= upper) return false;
+        return isBST(root.left, lower, root.val) && isBST(root.right, root.val, upper);
+
+    }
+}
+解法3：先去从根节点开始检查是不是BST，是的话就获得根的儿子数去更新res，再去递归左右子树，也就是不停验证。验证是否是BST是用一个pre变量，用中序遍历，如果当前节点比pre小于等于就返回false
 否则把pre设置为现在节点的值。时间O(n^2)因为遍历每个节点的时候都要去看它和它的儿子们是否构成BST 空间O(n)：递归函数每层都要分配stack空间，这里分配的空间取决于树高，所以最坏为一条链，为O(n)
 
 class Solution {
@@ -25,28 +83,5 @@ class Solution {
         pre = root.val;
         boolean r = isBST(root.right);
         return l && r;
-    }
-}
-
-解法2：如果判断到root是BST，则直接返回root的儿子数，因为此时是最大的，不是的话就去递归左右子树，分别记录左右子树的儿子树，最后返回最大那个。
-因为这次有变量，所以左右分别递归到有个根是BST的根时候就会返回，第一次检测到的BST就是最大的。判断BST的方法用传最大最小值，再对左边传最小值，node.val 右边就是node.val 最大值
-时间复杂度O(n)
-class Solution {
-    public int largestBSTSubtree(TreeNode root) {
-        if (root == null) return 0;
-        if (isBST(root, Integer.MIN_VALUE, Integer.MAX_VALUE)) return getCnt(root);
-        int l = largestBSTSubtree(root.left);
-        int r = largestBSTSubtree(root.right);
-        return Math.max(l, r);
-    }
-    private int getCnt(TreeNode root) {
-        if (root == null) return 0;
-        return getCnt(root.left) + getCnt(root.right) + 1;
-    }
-    private boolean isBST(TreeNode root, int lower, int upper) {
-        if (root == null) return true;
-        if (root.val <= lower || root.val >= upper) return false;
-        return isBST(root.left, lower, root.val) && isBST(root.right, root.val, upper);
-
     }
 }
