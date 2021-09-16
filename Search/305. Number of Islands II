@@ -19,12 +19,12 @@ class Solution {
                     int newIdx = x1 * n + y1;
                     // 去四周发现自己比如左边有个岛(所以visited会true)而且没合并
                     if (x1 >= 0 && x1 < m && y1 >= 0 && y1 < n 
-                    && visited[newIdx] && !uf.isConnected(idx, newIdx)) {
+                    && visited[newIdx]) {
                         uf.union(idx, newIdx); //每次合并都把前面加的cnt减去
                     }
                 }
             }
-            res.add(uf.getCnt());
+            res.add(uf.cnt);
         }
         return res;
     }
@@ -45,9 +45,6 @@ class Solution {
         public void addCnt() {
             this.cnt += 1;
         }
-        public boolean isConnected(int a, int b) {
-            return find(a) == find(b);
-        }
         public int find(int a) {
             if (parent[a] != a) parent[a] = find(parent[a]);
             return parent[a];
@@ -64,9 +61,6 @@ class Solution {
                 rank[pb] += rank[pa];
             }
             this.cnt--;
-        }
-        public int getCnt() {
-            return this.cnt;
         }
     }
 }
