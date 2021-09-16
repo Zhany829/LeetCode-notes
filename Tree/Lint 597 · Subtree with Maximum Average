@@ -1,0 +1,50 @@
+解法：时空O(n)，把当前节点的儿子数+root的数量、当前树所有节点和、当前节点封装到一个类，再创建一个初始化的这个类的全局变量。
+之后去递归函数里看，如果递归到null，则返回新的初始化变量，之后获得左右子树，把左右子树的节点数+1、左右子树和当前节点的值的和、当前节点封装成一个。
+之后这个封装完的就是当前节点的信息，用它的更新全局变量，如果全局变量的节点是null，也就是还没赋值，直接赋予，否则当前的sum / 当前的size > 全局的sum / 全局的size再赋予，相当于当前有更大的平均值
+相当于当前的sum * 全局的size > 全局的sum * 当前的size
+
+public class Solution {
+    /*
+     * @param root: the root of binary tree
+     * @return: the root of the maximum average of subtree
+     */
+    private class ResultType {
+        public int size;
+        public int sum;
+        public TreeNode treeNode;
+        
+        public ResultType (int size, int sum, TreeNode treeNode) {
+            this.size = size;
+            this.sum = sum;
+            this.treeNode = treeNode;
+        }
+    } 
+    
+    private ResultType result = new ResultType(0, 0, null);
+    
+    public TreeNode findSubtree2 (TreeNode root) {
+        // write your code here
+        helper(root);
+        return result.treeNode;
+    }
+    
+    private ResultType helper (TreeNode node) {
+        if (node == null) {
+            return new ResultType(0, 0, null);
+        }
+        
+        ResultType left = helper(node.left);
+        ResultType right = helper(node.right);
+        ResultType resultType = new ResultType(
+            left.size + right.size + 1,
+            left.sum + right.sum + node.val,
+            node
+            );
+        // 相当于resultType.sum / resultType.size > result.sum / result.size
+        if (result.treeNode == null ||
+            resultType.sum * result.size > result.sum * resultType.size) {
+                result = resultType;
+            }
+        return resultType;
+    }
+}
