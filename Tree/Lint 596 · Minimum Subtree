@@ -1,0 +1,47 @@
+解法：时空O(n)用一个类封装subtree的节点的和的最小值，根节点和所有节点的和。把根节点传入递归函数，如果根节点是null，则返回substree，里面节点是null，最小和是0，节点和是MAX_VALUE
+之后递归左右获得左右subtree，把左右儿子和当前节点的值加起来作为sum和minsum，并把root作为节点去构造返回的subtree。
+再去比较左，如果左边minsum比返回节点小，则把返回的subtree的节点设置为左儿子的节点，把minsum设置为左儿子的minSum。再用返回的节点的minsum去和右边的比较，如果右边的小再设置为右边的。三者依次比较
+
+public class Solution {
+    /**
+     * @param root: the root of binary tree
+     * @return: the root of the minimum subtree
+     */
+    public TreeNode findSubtree(TreeNode root) {
+        ResultType result = helper(root);
+        return result.minSubtree;
+    }
+    ResultType helper(TreeNode root) {
+        if (root == null) {
+            return new ResultType(null, 0, Integer.MAX_VALUE);
+        }
+        // 获得左右子树的和
+        ResultType leftResult = helper(root.left);
+        ResultType rightResult = helper(root.right);
+        
+        // 计算当前子树和，并更新答案
+        int sum = root.val + leftResult.sum + rightResult.sum;
+        
+        ResultType result = new ResultType(root, sum, sum);
+        
+        if (leftResult.minSum < result.minSum) {
+            result.minSubtree = leftResult.minSubtree;
+            result.minSum = leftResult.minSum;
+        }
+        if (rightResult.minSum < result.minSum) {
+            result.minSubtree = rightResult.minSubtree;
+            result.minSum = rightResult.minSum;
+        }
+        return result;
+    }
+}
+class ResultType {
+    public int sum, minSum;
+    public TreeNode minSubtree;
+    
+    public ResultType(TreeNode minSubtree, int sum, int minSum) {
+        this.minSubtree = minSubtree;
+        this.minSum = minSum;
+        this.sum = sum;
+    }
+}
