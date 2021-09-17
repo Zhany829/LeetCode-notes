@@ -1,0 +1,21 @@
+解法：用一个变量记录最大值，之后把root传到递归函数，如果root是null则返回0，之后递归左右两边，如果得到左边或右边的收益为负数，则用0代替，之后用当前节点值+左右两边收益更新最大值
+最后用当前节点值加上左右两边更大的一边的收益返回给上级使用。时空都是O(n）每个节点只访问一次，自底向上。空间取决于递归层数，也就是树高，最大为O(n)
+
+class Solution {
+    int max = Integer.MIN_VALUE;
+    public int maxPathSum(TreeNode root) {
+        dfs(root);
+        return max;
+    }
+    public int dfs(TreeNode root) {
+        if (root == null) return 0;
+        //计算左边分支最大值，左边分支如果为负数还不如不选择
+        int leftMax = Math.max(0, dfs(root.left));
+        //计算右边分支最大值，右边分支如果为负数还不如不选择
+        int rightMax = Math.max(0, dfs(root.right));
+        //left->root->right 作为路径与已经计算过历史最大值做比较
+        max = Math.max(max, root.val + leftMax + rightMax);
+        // 返回经过root的单边最大分支给当前root的父节点计算使用
+        return root.val + Math.max(leftMax, rightMax);
+    }
+}
