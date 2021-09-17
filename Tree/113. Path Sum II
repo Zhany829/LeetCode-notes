@@ -1,0 +1,49 @@
+解法1：递归 如果递归到叶子节点(左右儿子都是null)，而且当前节点刚好组成完整的targetSum，把当前节点加到一个新list再加到res返回，这样就把合法的完整路径返回到上级了。
+之后递归左右两边得到合法路径，再分别对左右两边的合法路径拿出加上root得到完整路径加到res
+时间O(n^2) 因为每次都会去找左右两边的合法路径 空间O(n) 取决于树高 每次递归都会分配栈
+
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) return res;
+        if (root.left == null && root.right == null && targetSum == root.val) {
+            List<Integer> arr = new ArrayList<>();
+            arr.add(root.val);
+            res.add(arr);
+            return res;
+        }
+        List<List<Integer>> left = pathSum(root.left, targetSum - root.val);
+        List<List<Integer>> right = pathSum(root.right, targetSum - root.val);
+        for (List<Integer> l : left) {
+            l.add(0, root.val); //把root加到可达路径的第一个节点作为完整的路径加到res
+            res.add(l);
+        }
+        for (List<Integer> r : right) {
+            r.add(0, root.val);
+            res.add(r);
+        }
+        return res;
+    }
+}
+
+解法2：dfs/回溯 如果root是null就返回，先加上当前节点值，再判断是不是叶子节点儿子路径合法，合法就用new ArrayList<>(cur)加到res，再去递归左右两边，最后把当前节点移除，也就是移除最后一个元素
+时间空间同上
+
+class Solution {
+    List<Integer> cur = new ArrayList<>();
+    List<List<Integer>> res = new ArrayList<>();
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+        dfs(root, targetSum);
+        return res;
+    }
+    private void dfs(TreeNode root, int targetSum) {
+        if (root == null) return;
+        cur.add(root.val);
+        if (root.left == null && root.right == null && root.val == targetSum) {
+            res.add(new ArrayList<>(cur));
+        }
+        dfs(root.left, targetSum - root.val);
+        dfs(root.right, targetSum - root.val);
+        cur.remove(cur.size() - 1);
+    }
+}
