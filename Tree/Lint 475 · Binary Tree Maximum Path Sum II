@@ -1,0 +1,20 @@
+解法：如果root是null则返回0，获取左右两边的最大结果，初始化变量当前能获得的值为最小Integer，之后用root值，root+左，root+右值更新这个变量，也就是取最大的一种返回。
+因为左右两边利益最大化也可能是负的
+
+public class Solution {
+    /**
+     * @param root: the root of binary tree.
+     * @return: An integer
+     */
+    public int maxPathSum2(TreeNode root) {
+        // write your code here
+        if (root == null) return 0;
+        int max = Integer.MIN_VALUE;
+        int left = maxPathSum2(root.left);
+        int right = maxPathSum2(root.right);
+        max = Math.max(max, root.val);
+        max = Math.max(max, root.val + left);
+        max = Math.max(max, root.val + right);
+        return max;
+    }
+}
