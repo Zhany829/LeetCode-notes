@@ -1,0 +1,16 @@
+解法：递归方法里传当前节点和父亲节点和长度。如果当前节点是null就返回，之后看parent如果不是null而且当前值刚好比parent的值大1就把length+1，否则回归1.之后更新max全局变量并递归左右两边
+
+class Solution {
+    int max = 0;
+    public int longestConsecutive(TreeNode root) {
+        dfs(root, null, 0);
+        return max;
+    }
+    private void dfs(TreeNode cur, TreeNode parent, int len) {
+        if (cur == null) return;
+        len = (parent != null && cur.val == parent.val + 1) ? len + 1 : 1;
+        max = Math.max(max, len);
+        dfs(cur.left, cur, len);
+        dfs(cur.right, cur, len);
+    }
+}
