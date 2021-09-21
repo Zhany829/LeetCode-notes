@@ -1,0 +1,24 @@
+解法：用一个全局变量记录当前节点左边下降和右边上升或左边上升右边下降的最长距离(间隔为1)。递归root，每次初始化两个变量分别记录此次节点位置的最大上升和下降，初始化为1因为根节点算一个。
+之后递归得到左右两边分别的最大上升和下降(int[2])。再去看如果有左节点而且当前节点的值=左节点值+1，则去更新最大上升，当前节点值=左节点值-1则更新最大下降。右边同理。
+得到当前节点的最大上升和下降，更新到全局变量。再返回int[2]，里面有最大上升和下降
+时空O(n)
+
+class Solution {
+    int max = 0;
+    public int longestConsecutive(TreeNode root) {
+        dfs(root);
+        return max;
+    }
+    private int[] dfs(TreeNode root) {
+        if (root == null) return new int[]{0, 0};
+        int[] l = dfs(root.left);
+        int[] r = dfs(root.right);
+        int newUp = 1, newDown = 1;
+        if (root.left != null && root.val == root.left.val + 1) newUp = Math.max(newUp, l[0] + 1);
+        if (root.left != null && root.val == root.left.val - 1) newDown = Math.max(newDown, l[1] + 1);
+        if (root.right != null && root.val == root.right.val + 1) newUp = Math.max(newUp, r[0] + 1);
+        if (root.right != null && root.val == root.right.val - 1) newDown = Math.max(newDown, r[1] + 1);
+        max = Math.max(max, newUp + newDown - 1);
+        return new int[]{newUp, newDown};
+    }
+}
