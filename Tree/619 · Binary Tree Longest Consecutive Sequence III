@@ -1,0 +1,26 @@
+解法：时空O(n),初始化全局变量max，之后每次递归都创建两个变量分别是up和down为1，因为当前节点算一个。之后对于当前节点每个儿子都去递归得到最长的上升和下降长度(int[2])
+如果儿子节点比当前节点大1，说明是下降，则更新down。反之更新up。再用up和down更新max。最后返回up和down数组
+
+public class Solution {
+    /**
+     * @param root the root of k-ary tree
+     * @return the length of the longest consecutive sequence path
+     */
+    int max = 0;
+    public int longestConsecutive3(MultiTreeNode root) {
+        // Write your code here
+        dfs(root);
+        return max;
+    }
+    private int[] dfs(MultiTreeNode root) {
+        int up = 1, down = 1;
+        for (MultiTreeNode node : root.children) { //遍历儿子
+            int[] cur = dfs(node); //每个儿子都找到最底下
+            if (node.val + 1 == root.val) up = Math.max(up, cur[0] + 1); //儿子到当前是上升的更新up
+            if (node.val - 1 == root.val) down = Math.max(down, cur[1] + 1); //儿子到当前是下降的，更新down
+        }
+        max = Math.max(max, up + down - 1);
+        return new int[]{up, down};
+    }
+}
+   
