@@ -17,12 +17,12 @@ class Solution {
 }
 
 解法2：迭代 时空O(n)
-用Node.val范围很大，所以要用-Double.MAX_VALUE来表示前一个值，之后用stack做中序遍历，也就是先把左边节点放到stack, 再把root设置为st.pop，对root和pre进行比较，如果比前一个小于等于则返回false
-之后再pre设置成当前值并且把root设置为right
+用Node.val范围很大，所以要用-Double.MAX_VALUE/-Long.MIN_VALUE来表示前一个值，
+之后用stack做中序遍历，也就是先把左边节点放到stack, 再把root设置为st.pop，对root和pre进行比较，如果比前一个小于等于则返回false. 之后再pre设置成当前值并且把root设置为right
 class Solution {
     public boolean isValidBST(TreeNode root) {
         Stack<TreeNode> st = new Stack<>();
-        double pre = -Double.MAX_VALUE;
+        double pre = -Long.MIN_VALUE;
         while (!st.isEmpty() || root != null) {
             while (root != null) {
                 st.push(root);
