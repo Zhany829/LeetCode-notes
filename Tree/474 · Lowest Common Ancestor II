@@ -1,0 +1,47 @@
+解法1：先用set把A到root的节点都装进去(用个cur变量去visit)，之后把cur设置为B，再去B到root找set里能不能遇到一样的，每次都判断一样，有没有contain当前节点，有就直接返回，没有继续往上
+时空O(n) 为树高，最坏要搜索全树因为是一条链
+
+public class Solution {
+    /*
+     * @param root: The root of the tree
+     * @param A: node in the tree
+     * @param B: node in the tree
+     * @return: The lowest common ancestor of A and B
+     */
+    public ParentTreeNode lowestCommonAncestorII(ParentTreeNode root, ParentTreeNode A, ParentTreeNode B) {
+        // write your code here
+        Set<ParentTreeNode> nodes = new HashSet<>();
+        ParentTreeNode cur = A;
+        while (cur != null) {
+            nodes.add(cur);
+            cur = cur.parent;
+        }
+        cur = B;
+        while (cur != null) {
+            if (nodes.contains(cur)) return cur;
+            cur = cur.parent;
+        }
+        return null;
+    }
+}
+
+解法2：用两个变量代替A和B，分别向上走，走到null了就=另一个节点，直接两节点相遇，第一次没相遇，在第二次一定相遇。和链表的交点类似
+时空O(n) 树高
+
+public class Solution {
+    /*
+     * @param root: The root of the tree
+     * @param A: node in the tree
+     * @param B: node in the tree
+     * @return: The lowest common ancestor of A and B
+     */
+    public ParentTreeNode lowestCommonAncestorII(ParentTreeNode root, ParentTreeNode A, ParentTreeNode B) {
+        // write your code here
+        ParentTreeNode p = A, q = B;
+        while (p != q) {
+            p = p == null ? B : p.parent;
+            q = q == null ? A : q.parent;
+        }
+        return p;
+    }
+}
