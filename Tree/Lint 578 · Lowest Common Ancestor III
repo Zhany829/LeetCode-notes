@@ -1,0 +1,39 @@
+解法：Divide & Conquer + Global Variable（不需要 ResultType）
+这题和 LCA 原题的区别主要是要找的 A 和 B 可能并不存在树里。所以我们要做出这两个改变
+用全局变量把 A 和 B 是否找到保存起来。最后在 main function 里面要查看是否都找到
+当 root 等于 A 或者 B 时不能直接返回root了。原题可以直接返回是因为两个 node 是保证存在的所以这情况下 LCA 一定是 root。
+现在 root 等于 A 或者 B 我们还是要继续往下找是否存在另外的一个
+不用 ResultType 的一个好处是：如果面试的时候出了一个原题，然后问这题做 follow up。如果从头开始写 result type 代码改动会比较大。一是比较容易写错，二是时间可能会不够。
+这个方法只需要增加两个全局变量并且改动 LCA 原题的代码两行即可。
+
+public class Solution {
+    /*
+     * @param root: The root of the binary tree.
+     * @param A: A TreeNode
+     * @param B: A TreeNode
+     * @return: Return the LCA of the two nodes.
+     */
+    private boolean foundp = false, foundq = false;
+    public TreeNode lowestCommonAncestor3(TreeNode root, TreeNode p, TreeNode q) {
+        // write your code here
+        TreeNode res = divConq(root, p, q);
+        if (foundp && foundq) return res;
+        return null;
+    }
+    private TreeNode divConq(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) return root;
+        TreeNode left = divConq(root.left, p, q);
+        TreeNode right = divConq(root.right, p, q);
+        // root是要找的，更新全局变量
+        if (root == p || root == q) {
+            foundp = (root == p) || foundp;
+            foundq = (root == q) || foundq;
+            return root;
+        }
+        // 之前LCA做法
+        if (left != null && right != null) return root; //说明两个节点分别在root左右，则root就是LAC
+        else if (left == null) return right; //在左边没发现两个节点，则两个节点都在右边，去右边找
+        else if (right == null) return left;
+        else return null; //两边都没发现，节点不存在，返回null，这个是和LCA不同的点，也就是可能出现不存在的点
+    }
+}
