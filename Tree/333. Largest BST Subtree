@@ -2,6 +2,7 @@
 用这个方法递归左右子树，如果传入根节点是空的就返回一个空的Result。之后看如果左边的节点数是0或者左边的节点正好是当前节点的左儿子而且左边的最大值小于当前节点值。右边同理
 如果都符合 说明找到了BST，则返回一个Result，里面节点数是左右两边节点数+1，最小值是当前节点的值如果左边节点数=0，否则是左边的最小值。右边同理。
 如果不是BST则返回左右两边节点最多的一边
+时间复杂度O(n)
 
 class Solution {
     private Result empty = new Result();
@@ -36,7 +37,7 @@ class Solution {
 
 解法2：如果判断到root是BST，则直接返回root的儿子数，因为此时是最大的，不是的话就去递归左右子树，分别记录左右子树的儿子树，最后返回最大那个。
 因为这次有变量，所以左右分别递归到有个根是BST的根时候就会返回，第一次检测到的BST就是最大的。判断BST的方法用传最大最小值，再对左边传最小值，node.val 右边就是node.val 最大值
-时间复杂度O(n)
+时间复杂度O(n^2)
 class Solution {
     public int largestBSTSubtree(TreeNode root) {
         if (root == null) return 0;
