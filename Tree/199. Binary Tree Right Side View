@@ -1,0 +1,44 @@
+解法1：用BFS层序遍历，每次遍历到一层的最后一个元素放到res 时空O(n),因为不是平衡二叉树，所以可能是一条链
+
+class Solution {
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
+                if (i == size - 1) {  //将当前层的最后一个节点放入结果列表
+                    res.add(node.val);
+                }
+            }
+        }
+        return res;
+    }
+}
+解法2：DFS，每次按照根右左访问，保证每层都是先访问到最右边节点
+
+class Solution {
+    List<Integer> res = new ArrayList<>();
+    public List<Integer> rightSideView(TreeNode root) {
+        dfs(root, 0);
+        return res;
+    }
+    private void dfs(TreeNode root, int depth) {
+        if (root == null) return;
+        if (res.size() == depth) res.add(root.val);
+        depth++;
+        dfs(root.right, depth);
+        dfs(root.left, depth);
+    }
+}
