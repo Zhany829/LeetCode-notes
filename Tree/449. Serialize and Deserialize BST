@@ -1,0 +1,37 @@
+解法：这题是序列化和反序列化平衡二叉树，序列化用stringBuilder作前序遍历最后转化为string即可。反序列化先把string按照，分割成数组，用一个全局变量遍历string，
+再去递归的方法里传root和最大最小值，如果全局变量遍历完了string或者当前遍历的节点值不在最大最小值内就返回null，否则构造当前节点作为root，并且把全局遍历++，再去递归左右两边(设置最大最小值)
+时空O(n)
+
+public class Codec {
+    StringBuilder sb;
+    int idx;
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        sb = new StringBuilder();
+        serializeHelper(root);
+        return sb.toString();
+    }
+    public void serializeHelper(TreeNode root) {
+        if (root == null) return;
+        sb.append(root.val + ",");
+        serializeHelper(root.left);
+        serializeHelper(root.right);
+    }
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data.equals("")) return null;
+        idx = 0;
+        String[] arr = data.split(",");
+        return deserializeHelper(arr, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+    private TreeNode deserializeHelper(String[] data, int min, int max) {
+        if (idx > data.length-1) return null;
+        int curValue = Integer.parseInt(data[idx]);
+        if (curValue < min || curValue > max) return null;
+        TreeNode root = new TreeNode(curValue);
+        idx++;
+        root.left = deserializeHelper(data, min, curValue);
+        root.right = deserializeHelper(data, curValue, max);
+        return root;
+    }
+}
