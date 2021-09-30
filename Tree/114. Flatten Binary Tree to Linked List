@@ -1,0 +1,26 @@
+解法：非递归，每次先看有没有左子树，没有就去右边，有的话先找到左儿子的最右节点，之后把root的右节点拼接到最右节点的right，再把root的right设置为左儿子，把left设置为null，root继续去right遍历。这样就实现把右边拼接到值更小的节点的目的，因为左边都是比root的right小的，root的左儿子的最右节点是左边最大的。
+时空(n)
+
+class Solution {
+    public void flatten(TreeNode root) {
+        while (root != null) { 
+            //左子树为 null，直接考虑下一个节点
+            if (root.left == null) {
+                root = root.right;
+            } else {
+                // 找左子树最右边的节点
+                TreeNode pre = root.left;
+                while (pre.right != null) {
+                    pre = pre.right;
+                }    
+                //将原来的右子树接到左子树的最右边节点
+                pre.right = root.right;
+                // 将左子树插入到右子树的地方
+                root.right = root.left;
+                root.left = null;
+                // 考虑下一个节点
+                root = root.right;
+            }
+        }
+    }
+}
