@@ -1,0 +1,27 @@
+解法：DFS, 递归终止条件是左右括号都能成功放完。减枝就是看当前开始的右边的剩余左括号比剩余的右括号多就返回，因为在右边每个左括号都要一个右括号，这个都没法满足，更别提还要满足当前左边可能的左括号
+之后每次递归都减少左右括号数量，并且把str加上对应左右括号
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        if (n < 1) return res;
+        dfs("", n, n, res);
+        return res;
+    }
+    private void dfs(String cur, int left, int right, List<String> res) {
+        if (left == 0 && right == 0) {
+            res.add(new String(cur));
+            return;
+        }
+        // 剪枝，左括号剩下数量大于右括号，后面没有足够的左括号把右边封起来了
+        if (left > right) return;
+        if (left > 0) {
+            dfs(cur + "(", left - 1, right, res);
+        }
+        if (right > 0) {
+            dfs(cur + ")", left, right - 1, res);
+        }
+        return;
+    }
+}
+
