@@ -20,3 +20,24 @@ class Solution {
         return res;
     }
 }
+解法2：用链表的addFirst同样达到O(1)目的
+class Solution {
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        LinkedList<List<Integer>> res = new LinkedList<>();
+        if (root == null) return res;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            LinkedList<Integer> list = new LinkedList<>();
+            while (size-- > 0) {
+                TreeNode cur = queue.poll();
+                list.add(cur.val);
+                if (cur.left != null) queue.add(cur.left);
+                if (cur.right != null) queue.add(cur.right); 
+            }
+            res.addFirst(list);
+        }
+        return res;
+    }
+}
