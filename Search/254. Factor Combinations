@@ -1,0 +1,26 @@
+解法：从2开始递归，如果递归到起始小于1则返回空的res，再去遍历start到sqrt(num)，如果num能整除当前遍历的数，则把当前遍历的数和被除后剩下的数加到res。
+再去对这两个数作dfs，把得到的list加上当前遍历的数，因为递归的list里没加，再加到res
+
+class Solution {
+    public List<List<Integer>> getFactors(int n) {
+        return dfs(2, n);
+    }
+    public List<List<Integer>> dfs(int start, int num) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (start <= 1) return res;
+        for (int mulNum = start; mulNum <= (int)Math.sqrt(num); mulNum++) {
+            if (num % mulNum == 0) {
+                List<Integer> cur = new ArrayList<>();
+                cur.add(mulNum);
+                cur.add(num / mulNum);
+                res.add(cur);
+                List<List<Integer>> next = dfs(mulNum, num/mulNum);
+                for (List<Integer> list : next) {
+                    list.add(mulNum);
+                    res.add(list);
+                }
+            }
+        }
+        return res;
+    }
+}
