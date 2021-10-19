@@ -2,26 +2,23 @@
 之后每次递归都减少左右括号数量，并且把str加上对应左右括号
 
 class Solution {
+    List<String> res = new ArrayList<>();
     public List<String> generateParenthesis(int n) {
-        List<String> res = new ArrayList<>();
         if (n < 1) return res;
-        dfs("", n, n, res);
+        generate("", n, n);
         return res;
     }
-    private void dfs(String cur, int left, int right, List<String> res) {
+    private void generate(String str, int left, int right) {
         if (left == 0 && right == 0) {
-            res.add(new String(cur));
-            return;
+            res.add(str);
         }
-        // 剪枝，左括号剩下数量大于右括号，后面没有足够的左括号把右边封起来了
         if (left > right) return;
         if (left > 0) {
-            dfs(cur + "(", left - 1, right, res);
+            generate(str + "(", left-1, right);
         }
         if (right > 0) {
-            dfs(cur + ")", left, right - 1, res);
+            generate(str + ")", left, right-1);
         }
-        return;
+        
     }
 }
-
