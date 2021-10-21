@@ -3,7 +3,7 @@
 空间复杂度 最坏情况O(H)，树不是平衡树的情况
 初始化链表和pred为一个极小数，之后中序遍历，先把左儿子都加到链表，之后拿出最后一个节点removeLast看如果target在pred和目前root.val之间则说明找到了最接近元素，返回pred和root两者最接近的就行，
 没找到就把pred设置为root，root设置为右儿子--中序遍历 左中右
-
+ 
 class Solution {
     public int closestValue(TreeNode root, double target) {
         LinkedList<TreeNode> st = new LinkedList<>();
