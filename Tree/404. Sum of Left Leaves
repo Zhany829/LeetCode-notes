@@ -1,6 +1,6 @@
 解法：先判断左儿子是不是叶子节点，是就把左儿子的值保存
 最后带上这个左儿子的值(不是叶子节点就是0)去递归自己的左右儿子，继续探索下去
-
+时间O(n)  空间O(n)？logn?
 class Solution {
     public int sumOfLeftLeaves(TreeNode root) {
         if (root == null) return 0;
