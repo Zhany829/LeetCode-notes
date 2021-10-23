@@ -1,5 +1,28 @@
-解法：对于root和他的左右儿子递归去找路径，每次递归先判断当前值是不是等于节点值，是的话ret++，之后ret再去加上递归左/右儿子和减掉了节点值的targetSum
+解法1：前缀和 dfs 先把和为0的元素作为数量=1放到map，然后去做dfs，每次先判断map里有没有元素+当前值 = target，有就用变量加上这个值的数量。
+之后开始常规把当前遍历的值放到map，或者有的话就数量+1.再去递归左右两边，同时带上左右两边分别的值。最后再把当前值从map里数量-1
+时空O(n)
+class Solution {
+    int res = 0;
+    Map<Integer, Integer> map = new HashMap<>();
+    int t = 0;
+    public int pathSum(TreeNode root, int targetSum) {
+        if (root == null) return 0;
+        t = targetSum;
+        map.put(0, 1);
+        dfs(root, root.val);
+        return res;
+    }
+    private void dfs(TreeNode root, int val) {
+        if (map.containsKey(val - t)) res += map.get(val - t);
+        map.put(val, map.getOrDefault(val, 0) + 1);
+        if (root.left != null) dfs(root.left, val + root.left.val);
+        if (root.right != null) dfs(root.right, val + root.right.val);
+        map.put(val, map.getOrDefault(val, 0) - 1);
+    }
+}
 
+解法2：对于root和他的左右儿子递归去找路径，每次递归先判断当前值是不是等于节点值，是的话ret++，之后ret再去加上递归左/右儿子和减掉了节点值的targetSum
+时间O(n^2)
 class Solution {
     public int pathSum(TreeNode root, int targetSum) {
         if (root == null) return 0;
