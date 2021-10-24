@@ -1,4 +1,17 @@
-解法：对树进行中序遍历把值从小到大放到List里，之后再用双指针对这个list进行找两个数=target
+解法1：时空O(n) 用set去作中序遍历，每次先看set有没有满足当前节点值与target差的值，有就返回true，之后去左右儿子检查，有一边满足就行
+class Solution {
+    public boolean findTarget(TreeNode root, int k) {
+        Set<Integer> set = new HashSet<>();
+        return find(root, set, k);
+    }
+    private boolean find(TreeNode root, Set<Integer> set, int k) {
+        if (root == null) return false;
+        if (set.contains(k - root.val)) return true;
+        set.add(root.val);
+        return find(root.left, set, k) || find(root.right, set, k);
+    }
+}
+解法2：对树进行中序遍历把值从小到大放到List里，之后再用双指针对这个list进行找两个数=target
 
 class Solution {
     public boolean findTarget(TreeNode root, int k) {
