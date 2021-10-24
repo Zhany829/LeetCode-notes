@@ -1,5 +1,26 @@
-解法：传root和root的值到递归的方法里，如果到底了，也就是null了也就返回-1。如果当前节点大于根节点直接返回，否则就是当前节点等于根节点，就去两个子树去找，如果两个子树都返回-1，也就是两个子树都有
-大于最小值的节点，则返回最小的那个(这样根节点最小，那么返回的较小的这个就是第二小的了)，否则返回较大的那一个继续找下去
+解法1：时间O(n) 空间O(1) 题目条件是根节点是左右儿子里最小的，所以去找比根节点大的节点里最小的。
+用前序遍历去看当前遍历到的节点是否与根节点值不同，不同就去看res是不是第一次赋值，是的话就赋予当前节点值，不是第一次赋值就去更新，取两者最小，
+因为前提是当前节点和根节点不一样，所以最后会把第二小的节点值更新给res。然后返回因为当前节点是最小的，它的左右儿子都比它小，不用去找了
+class Solution {
+    int res = -1;
+    public int findSecondMinimumValue(TreeNode root) {
+        dfs(root, root.val);
+        return res;
+    }
+    private void dfs(TreeNode node, int rootVal) {
+        if (node == null) return;
+        if (node.val != rootVal) { //说明遇到比根节点大的数，因为根节点最小
+            if (res == -1) res = node.val; //第一次赋值
+            else res = Math.min(res, node.val); //赋值过后就去找第二小的值去赋值
+            return; //剪枝, 因为他的左右两边都比当前大，不可能出现更小的就不用去找了
+        }
+        dfs(node.left, rootVal);
+        dfs(node.right, rootVal);
+    }
+}
+
+解法2：传root和root的值到递归的方法里，如果到底了，也就是null了也就返回-1。如果当前节点大于根节点直接返回，否则就是当前节点等于根节点，就去两个子树去找，如果两个子树都返回-1，也就是两个子树都有
+大于最小值的节点，则返回最小的那个(这样根节点最小，那么返回的较小的这个就是第二小的了)，否则返回较大的那一个继续找下去。时空O(n)
 
 class Solution {
     public int findSecondMinimumValue(TreeNode root) {
