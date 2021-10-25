@@ -1,0 +1,20 @@
+解法：先判断输入是不是负数，用一个变量记录，如果是的话就最后乘-1。因为超过int范围要变0，所以，先把res作为long，最后转化为int看是否一样，如果一样的话就返回int之后的数，否则返回0
+时间复杂度为反转次数log(n) 空间O(1)
+
+class Solution {
+    public int reverse(int x) {
+        boolean isNegative = x < 0;
+        if (isNegative) x *= -1;
+        long res = 0;
+        while (x != 0) {
+            res = res * 10 + x % 10;
+            x /= 10;
+        }
+        if ((int)res == res) {
+            if (isNegative) return -1*(int)res;
+            else return (int)res;
+        } else {
+            return 0;
+        }
+    }
+}
