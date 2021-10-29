@@ -1,0 +1,30 @@
+解法：我们需要将一个左边的「较小数」与一个右边的「较大数」交换，以能够让当前排列变大，从而得到下一个排列。
+同时我们要让这个「较小数」尽量靠右，而「较大数」尽可能小。当交换完成后，「较大数」右边的数需要按照升序重新排列。这样可以在保证新排列大于原来排列的情况下，使变大的幅度尽可能小。
+从右往左找到第一个i比i+1位置小的数（此时i后面都是降序），再去找后面比i位置第一次大的数，交换i和j的元素最后再反转i+1之后的数（用双指针)，交换完肯定还是降序，反转后变成升序来让数尽可能小
+时间O(n) 空间O(1)
+
+class Solution {
+    public void nextPermutation(int[] nums) {
+        int n = nums.length;
+        int i = n - 2;
+        while (i >= 0 && nums[i] >= nums[i+1]) i--;
+        int j = n - 1;
+        if (i >= 0) {
+            while (j >= 0 && nums[j] <= nums[i]) j--;
+            swap(nums, i, j);
+        }
+        reverse(nums, i + 1, n-1);
+    }
+    private void swap(int[] nums, int i, int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
+    }
+    private void reverse(int[] nums, int left, int right) {
+        while (left < right) {
+            swap(nums, left, right);
+            left++;
+            right--;
+        }
+    }
+}
