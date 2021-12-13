@@ -7,13 +7,15 @@ class Solution {
     public void nextPermutation(int[] nums) {
         int n = nums.length;
         int i = n - 2;
-        while (i >= 0 && nums[i] >= nums[i+1]) i--;
-        int j = n - 1;
-        if (i >= 0) {
+        // 从右往左找第一个比右边小的，这样也确保右边不是一直降
+        while (i >= 0 && nums[i] >= nums[i+1]) i--; 
+        int j = n-1;
+        if (i >= 0) { // i>=0说明全部是降序，最下面直接反转就行
+            // 从右往左找第一个比i位置大的数然后互换
             while (j >= 0 && nums[j] <= nums[i]) j--;
             swap(nums, i, j);
         }
-        reverse(nums, i + 1, n-1);
+        reverse(nums, i+1, n-1); //i后面的是降序，反转一下变升序，就更小了
     }
     private void swap(int[] nums, int i, int j) {
         int tmp = nums[i];
@@ -21,10 +23,8 @@ class Solution {
         nums[j] = tmp;
     }
     private void reverse(int[] nums, int left, int right) {
-        while (left < right) {
-            swap(nums, left, right);
-            left++;
-            right--;
+        while (left <= right) {
+            swap(nums, left++, right--);
         }
     }
 }
