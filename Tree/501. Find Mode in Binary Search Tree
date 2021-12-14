@@ -2,33 +2,33 @@
 之后如果当前节点数量小于最大次数就继续，等于就加到list里，如果大于就更新maxCount同时把list清空只加当前节点进去
 
 class Solution {
-    int curCnt = 1;
-    int maxCnt = 1;
     TreeNode pre = null;
+    int cur = 0;
+    int max = 0;
     public int[] findMode(TreeNode root) {
-        List<Integer> nums = new ArrayList<>();
-        inOrder(root, nums);
-        int[] res = new int[nums.size()];
-        for (int i = 0; i < res.length; i++) {
-            res[i] = nums.get(i);
+        List<Integer> list = new ArrayList<>();
+        dfs(root, list);
+        int[] res = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            res[i] = list.get(i);
         }
         return res;
     }
-    private void inOrder(TreeNode root, List<Integer> nums) {
+    private void dfs(TreeNode root, List<Integer> list) {
         if (root == null) return;
-        inOrder(root.left, nums);
-        if (pre != null) {
-            if (pre.val == root.val) curCnt++;
-            else curCnt = 1;
+        dfs(root.left, list);
+        if (pre != null) { //pre不是null就更新目前连续的长度
+            if (pre.val == root.val) cur++;
+            else cur = 0;
         }
-        if (curCnt == maxCnt) {
-            nums.add(root.val);
-        } else if (curCnt > maxCnt) {
-            nums.clear();
-            nums.add(root.val);
-            maxCnt = curCnt;
+        if (cur == max) { // 达到了最大长度才加这个元素
+            list.add(root.val);
+        } else if (cur > max) { //比最大长度大就让list只有目前这个元素值，并更新最大长度
+            list.clear();
+            list.add(root.val);
+            max = cur;
         }
-        pre = root;
-        inOrder(root.right, nums);
+        pre = root; //更新让下次来比较这次的元素
+        dfs(root.right, list);
     }
 }
