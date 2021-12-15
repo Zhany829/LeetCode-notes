@@ -14,7 +14,7 @@ class Solution {
         return midNode;
     }
     private ListNode findPreMid(ListNode head) {
-        ListNode slow = head, fast = head.next;
+        ListNode slow = head, fast = head;
         ListNode pre = slow;
         while (fast != null && fast.next != null) {
             pre = slow;
