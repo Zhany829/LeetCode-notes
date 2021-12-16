@@ -9,16 +9,9 @@ class Solution {
         return res;
     }
     private void generate(String str, int left, int right) {
-        if (left == 0 && right == 0) {
-            res.add(str);
-        }
-        if (left > right) return;
-        if (left > 0) {
-            generate(str + "(", left-1, right);
-        }
-        if (right > 0) {
-            generate(str + ")", left, right-1);
-        }
-        
+        if (left == 0 && right == 0) res.add(str);// 左右括号都不剩余了，递归终止
+        if (left > right) return; //没有足够的右括号来满足左括号了，剪枝来停止
+        if (left > 0) generate(str+"(", left-1, right);// 如果左括号还剩余的话，可以拼接左括号
+        if (right > 0) generate(str+")", left, right-1);// 如果右括号剩余多于左括号剩余的话拼接右括号
     }
 }
