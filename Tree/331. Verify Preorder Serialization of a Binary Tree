@@ -1,17 +1,18 @@
 解法：叶子节点肯定是两个#，那么每次都把两个叶子节点消去，然后父节点也变成#，这样下来就是总共#数量减一，从下往上依次遍历，最终就只剩一个#。最后如果只剩一个#就返回true。
 遇到,就继续 时间O(n)，空间O(1)
 
+
 class Solution {
     public boolean isValidSerialization(String preorder) {
         int n = preorder.length();
-        char[] arr = preorder.toCharArray();
         int num = 0;
-        for (int i = n-1; i >= 0; i--) {
-            if (arr[i] == ',') continue;
-            if (arr[i] == '#') num++;
-            else {
-                while (i >=0 && arr[i] != ',') i--; //遍历到数字，把数字遍历完
-                if (num >= 2) num = num - 2 + 1;    //去掉两个叶子节点把自己用#代替
+        for (int i = n - 1; i >= 0; i--) {
+            if (preorder.charAt(i) == ',') continue;
+            if (preorder.charAt(i) == '#') {
+                num++;
+            } else {
+                while (i >= 0 && preorder.charAt(i) != ',') i--; //遍历到数字，把数字遍历完
+                if (num >= 2) num--; //去掉两个叶子节点把自己用#代替, #总数+1-2 = -1
                 else return false; //#数量不足2个，不合法
             }
         }
@@ -19,21 +20,3 @@ class Solution {
     }
 }
 
-
-class Solution {
-    public boolean isValidSerialization(String preorder) {
-        int cnt = 0;
-        int n = preorder.length();
-        char[] arr = preorder.toCharArray();
-        for (int i = n-1; i >= 0; i--) {
-            if (arr[i] == ',') continue;
-            if (arr[i] == '#') cnt++;
-            else {
-                while (i >= 0 && arr[i] != ',' ) i--;
-                if (cnt < 2) return false;
-                cnt--;
-            }
-        }
-        return cnt == 1;
-    }
-}
