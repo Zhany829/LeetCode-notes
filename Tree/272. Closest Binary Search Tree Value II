@@ -1,0 +1,52 @@
+解法1：递迭法 中序遍历, 先放左儿子节点，直到当前节点是null，再pop出一个，再去看res的size，小于k就放，大于等于说明不能放了，就去分别比较一下第一个元素和当前节点的值和target的差值
+更小的话就把第一个元素poll出再放当前节点，最后把节点设置为右儿子  时空O(n)?
+
+class Solution {
+    public List<Integer> closestKValues(TreeNode root, double target, int k) {
+        LinkedList<Integer> res = new LinkedList<>();
+        Stack<TreeNode> st = new Stack<>();
+        TreeNode cur = root;
+        while (!st.isEmpty() || cur != null) {
+            while (cur != null) {
+                st.push(cur);
+                cur = cur.left;
+            } 
+            TreeNode node = st.pop();
+            if (res.size() < k) {
+                res.add(node.val);
+            } else {
+                if (Math.abs(res.get(0) - target) > Math.abs(node.val - target)) {
+                    res.poll();
+                    res.add(node.val);
+                }
+            }
+            cur = node.right;            
+        }
+        return res;
+    }
+}
+
+解法2:递归 同样是中序遍历 左中右
+
+class Solution {
+    public List<Integer> closestKValues(TreeNode root, double target, int k) {
+        LinkedList<Integer> res = new LinkedList<>();
+        dfs(root, target, k, res);
+        return res;
+    }
+    private void dfs(TreeNode root, double target, int k, LinkedList<Integer> res) {
+        if (root == null) return;
+        dfs(root.left, target, k, res);
+        if (res.size() < k) {
+            res.add(root.val);
+        } else {
+            if (Math.abs(res.get(0) - target) > Math.abs(root.val - target)) {
+                res.poll();
+                res.add(root.val);
+            }
+        }
+        dfs(root.right, target, k, res);
+    }
+}
+
+
