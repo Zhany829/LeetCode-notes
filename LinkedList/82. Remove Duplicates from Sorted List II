@@ -1,0 +1,23 @@
+解法：创建dummy node，把next设置为head，从dummy开始往后找，如果后两个，也就是第一和第二个节点都不为null，就记录第一个节点值，只要第1，2，3...都等于这个值而且没到链表尽头就直接移除
+如果发现第一和第二个节点值不一样了就把cur move到下一个节点。最后返回dummy的下一个节点就行
+时间O(n) 空间O(1)
+
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null) return null;
+        ListNode dummy = new ListNode(0, head);
+        ListNode cur = dummy;
+        while (cur.next != null && cur.next.next != null) {
+            if (cur.next.val == cur.next.next.val) {
+                int val = cur.next.val;
+                while (cur.next != null && cur.next.val == val) {
+                    cur.next = cur.next.next;
+                }
+            } else {
+                cur = cur.next;
+            }
+        }
+
+        return dummy.next;
+    }
+}
