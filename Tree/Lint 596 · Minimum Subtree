@@ -41,7 +41,7 @@ class ResultType {
     
     public ResultType(TreeNode minSubtree, int sum, int minSum) {
         this.minSubtree = minSubtree;
-        this.minSum = minSum;
         this.sum = sum;
+        this.minSum = minSum;
     }
 }
