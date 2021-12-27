@@ -1,0 +1,19 @@
+解法：前序遍历，如果遇到比当前节点大的节点，就更新最大值同时cnt++。前序遍历是因为先去左边找，这样就只能找到和root值一样的节点来++cnt，再去找右边来更新max，这样就不会因为先去了右边而没算上
+左边一样值的节点。时间O(n) 空间O(1)
+
+class Solution {
+    int cnt = 0;
+    public int goodNodes(TreeNode root) {
+        dfs(root, root.val);
+        return cnt;
+    }
+    private void dfs(TreeNode root, int max) {
+        if (root == null) return;
+        if (root.val >= max) {
+            cnt++;
+            max = root.val;
+        }
+        dfs(root.left, max);
+        dfs(root.right, max);
+    }
+}
