@@ -7,41 +7,35 @@ public class Solution {
      * @param root: the root of binary tree
      * @return: the root of the minimum subtree
      */
+    public class Result{
+        TreeNode node;
+        int sum;
+        int min;
+        public Result(TreeNode node, int sum, int min) {
+            this.node = node;
+            this.sum = sum;
+            this.min = min;
+        }
+    }
+    Result empty = new Result(null, 0, Integer.MAX_VALUE);
     public TreeNode findSubtree(TreeNode root) {
-        ResultType result = helper(root);
-        return result.minSubtree;
+        Result res = visit(root);
+        return res.node;
     }
-    ResultType helper(TreeNode root) {
-        if (root == null) {
-            return new ResultType(null, 0, Integer.MAX_VALUE);
+    private Result visit(TreeNode node) {
+        if (node == null) return empty;
+        Result left = visit(node.left);
+        Result right = visit(node.right);
+        int sum = node.val + left.sum + right.sum;
+        Result res = new Result(node, sum, sum);
+        if (res.min > left.min) {
+            res.node = left.node;
+            res.min = left.min;
         }
-        // 获得左右子树的和
-        ResultType leftResult = helper(root.left);
-        ResultType rightResult = helper(root.right);
-        
-        // 计算当前子树和，并更新答案
-        int sum = root.val + leftResult.sum + rightResult.sum;
-        
-        ResultType result = new ResultType(root, sum, sum);
-        
-        if (leftResult.minSum < result.minSum) {
-            result.minSubtree = leftResult.minSubtree;
-            result.minSum = leftResult.minSum;
+        if (res.min > right.min) {
+            res.node = right.node;
+            res.min = right.min;
         }
-        if (rightResult.minSum < result.minSum) {
-            result.minSubtree = rightResult.minSubtree;
-            result.minSum = rightResult.minSum;
-        }
-        return result;
-    }
-}
-class ResultType {
-    public int sum, minSum;
-    public TreeNode minSubtree;
-    
-    public ResultType(TreeNode minSubtree, int sum, int minSum) {
-        this.minSubtree = minSubtree;
-        this.sum = sum;
-        this.minSum = minSum;
+        return res;
     }
 }
