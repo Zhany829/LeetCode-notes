@@ -12,43 +12,33 @@
  * }
  */
 public class Codec {
+     // Encodes a tree to a single string.
+        public String serialize(TreeNode root) {
+            if (root == null) return "None,";
+            String leftSerialize = serialize(root.left); //左子树的序列化字符串
+            String rightSerialize = serialize(root.right); //右子树的序列化字符串
+            return root.val + "," + leftSerialize + rightSerialize;
+        }
 
-    // Encodes a tree to a single string.
-    public String serialize(TreeNode root) {
-        return serializeHelper(root, "");
-    }
-    
-    private String serializeHelper(TreeNode root, String res) {
-        if (root == null) {
-            res += "None,";
-        } else {
-            res += res.valueOf(root.val) + ",";
-            res = serializeHelper(root.left, res);
-            res = serializeHelper(root.right, res);
+        // Decodes your encoded data to tree.
+        /**
+         * 构建树的函数 buildTree 接收的 “状态” 是 list 数组，由序列化字符串转成
+         * 按照前序遍历的顺序：先构建根节点，再构建左子树、右子树
+         * 将 list 数组的首项弹出，它是当前子树的 root 节点
+         * 如果它为 'X' ，返回 null
+         * 如果它不为 'X'，则为它创建节点，并递归调用 buildTree 构建左右子树，当前子树构建完毕，向上返回
+         */
+        public TreeNode deserialize(String data) {
+            String[] temp = data.split(",");
+            LinkedList<String> dp = new LinkedList<>(Arrays.asList(temp));
+            return buildTree(dp);
         }
-        return res;
-    }
-    // Decodes your encoded data to tree.
-    public TreeNode deserialize(String data) {
-        String[] dataArray = data.split(",");
-        List<String> dataList = new LinkedList<>(Arrays.asList(dataArray));
-        return deserializeHelper(dataList);
-    }
-    private TreeNode deserializeHelper(List<String> dataList) {
-        if (dataList.get(0).equals("None")) {
-            dataList.remove(0);
-            return null;
+        private TreeNode buildTree(LinkedList<String> list){
+            String s = list.poll(); //返回当前结点
+            if (s.equals("None")) return null;
+            TreeNode node = new TreeNode(Integer.parseInt(s));
+            node.left = buildTree(list); //构建左子树
+            node.right = buildTree(list); //构建右子树
+            return node;
         }
-        TreeNode root = new TreeNode(Integer.valueOf(dataList.get(0)));
-        dataList.remove(0);
-        root.left = deserializeHelper(dataList);
-        root.right = deserializeHelper(dataList);
-        return root;
-    }
 }
-
-
-// Your Codec object will be instantiated and called as such:
-// Codec ser = new Codec();
-// Codec deser = new Codec();
-// TreeNode ans = deser.deserialize(ser.serialize(root));
