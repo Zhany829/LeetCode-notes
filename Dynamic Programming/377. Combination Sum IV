@@ -2,17 +2,13 @@
 
 class Solution {
     public int combinationSum4(int[] nums, int target) {
-        int n = nums.length;
         int[] dp = new int[target+1];
         dp[0] = 1;
-        Arrays.sort(nums);
-        for (int i = 1; i < target+1; i++) { //完全背包--背包容量放外面
+        for (int i = 1; i <= target; i++) { //完全背包--背包容量放外面
             for (int num : nums) { //迭代物品
-                if (i >= num) {
-                    dp[i] = dp[i] + dp[i-num];
-                }
+                if (i >= num) dp[i] += dp[i-num];
             }
         }
         return dp[target];
-    }   
+    }
 }
