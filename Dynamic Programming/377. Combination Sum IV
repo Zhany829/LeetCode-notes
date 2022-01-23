@@ -1,4 +1,4 @@
-解法：物品没有使用次数—完全背包 外面是背包容量 里面迭代物品
+解法：物品没有使用次数—完全背包 外面是背包容量 里面迭代物品 时间target * 数组长度
 
 class Solution {
     public int combinationSum4(int[] nums, int target) {
