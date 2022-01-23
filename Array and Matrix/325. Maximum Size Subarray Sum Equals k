@@ -1,29 +1,21 @@
 解法：把每个前项和第一次出现的indx放到哈希表里，每次https://github.com/Zhany829/LeetCode-notes/tree/main/Array%20and%20Matrix如果遇到pre-k这个key则更新max。当然还要检查0..i前项和等于k的情况
 之所以仅仅需要记录第一个出现的位置，是因为要保证整个子数组最长，因此只需要记录最前面的位置就好了
-
 class Solution {
     public int maxSubArrayLen(int[] nums, int k) {
-        int n = nums.length;
-        // 哈希表，映射前缀和值到第一次出现的下标位置
-        Map<Integer, Integer> preSumIndex = new HashMap<>();
-        int ans = 0;
-        // 前缀和
-        int preSum = 0;
-        // 0 出现的位置在 -1 位置处
-        preSumIndex.put(0, -1);
-        for (int i = 0; i < n; ++i) {
-            // 累加前缀和
-            preSum += nums[i];
-            // 确保记录的是第一次出现的位置
-            if (!preSumIndex.containsKey(preSum)) {
-                preSumIndex.put(preSum, i);
+        Map<Integer, Integer> map = new HashMap<>();
+        int res = 0, preSum = 0;
+        map.put(0, -1);
+        for (int i = 0; i < nums.length; i++) {
+            preSum += nums[i]; //累加前缀和
+            if (!map.containsKey(preSum)) { //确保是第一次出现的位置
+                map.put(preSum, i);
             }
-            // 检查一下是否需要更新答案
-            if (preSumIndex.containsKey(preSum - k)) {
-                ans = Math.max(ans, i - preSumIndex.get(preSum - k));
+            //当前的前缀和 - 之前某时刻的前缀和如果等于目标k值,则该前缀和的长度 - 之前那个前缀和的长度 = 当前连续子数组的长度
+            if (map.containsKey(preSum - k)) {
+                res = Math.max(res, i - map.get(preSum-k));
             }
         }
-        return ans;
+        return res;
     }
 }
 
