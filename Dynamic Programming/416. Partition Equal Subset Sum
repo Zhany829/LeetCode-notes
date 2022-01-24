@@ -41,18 +41,16 @@ class Solution {
 class Solution {
     public boolean canPartition(int[] nums) {
         int sum = 0;
-        int W = 0;
         for (int num : nums) {
             sum += num;
         }
-        if (sum % 2 == 1) return false; //和为奇数不可能能分两块和一样的
-        W = sum / 2; //只需要找数组里是不是有元素能组成和/2就行
-        boolean[] dp = new boolean[W+1];//表示能不能选一些数正好等于j，所以如果W位置上是true 说明可以用一些数=W 也就是sum/2
-        dp[0] = true; // 当 j - nums[i] == 0 成立的时候，根据上面分析，就说明单独的 nums[i] 这个数就恰好能够在被分割为单独的一组，其余的数分割成为另外一组。因此，我们把初始化的 dp[i][0] 设置成为 true 是没有问题的。
-
-        for (int i = 1; i < nums.length; i++) {
-            for (int j = W; j >= nums[i]; j--) { //逆序 因为顺序会造成nums[i]一直影响
-                dp[j] = dp[j] || dp[j-nums[i]]; //j-nums[i]位置上是true也可以，因为这里正好加了个j也满足
+        if (sum % 2 == 1) return false;
+        int W = sum / 2;
+        boolean[] dp = new boolean[W+1];
+        dp[0] = true;
+        for (int num : nums) {
+            for (int i = W; i >= num; i--) {
+                dp[i] = dp[i] || dp[i - num];
             }
         }
         return dp[W];
