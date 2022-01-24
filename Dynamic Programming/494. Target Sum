@@ -12,19 +12,21 @@ sum(P) + sum(N) + sum(P) - sum(N) = target + sum(P) + sum(N)
 所以题目就是找到能组成子集(target + sum(nums))/2的方式有多少种
 dp[i][j]表示前面i个数组成j的方式
 
+
+
 class Solution {
     public int findTargetSumWays(int[] nums, int target) {
         int sum = 0;
         for (int num : nums) {
             sum += num;
         }
-        if (sum < Math.abs(target) || (sum+target) % 2 == 1) return 0; // 全加起来也达不到sum
-        int W = (target + sum)/2;
+        if (sum < Math.abs(target) || (sum+target) % 2 == 1) return 0;
+        int W = (sum+target) / 2;
         int[] dp = new int[W+1];
         dp[0] = 1;
-        for (int i = 0; i < nums.length; i++) {
-            for (int j = W; j >= nums[i]; j--) {
-                dp[j] = dp[j] + dp[j-nums[i]]; //能组成j的子集的数量
+        for (int num : nums) { //每个物品只能用一次所以把物品放外层
+            for (int i = W; i >= num; i--) { 
+                dp[i] += dp[i-num];
             }
         }
         return dp[W];
