@@ -1,5 +1,5 @@
 解法：如果n是质数，则只能一个个copy得到，如果是合数，则可以通过复制得到，比如20可以由10复制得到，10可以由5复制得到，但5只能一个个复制，所以n=20时候答案是9
-
+时间O(根号n) 空间O(1)
 class Solution {
     public int minSteps(int n) {
         int res = 0;
