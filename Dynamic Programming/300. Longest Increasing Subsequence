@@ -3,18 +3,17 @@
 即考虑往dp[0…i−1] 中最长的上升子序列后面再加一个nums[i]。由于dp[j] 代表nums[0…j] 中以nums[j] 结尾的最长上升子序列，所以如果能从dp[j] 这个状态转移过来，那么nums[i] 必然要大于nums[j]，才能将nums[i] 放在nums[j] 后面以形成更长的上升子序列。
 最后，整个数组的最长上升子序列即所有dp[i] 中的最大值。
 LIS length = max(dp[i]),其中0≤i<n
-
+时间O(n^2) 空间O(n)
 class Solution {
     public int lengthOfLIS(int[] nums) {
         int n = nums.length;
         int[] dp = new int[n];
-        dp[0] = 1;
-        int max = 1;
-        for (int i = 1; i < n; i++) {
-            dp[i] = 1;  //初始化，最短的递增子序列也有1
-            for (int j = 0; j < n; j++) {
-                if (nums[i] > nums[j]) { //比较当前数比之前哪个递增序列的尾大，大就用这个序列长度+1去比较
-                    dp[i] = Math.max(dp[i], dp[j]+1);
+        int max = 0;
+        Arrays.fill(dp, 1);  //初始化，最短的递增子序列也有1
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);  //比较当前数比之前哪个递增序列的尾大，大就用这个序列长度+1去比较
                 }
             }
             max = Math.max(max, dp[i]);
@@ -22,8 +21,9 @@ class Solution {
         return max;
     }
 }
-
+解法2:用一个数组，把每次把input数组元素放到/替换到末尾元素，如果当前元素比末尾的大就直接放，如果比他小就替换末尾元素。这样末尾元素可以尽可能小，这样就能保证数组里放的递增序列最长
 时间复杂度O(nlogn)
+
 class Solution {
     public int lengthOfLIS(int[] nums) {
         int n = nums.length;
@@ -46,6 +46,24 @@ class Solution {
                 }
             dp[pos+1] = nums[i];
             }
+        }
+        return res;
+    }
+}
+另一种写法
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int[] tails = new int[nums.length];
+        int res = 0;
+        for(int num : nums) {
+            int i = 0, j = res;
+            while(i < j) {
+                int m = (i + j) / 2;
+                if(tails[m] < num) i = m + 1;
+                else j = m;
+            }
+            tails[i] = num;
+            if(res == j) res++;
         }
         return res;
     }
