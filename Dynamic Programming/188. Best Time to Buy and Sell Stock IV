@@ -1,3 +1,5 @@
+时间O(nmin(n,k))
+空间 用二维数组O(n * min(n,k))  用一维数组O(min(n,k))
 class Solution {
     public int maxProfit(int k, int[] prices) {
         int n = prices.length;
