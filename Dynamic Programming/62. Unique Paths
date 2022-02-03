@@ -1,3 +1,4 @@
+解法：dp，时空m*n
 class Solution {
     public int uniquePaths(int m, int n) {
         int[][] dp = new int[m][n];
@@ -13,7 +14,7 @@ class Solution {
         return dp[m-1][n-1];
     }
 }
-
+解法2:优化的dp，时间m*n，空间n。因为dp[i][j]依赖dp[i-1][j]和dp[i][j-1]，而且遍历的时候是一行行遍历的，因为m在外层，所以就用一维数组在每一层更新就行。
 class Solution {
     public int uniquePaths(int m, int n) {
         int[] dp = new int[n];
