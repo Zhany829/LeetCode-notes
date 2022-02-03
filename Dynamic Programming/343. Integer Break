@@ -1,4 +1,5 @@
-解法：用dp 记录当前i的位置表示当前数可以获得的最大乘积，获取最大乘积要用i和1..i-1这些数字比较，取dp[j]*(i-j)和j*(i-j)(两个数是拆分的情况)的最大值，用dp[i]和他比较取最大值
+解法1：dp 记录当前i的位置表示当前数可以获得的最大乘积，获取最大乘积要用i和1..i-1这些数字比较，取dp[j]*(i-j)和j*(i-j)(两个数是拆分的情况)的最大值，用dp[i]和他比较取最大值
+时间O(n^2) 空间O(n)
 
 class Solution {
     public int integerBreak(int n) {
@@ -8,6 +9,23 @@ class Solution {
             for (int j = 1; j < i; j++) { //获取最大乘积要用i和1..i-1这些数字比较
                 dp[i] = Math.max(dp[i], Math.max((j * dp[i-j]), j*(i-j)));
             }
+        }
+        return dp[n];
+    }
+}
+
+解法2: 优化的dp
+时空O(n)
+
+class Solution {
+    public int integerBreak(int n) {
+        if (n < 4) {
+            return n - 1;
+        }
+        int[] dp = new int[n + 1];
+        dp[2] = 1;
+        for (int i = 3; i <= n; i++) {
+            dp[i] = Math.max(Math.max(2 * (i - 2), 2 * dp[i - 2]), Math.max(3 * (i - 3), 3 * dp[i - 3]));
         }
         return dp[n];
     }
