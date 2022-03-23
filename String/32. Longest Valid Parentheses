@@ -1,0 +1,35 @@
+时间：O(n) 空间O(1)
+解法1：用两个指针left和right，从左到右遍历字符串，如果遇到'('则把left+1，遇到')'则把right+1，如果left==right，就计算当前有效字符串的长度，并且记录目前为止找到的最长子字符串。
+当left > right时候就把left和right=0，也就是舍弃之前的字符串重新开始计算。但有种情况是left一直比right大，比如((),所以还要从右往左扫一遍，不同的是right > left的时候把他们才设置为0
+
+class Solution {
+    public int longestValidParentheses(String s) {
+        int left = 0, right = 0, maxlength = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') {
+                left++;
+            } else {
+                right++;
+            }
+            if (left == right) {
+                maxlength = Math.max(maxlength, 2 * right);
+            } else if (right > left) {
+                left = right = 0;
+            }
+        }
+        left = right = 0;
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) == '(') {
+                left++;
+            } else {
+                right++;
+            }
+            if (left == right) {
+                maxlength = Math.max(maxlength, 2 * left);
+            } else if (left > right) {
+                left = right = 0;
+            }
+        }
+        return maxlength;
+    }
+}
