@@ -15,3 +15,4 @@ class Solution {
         return points.length - res; //要返回的是需要的刺的次数也就是不重叠的区间
     }
 }
+ 
