@@ -2,12 +2,11 @@ Use two pointers point to 0 and the square root of c respectively. Then compare 
 Move one of the two pointers according to the result of the comparision.
 class Solution {
     public boolean judgeSquareSum(int c) {
-        int i = 0;
-        int j = (int)Math.sqrt(c);
-        while (i <= j) {
-            int sum = i*i + j*j;
-            if (sum > c) j--;
-            else if(sum < c) i++;
+        long l = 0, r = (long)Math.sqrt(c);
+        while (l <= r) {
+            long power = l*l + r*r;
+            if (power < c) l += 1;
+            else if (power > c) r -= 1;
             else return true;
         }
         return false;
