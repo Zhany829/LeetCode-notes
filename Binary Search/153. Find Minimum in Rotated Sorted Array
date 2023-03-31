@@ -8,7 +8,7 @@ class Solution {
             } else {
                 if (nums[mid] < nums[r]) {
                     r = mid;
-                } else {
+                } else { 
                     l = mid + 1;
                 }
             }
