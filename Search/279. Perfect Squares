@@ -48,6 +48,6 @@ class Solution {
             square += diff;
             diff += 2;
         }
-        return squares;
+        return squares; 
     }
 }
