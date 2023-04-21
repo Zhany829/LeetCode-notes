@@ -12,7 +12,7 @@ class Solution {
             res.add(null);
             return res;
         }
-        for (int i = left; i <= right; i++) {
+        for (int i = left; i <= right; i++) { 
             List<TreeNode> leftNodes = getUniqueRes(left, i-1);
             List<TreeNode> rightNodes = getUniqueRes(i+1, right);
             for (TreeNode leftNode : leftNodes) {
