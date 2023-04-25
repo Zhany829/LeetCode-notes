@@ -6,7 +6,7 @@ class Solution {
     private int m,n;
     int[][] directions = {{0,1},{0,-1},{1,0},{-1,0}};
     int[][] matrix;
-    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+    public List<List<Integer>> pacificAtlantic(int[][] heights) { 
         m = heights.length;
         n = heights[0].length;
         matrix = heights;
