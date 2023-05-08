@@ -15,7 +15,7 @@ class Solution {
         n = board[0].length;
         boolean[][] visited = new boolean[m][n];    //避免单次递归重复访问
         for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
+            for (int j = 0; j < n; j++) { 
                 if (check(board, word, i, j, visited, 0)) return true; //从每个点开始check，找到就返回true
             }
         }
