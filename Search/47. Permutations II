@@ -19,7 +19,7 @@ class Solution {
             return;
         }
         for (int i = 0; i < n; i++) {
-            //和前一个数字一样，而且前一个数字用过了(被置为false)就continue；
+            //和前一个数字一样，而且前一个数字用过了(被置为false)就continue； 
             if (i > 0 && nums[i] == nums[i-1] && !visited[i-1]) {  
                 continue;
             }
