@@ -1,4 +1,8 @@
 解法：回溯方法里，先判断如果cur达到了k，那么就把这个组合加到res，下面for loop遍历startIndex到n，cur先加i，再递归(用i+1)，最后回溯-把cur里的最后一个元素移除
+剪枝：如果 n = 7, k = 4，从5开始搜索就已经没有意义了，这是因为：即使把5选上，后面的数只有6和7了，一共就3个数，凑不出4个数的组合。因此，搜索起点有上界。
+        搜索起点的上界 + 接下来要选择的元素个数 - 1 = n
+        接下来要选择的元素个数 = k - path.size()，所以
+        搜索起点的上界 = n - (k - path.size()) + 1
 
 class Solution {
     List<List<Integer>> result = new ArrayList<>();
