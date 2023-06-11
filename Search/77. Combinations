@@ -12,7 +12,7 @@ class Solution {
         if (path.size() == k) {
             result.add(new ArrayList<>(path));
             return;
-        }
+        } 
          //实现剪枝： 如果 还要找的数 > 可选择的个数  -> 填充不完    ->>>这里确定起点的关系
         for (int i = startIndex; i <= n - (k - path.size()) + 1; i++){ 
             path.add(i);                //尾添加
