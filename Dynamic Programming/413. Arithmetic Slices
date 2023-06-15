@@ -14,7 +14,7 @@ class Solution {
             }
         }
         int res = 0;
-        for (int num : dp) {
+        for (int num : dp) {  //subarray可以是3个一组，4个一组，....n个一组
             res += num;
         }
         return res;
