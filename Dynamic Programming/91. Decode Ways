@@ -1,5 +1,5 @@
 解法：多了条件处理的爬楼梯问题。1.对于当前位置i，如果不是0，那就可以编码A-I 2.和i-1的数字一起编码，但要i-1的数不为0而且与当前数的和小于等于26。符合1就+=i-1的值 符合2就是+=i-2的值
-
+dp[i]表示前面i个字母的解码方法数
 class Solution {
     public int numDecodings(String s) {
         int n = s.length();
