@@ -6,7 +6,7 @@ class Solution {
     public int countPrimes(int n) {
         boolean[] isPrim = new boolean[n];
         Arrays.fill(isPrim, true);
-        // 从 2 开始枚举到 sqrt(n)。
+        // 从 2 开始枚举到 sqrt(n)。 
         for (int i = 2; i * i < n; i++) {
             // 如果当前是素数
             if (isPrim[i]) {
