@@ -1,5 +1,7 @@
 用二分的去找partition返回的下标是不是正好是k，是的话就返回,因为说明array里k的位置上是第k大的数字
+用random生成随机pivot的index，这样可以使得第一次选最小的第二次选第二小的这种概率降低
 class Solution {
+    private static Random random = new Random();
     public int findKthLargest(int[] nums, int k) {
         k = nums.length - k;
         int l = 0, r = nums.length-1;
@@ -14,6 +16,8 @@ class Solution {
     private int partition(int[] nums, int low, int high) {
         int leftMark = low;
         int rightMark = high+1;
+        int randomIdx = low + random.nextInt(high-low+1);
+        swap(nums, low, randomIdx);
         int pivot = nums[low];
         while (true) {
             while (nums[++leftMark] < pivot && leftMark < high);
@@ -30,3 +34,4 @@ class Solution {
         nums[r] = tmp;
     }
 }
+
