@@ -5,8 +5,8 @@ class Solution {
     public String reverseVowels(String s) {
         HashSet<Character> hashSet = new HashSet<>(Arrays.asList('a','e','i','o','u','A','E','I','O','U'));
         int i = 0, j = s.length()-1;
-        char[] res = new char[s.length()];
-        while (i <= j) {
+        char[] res = new char[s.length()]; //要创建一个arr来放 因为string不可变，下面不能换char的位置
+        while (i <= j) {  //要=因为要确保把arr的每个位置放满
             char ci = s.charAt(i);
             char cj = s.charAt(j);
             if (!hashSet.contains(ci)) {
