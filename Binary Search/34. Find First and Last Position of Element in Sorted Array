@@ -18,7 +18,7 @@ class Solution {
             else if (nums[mid] > target) r = mid - 1;
             else {
                 res = mid;
-                if (findFirst) r = mid - 1; //如果当前要找第一个，则会让让循环停止
+                if (findFirst) r = mid - 1; //如果当前要找第一个: res等于了第1个target，则会让让循环停止，因为左边没target了。如果当前mid是第2个target的位置，那么会继续去左边找，让res更新成第1个target
                 else l = mid + 1;
             }
         }
