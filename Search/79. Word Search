@@ -22,8 +22,8 @@ class Solution {
         return false;
     }
     private boolean check(char[][]board, String word, int i, int j, boolean[][] visited, int k) {
-        if (board[i][j] != word.charAt(k)) return false;  //此时不是目标单词里的一个char
-        else if (k == word.length()-1) return true; //找到目标单词(里的一个char)
+        if (board[i][j] != word.charAt(k)) return false;  //此时不是目标单词里的一个char             } 25，26 这两行顺序不能换，不然检测不到最后一个字母是否符合
+        else if (k == word.length()-1) return true; //找到目标单词(里的一个char)                    }
         visited[i][j] = true;
         for (int[] d : directions) {    //向四周扩散去找
             int x1 = i + d[0];
