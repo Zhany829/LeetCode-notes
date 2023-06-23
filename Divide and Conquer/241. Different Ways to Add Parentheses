@@ -9,7 +9,7 @@ class Solution {
                 List<Integer> left = diffWaysToCompute(expression.substring(0,i));
                 List<Integer> right = diffWaysToCompute(expression.substring(i+1));
                 for (int l : left) {
-                    for (int r : right) {
+                    for (int r : right) { 
                         if (c == '+') {
                             res.add(l+r);
                         } else if (c == '-') {
