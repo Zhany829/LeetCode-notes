@@ -14,14 +14,14 @@ class Solution {
                             res.add(l+r);
                         } else if (c == '-') {
                             res.add(l-r);
-                        }if (c == '*') {
+                        } else {
                             res.add(l*r);
                         }
                     }
                 }
             }
         }
-        if(res.size() == 0) res.add(Integer.valueOf(expression));
+        if (res.size() == 0) res.add(Integer.valueOf(expression));
         return res;
     }
 }
