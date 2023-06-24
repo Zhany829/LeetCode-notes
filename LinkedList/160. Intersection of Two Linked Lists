@@ -5,8 +5,8 @@ public class Solution {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         ListNode l1 = headA;
         ListNode l2 = headB;
-        while (l1 != l2) {
-            l1 = l1 == null ? headB : l1.next;
+        while (l1 != l2) {   //没有交点的话两个等于null也可以终止
+            l1 = l1 == null ? headB : l1.next;       l1==null时候才切换而不是l1.next === null 时候切换，因为没有交集的话 l1和l2都是null就可以终止循环
             l2 = l2 == null ? headA : l2.next;
         }
         return l1;
