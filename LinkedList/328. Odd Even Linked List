@@ -9,7 +9,7 @@ class Solution {
             odd.next = odd.next.next;   // get the odd nodes linkedlist
             even.next = even.next.next; //get the even nodes linkedlist
             odd = odd.next;
-            even = even.next;
+            even = even.next; 
         }
         odd.next = evenHead;    //link the even nodes linkedlist
         return head;
