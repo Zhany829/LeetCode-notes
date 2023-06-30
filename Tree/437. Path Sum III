@@ -57,7 +57,7 @@ class Solution {
         if (root == null) return 0;
         return getPathNum(root, targetSum) + pathSum(root.left, targetSum) + pathSum(root.right, targetSum);
     }
-    private int getPathNum(TreeNode root, int targetSum) {
+    private int getPathNum(TreeNode root, long targetSum) {   // targetSum要改成long因为node的val可以大于int，会导致比较/计算的时候出错
         if (root == null) return 0;
         int ret = 0;
         if (root.val == targetSum) ret++;
