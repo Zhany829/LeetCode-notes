@@ -9,7 +9,7 @@ class Solution {
     private int dfs(TreeNode root) {
         if (root == null) return 0;
         int left = dfs(root.left);
-        int right = dfs(root.right);
+        int right = dfs(root.right); 
         int leftPath = 0, rightPath = 0;
         if (root.left != null && root.left.val == root.val) {
             leftPath = left + 1;
