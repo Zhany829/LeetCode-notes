@@ -7,7 +7,7 @@
       
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) { 
-        if (root == null || p == root || q == root) return root;
+        if (root == null || p == root || q == root) return root;  //如果root是p或者q就不用往下探索了，不然会遇不到p或者q了
         TreeNode left = lowestCommonAncestor(root.left, p, q);
         TreeNode right = lowestCommonAncestor(root.right, p, q);
         if (left != null && right != null) return root;
