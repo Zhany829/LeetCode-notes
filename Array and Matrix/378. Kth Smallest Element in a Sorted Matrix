@@ -1,4 +1,46 @@
-解法：用双指针，一个初始化第一行第一个元素，另一个初始化最后一行最后一个元素。只要左指针值小于右指针，找出他们的中间值，然后从2D数组从头开始找计数直到当前数比中间数大。
+解法1：https://leetcode.cn/problems/kth-smallest-element-in-a-sorted-matrix/solution/you-xu-ju-zhen-zhong-di-kxiao-de-yuan-su-by-leetco/
+matrix[0][0] 为最小值，matrix[n−1][n−1] 为最大值，现在我们将其分别记作 l 和 r。
+任取一个数 mid 满足l≤mid≤r，那么矩阵中不大于 mid 的数，肯定全部分布在矩阵的左上角。
+矩阵中大于 mid 的数就和不大于 mid 的数分别形成了两个板块，沿着一条锯齿线将这个矩形分开。其中左上角板块的大小即为矩阵中不大于 mid 的数的数量。
+我们只要沿着这条锯齿线走一遍即可计算出这两个板块的大小，也自然就统计出了这个矩阵中不大于 mid 的数的个数了。
+所以走法为：1.初始位置在左下角matrix[n-1][0]  2.设当前位置为matrix[i][j], 如果matrix[i][j] <= mid, 那么因为列是sorted，所以当前列多不大于mid，把i+1都累加，然后向右移动，否则向上移动
+class Solution {
+    public int kthSmallest(int[][] matrix, int k) {
+        int n = matrix.length;
+        int left = matrix[0][0];
+        int right = matrix[n - 1][n - 1];
+        while (left < right) {
+            int mid = left + ((right - left) >> 1);
+            if (check(matrix, mid, k, n)) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+
+    public boolean check(int[][] matrix, int mid, int k, int n) {
+        int i = n - 1;
+        int j = 0;
+        int num = 0;
+        while (i >= 0 && j < n) {
+            if (matrix[i][j] <= mid) {
+                num += i + 1;
+                j++;
+            } else {
+                i--;
+            }
+        }
+        return num >= k;
+    }
+}
+
+
+
+
+
+解法2：用双指针，一个初始化第一行第一个元素，另一个初始化最后一行最后一个元素。只要左指针值小于右指针，找出他们的中间值，然后从2D数组从头开始找计数直到当前数比中间数大。
 再根据计数和k比，计数小就把左指针向右，这样就扩大了下次的mid，也就扩大了找的范围。最后左指针就是第k个位置
 
 class Solution {
