@@ -1,4 +1,5 @@
-解法：要获得num的补码，只要用相同bit数的11111去和num作xor就行。要获得这个一样bit的11111可以用一个tmp复制原num，然后每次移掉一位同时一个新变量每次多一个1，第一轮循环是1，第二轮是11.最后作xor
+解法：要获得num的补码，只要用相同bit数的11111去和num作xor就行。要获得这个一样bit的11111可以用一个tmp复制原num，然后每次移掉一位同时一个新变量每次多一个1，
+第一轮循环是1，第二轮是11.最后作xor
 
 class Solution {
     public int findComplement(int num) {
@@ -8,5 +9,5 @@ class Solution {
             c = (c << 1) + 1;
         }
         return num ^ c;
-    }
+    } 
 }
