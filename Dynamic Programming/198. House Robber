@@ -6,7 +6,7 @@ class Solution {
         dp[0] = nums[0];
         dp[1] = Math.max(nums[0], nums[1]);
         for (int i = 2; i < nums.length; i++) {
-            dp[i] = Math.max(dp[i-1], dp[i-2]+nums[i]); //用前前的+现在 去比较刚才
+            dp[i] = Math.max(dp[i-1], dp[i-2]+nums[i]); //用前前的+现在 去比较前的
         }
         return dp[dp.length-1];
     }
