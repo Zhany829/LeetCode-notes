@@ -12,7 +12,7 @@ class Solution {
                 } else {
                     dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);//不匹配，看看加上哪个word的单词
                 }
-            }
+            } 
         }
         return m+n - 2*dp[m][n];//用总长度减2*最长公共子序列 = 要删掉的数量
     }
