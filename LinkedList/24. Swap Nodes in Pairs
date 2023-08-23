@@ -3,7 +3,7 @@
 class Solution {
     public ListNode swapPairs(ListNode head) {
         ListNode dummy = new ListNode(-1);
-        ListNode pre = dummy;
+        ListNode pre = dummy; //pre 用来连接前一pair的最后一个和后一pair的第一个
         ListNode cur = head;
         pre.next = cur;
         while (cur != null && cur.next != null) {
