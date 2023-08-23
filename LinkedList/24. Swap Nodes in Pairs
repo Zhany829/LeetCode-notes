@@ -5,7 +5,7 @@ class Solution {
         ListNode dummy = new ListNode(-1);
         ListNode pre = dummy; //pre 用来连接前一pair的最后一个和后一pair的第一个
         ListNode cur = head;
-        pre.next = cur;
+        pre.next = cur; 
         while (cur != null && cur.next != null) {
             ListNode next = cur.next;
             ListNode nNext = next.next;
