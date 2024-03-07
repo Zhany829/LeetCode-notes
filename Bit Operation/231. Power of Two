@@ -11,7 +11,7 @@ class Solution {
 解法2：如果n只有一个1(也就是2的倍数)，n&(-n) = n, 因为n=1000 -n=0111+1 = 1000，两个相与还是n本身
 
 class Solution {
-    public boolean isPowerOfTwo(int n) {
+    public boolean isPowerOfTwo(int n) { 
         if (n <= 0) return false;
         return (n & (-n)) == n;
     }
