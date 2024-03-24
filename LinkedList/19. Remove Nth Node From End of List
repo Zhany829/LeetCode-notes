@@ -14,6 +14,6 @@ class Solution {
             fast = fast.next;
         }
         slow.next = slow.next.next; //做删除操作，slow.next肯定不为null因为n不会为0，所以slow肯定不会到尾部
-        return head;
+        return head; 
     }
 }
